@@ -5,6 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -86,79 +91,50 @@ fun ErrText(
         modifier = Modifier.padding(start = 8.dp, top = 4.dp)
     )
 }
-@Preview(showBackground = true)
-@Composable
-fun SuccessPopupPreview() {
-    SuccessPopup(
-        visible = true,
-        onDismiss = {}
-    )
-}
-@Composable
-fun SuccessPopup(
-    visible: Boolean,
-    onDismiss: () -> Unit
-) {
-    // Auto dismiss after 2s
-    LaunchedEffect(visible) {
-        if (visible) {
-            delay(2000)
-            onDismiss()
-        }
 
-    }
-
-    if (visible) {
-        Dialog(
-            onDismissRequest = onDismiss,
-            properties = DialogProperties(
-                dismissOnClickOutside = false,
-                usePlatformDefaultWidth = false
-            )
+@Composable
+fun SuccessPopupContent(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth(0.8f)
+            .background(Color.White, shape = RoundedCornerShape(16.dp))
+            .padding(24.dp)
+    ) {
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .background(Color.White, shape = RoundedCornerShape(16.dp))
-                    .padding(24.dp)
-            ) {
-                Column(
-                    modifier = Modifier.align(Alignment.Center),
-                   horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.CheckCircle,
-                        contentDescription = "Success",
-                        tint = Color(0xFF25AE88),
-                        modifier = Modifier.size(100.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Success!",
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 36.sp,
-                            lineHeight = 36.sp,
-                            letterSpacing = (36.sp * 0.055f),
-                            color = Color(0xFF25AE88)
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Your information has\nbeen updated!",
-                        textAlign = TextAlign.Center,
-                        style = TextStyle(
-                            fontWeight = FontWeight.Normal,
-                            fontSize = 20.sp,
-                            lineHeight = 20.sp,
-                            letterSpacing = (20.sp * 0.055f),
-                            color = Color.Black
-                        )
-                    )
-                }
-            }
+            Icon(
+                imageVector = Icons.Default.CheckCircle,
+                contentDescription = "Success",
+                tint = Color(0xFF25AE88),
+                modifier = Modifier.size(100.dp)
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Success!",
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontWeight = FontWeight.SemiBold,
+                    fontSize = 36.sp,
+                    lineHeight = 36.sp,
+                    letterSpacing = (36.sp * 0.055f),
+                    color = Color(0xFF25AE88)
+                )
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "Your information has\nbeen updated!",
+                textAlign = TextAlign.Center,
+                style = TextStyle(
+                    fontWeight = FontWeight.Normal,
+                    fontSize = 20.sp,
+                    lineHeight = 20.sp,
+                    letterSpacing = (20.sp * 0.055f),
+                    color = Color.Black
+                )
+            )
         }
     }
 }
@@ -261,6 +237,12 @@ fun MyInformation(modifier: Modifier = Modifier) {
     var isPhoneValid by remember { mutableStateOf(true) }
     var isUniversityValid by remember { mutableStateOf(true) }
 
+    LaunchedEffect(showPopup) {
+        if (showPopup) {
+            delay(2000)
+            showPopup = false
+        }
+    }
 
     Box(
         modifier = modifier
@@ -402,10 +384,25 @@ fun MyInformation(modifier: Modifier = Modifier) {
                     }
                 }
             }
+
+            if (showPopup) {
+                Dialog(
+                    onDismissRequest = { showPopup = false },
+                    properties = DialogProperties(
+                        dismissOnClickOutside = false,
+                        usePlatformDefaultWidth = false
+                    )
+                ) {
+                    AnimatedVisibility(
+                        visible = showPopup,
+                        enter = fadeIn() + scaleIn(initialScale = 0.8f),
+                        exit = fadeOut() + scaleOut(targetScale = 0.8f)
+                    ) {
+                        SuccessPopupContent()
+                    }
+                }
+            }
         }
-        SuccessPopup(
-            visible = showPopup,
-            onDismiss = { showPopup = false }
-        )
+
     }
 }
