@@ -32,8 +32,11 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -44,6 +47,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -53,6 +57,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.ui.platform.LocalFocusManager
 import com.hoaiphong.composeui.ui.theme.ComposeUITheme
 import kotlinx.coroutines.delay
 
@@ -117,7 +124,7 @@ fun SuccessPopup(
             ) {
                 Column(
                     modifier = Modifier.align(Alignment.Center),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                   horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Icon(
                         imageVector = Icons.Default.CheckCircle,
@@ -201,6 +208,7 @@ fun MyText(
         style = TextStyle.Default//	Style tổng hợp (nếu dùng TextStyle(...))
     )
 }
+
 @Composable
 fun MyInput(
     value: String,
@@ -208,7 +216,7 @@ fun MyInput(
     label: String,
     placeholder: String,
     isError: Boolean = false,
-    keyboardType: KeyboardType = KeyboardType.Text,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     enabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
@@ -224,7 +232,7 @@ fun MyInput(
             shape = RoundedCornerShape(15.dp),
             isError = isError,
             enabled = enabled,
-            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
+            keyboardOptions = keyboardOptions,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = Color.Gray,
                 unfocusedLabelColor = Color.Gray,
@@ -237,27 +245,32 @@ fun MyInput(
 @Preview(showBackground = true, name = "Form")
 @Composable
 fun MyInformation(modifier: Modifier = Modifier) {
-    val name = remember { mutableStateOf("") }
-    val phone = remember { mutableStateOf("") }
-    val university = remember { mutableStateOf("") }
-    val description = remember { mutableStateOf("") }
-    val isEditing = remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
 
-    val showPopup = remember { mutableStateOf(false) }
-    val submitted = remember { mutableStateOf(false) }
+    var name by rememberSaveable { mutableStateOf("") }
+    var phone  by rememberSaveable { mutableStateOf("") }
+    var university  by rememberSaveable { mutableStateOf("") }
+    var description  by rememberSaveable { mutableStateOf("") }
+    var isEditing  by rememberSaveable { mutableStateOf(false) }
+    var showPopup by rememberSaveable { mutableStateOf(false) }
 
     // Regex
     val nameRegex = Regex("^[a-zA-ZÀ-ỹ\\s]*$")
     val phoneRegex = Regex("^\\d{0,15}$")
+    var isNameValid by remember { mutableStateOf(true) }
+    var isPhoneValid by remember { mutableStateOf(true) }
+    var isUniversityValid by remember { mutableStateOf(true) }
 
-    val isNameValid = name.value.matches(nameRegex)
-    val isPhoneValid = phone.value.matches(phoneRegex)
-    val isUniversityValid = university.value.matches(nameRegex)
 
     Box(
         modifier = modifier
             .background(Color(0xFFF5FAFC))
             .fillMaxSize()
+            .pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    focusManager.clearFocus()
+                })
+            }
     ) {
         Column(
             modifier = Modifier
@@ -280,13 +293,13 @@ fun MyInformation(modifier: Modifier = Modifier) {
                     textAlign = TextAlign.Center,
                     maxLines = 1
                 )
-                if (!isEditing.value) {
+                if (!isEditing) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_edit),
                     contentDescription = "Edit Icon",
                     modifier = Modifier
                         .size(30.dp)
-                        .clickable { isEditing.value = true }
+                        .clickable { isEditing = true }
                 )}
             }
 
@@ -307,27 +320,33 @@ fun MyInformation(modifier: Modifier = Modifier) {
             Row {
                 Column(modifier = Modifier.weight(1f).padding(end = 4.dp)) {
                     MyInput(
-                        value = name.value,
-                        onValueChange = { name.value = it },
+                        value = name,
+                        onValueChange = { name = it },
                         label = "Name",
                         placeholder = "Enter your name...",
-                        enabled = isEditing.value
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                            capitalization = KeyboardCapitalization.Words
+                        ),
+                        enabled = isEditing
                     )
-                    if ( submitted.value  ) {
+                    if (!isNameValid) {
                         ErrText()
                     }
                 }
 
                 Column(modifier = Modifier.weight(1f).padding(start = 4.dp)) {
                     MyInput(
-                        value = phone.value,
-                        onValueChange = { phone.value = it },
+                        value = phone,
+                        onValueChange = { phone = it },
                         label = "Phone number",
                         placeholder = "Your phone number...",
-                        enabled = isEditing.value,
-                        keyboardType = KeyboardType.Number
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        ),
+                        enabled = isEditing,
                     )
-                    if (submitted.value ) {
+                    if (!isPhoneValid ) {
                         ErrText()
                     }
                 }
@@ -338,53 +357,55 @@ fun MyInformation(modifier: Modifier = Modifier) {
             // University
             Column {
                 MyInput(
-                    value = university.value,
-                    onValueChange = { university.value = it },
+                    value = university,
+                    onValueChange = { university = it },
                     label = "University name",
                     placeholder = "Your university name...",
-
-                    enabled = isEditing.value
+                    enabled = isEditing
                 )
-                if (submitted.value) {
-
+                if (!isUniversityValid) {
                     ErrText()
-
                 }
             }
             Spacer(modifier = Modifier.height(16.dp))
             // Description
             MyInput(
-                value = description.value,
-                onValueChange = { description.value = it },
+                value = description,
+                onValueChange = { description = it },
                 label = "Describe yourself",
                 placeholder = "Enter a description about yourself...",
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Text,
+                    capitalization = KeyboardCapitalization.Words
+                ),
                 modifier = Modifier.height(300.dp),
-                enabled = isEditing.value
+                enabled = isEditing
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             // Submit button
-            if (isEditing.value) {
+            if (isEditing) {
                 Box(
                     modifier = Modifier.fillMaxWidth(),
                     contentAlignment = Alignment.Center
                 ) {
                     MyButton(text = "Submit") {
+                        isNameValid = name.matches(nameRegex) && !name.isEmpty()
+                        isPhoneValid = phone.matches(phoneRegex) && !phone.isEmpty()
+                        isUniversityValid = university.matches(nameRegex) && !university.isEmpty()
 
-                       submitted.value = true
-                        if (isNameValid && isPhoneValid && isUniversityValid && !name.value.isEmpty()) {
-                            showPopup.value = true
-                            submitted.value = false
-                            isEditing.value = false
+                        if (isNameValid && isPhoneValid && isUniversityValid) {
+                            showPopup = true
+                            isEditing = false
                         }
                     }
                 }
             }
         }
         SuccessPopup(
-            visible = showPopup.value,
-            onDismiss = { showPopup.value = false }
+            visible = showPopup,
+            onDismiss = { showPopup = false }
         )
     }
 }
