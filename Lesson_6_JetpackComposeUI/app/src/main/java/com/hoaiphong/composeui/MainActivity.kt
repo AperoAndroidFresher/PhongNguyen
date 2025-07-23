@@ -8,6 +8,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,17 +22,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,7 +51,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.hoaiphong.composeui.ui.theme.ComposeUITheme
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,33 +62,99 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeUITheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
+                MyInformation()
+            }
+        }
+    }
+}
+@Preview(showBackground = true)
+@Composable
+fun ErrText(
+    message: String = "Invalid format"
+) {
+    Text(
+        text = message,
+        color = Color.Red,
+        fontSize = 12.sp,
+        modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+    )
+}
+@Preview(showBackground = true)
+@Composable
+fun SuccessPopupPreview() {
+    SuccessPopup(
+        visible = true,
+        onDismiss = {}
+    )
+}
+@Composable
+fun SuccessPopup(
+    visible: Boolean,
+    onDismiss: () -> Unit
+) {
+    // Auto dismiss after 2s
+    LaunchedEffect(visible) {
+        if (visible) {
+            delay(2000)
+            onDismiss()
+        }
+
+    }
+
+    if (visible) {
+        Dialog(
+            onDismissRequest = onDismiss,
+            properties = DialogProperties(
+                dismissOnClickOutside = false,
+                usePlatformDefaultWidth = false
+            )
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.8f)
+                    .background(Color.White, shape = RoundedCornerShape(16.dp))
+                    .padding(24.dp)
+            ) {
+                Column(
+                    modifier = Modifier.align(Alignment.Center),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.CheckCircle,
+                        contentDescription = "Success",
+                        tint = Color(0xFF25AE88),
+                        modifier = Modifier.size(100.dp)
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Success!",
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 36.sp,
+                            lineHeight = 36.sp,
+                            letterSpacing = (36.sp * 0.055f),
+                            color = Color(0xFF25AE88)
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Your information has\nbeen updated!",
+                        textAlign = TextAlign.Center,
+                        style = TextStyle(
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 20.sp,
+                            lineHeight = 20.sp,
+                            letterSpacing = (20.sp * 0.055f),
+                            color = Color.Black
+                        )
                     )
                 }
             }
         }
     }
 }
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    ComposeUITheme {
-        Greeting("Android")
-    }
-}
-
 @Preview(showBackground = true, name = "Button")
 @Composable
 fun MyButton(
@@ -130,137 +201,190 @@ fun MyText(
         style = TextStyle.Default//	Style tổng hợp (nếu dùng TextStyle(...))
     )
 }
-@Preview(showBackground = true, name = "Input")
 @Composable
 fun MyInput(
-    name: String = "",
-    placeholder: String ="Input1",
-    label: String = "Input",
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    isError: Boolean = false,
+    keyboardType: KeyboardType = KeyboardType.Text,
+    enabled: Boolean = true,
     modifier: Modifier = Modifier
 ) {
-    var text by remember { mutableStateOf(name) }
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-    ){
-
-        MyText(
-            label = label,
-        )
-
+    Box(modifier = modifier.fillMaxWidth()) {
+        MyText(label = label)
         OutlinedTextField(
-            value = text,
-            onValueChange = { text = it },
+            value = value,
+            onValueChange = onValueChange,
             label = { Text(placeholder, fontSize = 13.sp) },
-            modifier = modifier.fillMaxWidth()
+            modifier = modifier
+                .fillMaxWidth()
                 .padding(top = 16.dp),
             shape = RoundedCornerShape(15.dp),
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password
-            ),
+            isError = isError,
+            enabled = enabled,
+            keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             colors = OutlinedTextFieldDefaults.colors(
-                // focusedBorderColor = Color.Blue, //Màu viền khi input được focus (đang gõ)
-                unfocusedBorderColor = Color.Gray,//Màu viền khi chưa được focus
-                //  focusedLabelColor = Color.Blue,// Màu chữ label khi input đang được chọn
-                unfocusedLabelColor = Color.Gray, //Màu chữ label khi input không được chọn
-                // cursorColor = Color.Blue,//Màu của con trỏ nhập văn bản
-                // disabledBorderColor = Color.LightGray,//Màu viền khi input bị disable
-                errorBorderColor = Color.Red//Màu viền khi input có lỗi (isError = true)
+                unfocusedBorderColor = Color.Gray,
+                unfocusedLabelColor = Color.Gray,
+                errorBorderColor = Color.Red
             )
         )
     }
-
 }
 
 @Preview(showBackground = true, name = "Form")
 @Composable
-fun MyInformation(name: String = "", modifier: Modifier = Modifier) {
+fun MyInformation(modifier: Modifier = Modifier) {
+    val name = remember { mutableStateOf("") }
+    val phone = remember { mutableStateOf("") }
+    val university = remember { mutableStateOf("") }
+    val description = remember { mutableStateOf("") }
+    val isEditing = remember { mutableStateOf(false) }
 
-    Column(
+    val showPopup = remember { mutableStateOf(false) }
+    val submitted = remember { mutableStateOf(false) }
+
+    // Regex
+    val nameRegex = Regex("^[a-zA-ZÀ-ỹ\\s]*$")
+    val phoneRegex = Regex("^\\d{0,15}$")
+
+    val isNameValid = name.value.matches(nameRegex)
+    val isPhoneValid = phone.value.matches(phoneRegex)
+    val isUniversityValid = university.value.matches(nameRegex)
+
+    Box(
         modifier = modifier
-            .background(color = Color(0xFFF5FAFC))
-            .padding(8.dp)
+            .background(Color(0xFFF5FAFC))
             .fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(32.dp))
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .padding(horizontal = 14.dp), // thêm padding 2 bên nếu muốn
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = Modifier
+                .padding(8.dp)
+                .fillMaxSize()
         ) {
-            Text(
-                "MY INFORMATION",
-                fontSize = 25.sp,
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Header
+            Row(
                 modifier = Modifier
-                    .weight(1f)
-                    .height(40.dp),
-                textAlign = TextAlign.Center,
-                maxLines = 1
-            )
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    "MY INFORMATION",
+                    fontSize = 25.sp,
+                    modifier = Modifier.weight(1f),
+                    textAlign = TextAlign.Center,
+                    maxLines = 1
+                )
+                if (!isEditing.value) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_edit),
+                    contentDescription = "Edit Icon",
+                    modifier = Modifier
+                        .size(30.dp)
+                        .clickable { isEditing.value = true }
+                )}
+            }
 
+            // Avatar
             Image(
-                painter = painterResource(id = R.drawable.ic_edit),
-                contentDescription = "Edit Icon",
-                modifier = Modifier.size(30.dp)
+                painter = painterResource(id = R.drawable.avata),
+                contentDescription = "",
+                modifier = Modifier
+                    .size(150.dp)
+                    .align(Alignment.CenterHorizontally)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop,
             )
-        }
-        Image(
-            painter = painterResource(id = R.drawable.avata),
-            contentDescription = "",
-            modifier = modifier.size(150.dp)
-                .align(Alignment.CenterHorizontally)
-                .clip(CircleShape),
-            contentScale = ContentScale.Crop,
 
-            )
-        Spacer(modifier = Modifier.height(16.dp))
-        Row() {
+            Spacer(modifier = Modifier.height(32.dp))
+
+            // Name and Phone
+            Row {
+                Column(modifier = Modifier.weight(1f).padding(end = 4.dp)) {
+                    MyInput(
+                        value = name.value,
+                        onValueChange = { name.value = it },
+                        label = "Name",
+                        placeholder = "Enter your name...",
+                        enabled = isEditing.value
+                    )
+                    if ( submitted.value  ) {
+                        ErrText()
+                    }
+                }
+
+                Column(modifier = Modifier.weight(1f).padding(start = 4.dp)) {
+                    MyInput(
+                        value = phone.value,
+                        onValueChange = { phone.value = it },
+                        label = "Phone number",
+                        placeholder = "Your phone number...",
+                        enabled = isEditing.value,
+                        keyboardType = KeyboardType.Number
+                    )
+                    if (submitted.value ) {
+                        ErrText()
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // University
+            Column {
+                MyInput(
+                    value = university.value,
+                    onValueChange = { university.value = it },
+                    label = "University name",
+                    placeholder = "Your university name...",
+
+                    enabled = isEditing.value
+                )
+                if (submitted.value) {
+
+                    ErrText()
+
+                }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            // Description
             MyInput(
-                modifier = Modifier.weight(1f).padding(end = 4.dp),
-                label = "Name",
-                placeholder = "Enter your name..."
+                value = description.value,
+                onValueChange = { description.value = it },
+                label = "Describe yourself",
+                placeholder = "Enter a description about yourself...",
+                modifier = Modifier.height(300.dp),
+                enabled = isEditing.value
+            )
 
-            )
-            MyInput(
-                modifier = Modifier.weight(1f).padding(start = 4.dp),
-                label = "Phone number",
-                placeholder = "Your phone number..."
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Submit button
+            if (isEditing.value) {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    MyButton(text = "Submit") {
+
+                       submitted.value = true
+                        if (isNameValid && isPhoneValid && isUniversityValid && !name.value.isEmpty()) {
+                            showPopup.value = true
+                            submitted.value = false
+                            isEditing.value = false
+                        }
+                    }
+                }
+            }
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-        MyInput(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            label = "University name",
-            placeholder = "Your university name..."
-
+        SuccessPopup(
+            visible = showPopup.value,
+            onDismiss = { showPopup.value = false }
         )
-
-        MyInput(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp)
-                .padding(bottom = 8.dp),
-            label = "describe yourself",
-            placeholder = "Enter a description about yourself..."
-        )
-
-        Box (
-            modifier = modifier
-                .fillMaxWidth(),
-            contentAlignment = Alignment.Center
-        ){
-            MyButton(
-                text = "Submit"
-            )
-        }
-
     }
-
 }
-
-
-
