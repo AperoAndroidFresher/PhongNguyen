@@ -13,7 +13,7 @@
         android:theme="@style/Theme.ComposeUI"
         tools:targetApi="31">
         <activity
-            android:name=".ui.theme.PlaylistSongActivity"
+            android:name=".PlaylistSongActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -74,7 +74,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             ComposeUITheme {
-                MyInformation()
+                PlaylistSong()
             }
         }
     }
