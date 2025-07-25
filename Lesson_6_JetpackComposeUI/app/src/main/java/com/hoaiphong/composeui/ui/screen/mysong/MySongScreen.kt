@@ -43,6 +43,7 @@ import com.hoaiphong.composeui.data.model.songList
 fun PlaylistSong(modifier: Modifier = Modifier) {
     val songs = remember { mutableStateListOf<Song>().apply { addAll(songList) } }
     var isColumnView  by rememberSaveable { mutableStateOf(true) }
+    var isSorting  by rememberSaveable { mutableStateOf(true) }
 
 
     Box(
@@ -94,28 +95,16 @@ fun PlaylistSong(modifier: Modifier = Modifier) {
 
             Spacer(modifier = Modifier.height(16.dp))
             if (isColumnView) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    items(songs.size) { index ->
-                        MyListItem(
-                            song = songs[index],
-                            onRemoveClick = { songs.removeAt(index) },
-                        )
-                    }
-                }
-            }else
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(8.dp)
-                ) {
-                    items(songs.size) { index ->
-                        MyColumnItem(
-                            song = songs[index],
-                            onRemoveClick = { songs.removeAt(index) },
-                        )
-                    }
-                }
+                ColumnSongList(
+                    songs = songs,
+                    onRemoveClick = { index -> songs.removeAt(index) }
+                )
+            } else {
+                GridSongList(
+                    songs = songs,
+                    onRemoveClick = { index -> songs.removeAt(index) }
+                )
+            }
 
         }
     }
