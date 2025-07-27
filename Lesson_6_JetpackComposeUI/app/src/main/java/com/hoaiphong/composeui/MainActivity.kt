@@ -5,7 +5,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
+import com.hoaiphong.composeui.ui.navigation.AppNavGraph
+import com.hoaiphong.composeui.ui.screen.login.LoginScreen
+import com.hoaiphong.composeui.ui.screen.login.SignUpScreen
 import com.hoaiphong.composeui.ui.screen.myinfo.MyInformation
 import com.hoaiphong.composeui.ui.screen.mysong.PlaylistSong
 
@@ -15,7 +19,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AppTheme {
-                MyInformation()
+                val navController = rememberNavController()
+                AppNavGraph(navController = navController)
             }
         }
     }
