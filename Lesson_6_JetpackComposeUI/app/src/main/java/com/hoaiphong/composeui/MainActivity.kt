@@ -16,11 +16,10 @@ import com.hoaiphong.composeui.ui.screen.mysong.PlaylistSong
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+        //enableEdgeToEdge()
         setContent {
             AppTheme {
-                val navController = rememberNavController()
-                AppNavGraph(navController = navController)
+                AppNavGraph()
             }
         }
     }
