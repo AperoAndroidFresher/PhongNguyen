@@ -33,17 +33,22 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.data.model.User
+import com.hoaiphong.composeui.data.model.UserManager
 
 @Preview(showBackground = true)
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    onSignUpClick: () -> Unit = {}
+    onSignUpClick: () -> Unit = {},
+    onLoginSuccess: () -> Unit={},
+    defaultUsername: String = "",
+    defaultPassword: String = ""
  ) {
     val focusManager = LocalFocusManager.current
 
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    var username by rememberSaveable { mutableStateOf(defaultUsername) }
+    var password by rememberSaveable { mutableStateOf(defaultPassword) }
     var rememberMeChecked by rememberSaveable { mutableStateOf(false) }
 
     Column(
@@ -103,7 +108,14 @@ fun LoginScreen(
 
         LoginButton(
             text = "Log in",
-            onClick = { /* Handle login click */ }
+            onClick = {
+                if (UserManager.validateLogin(username, password)) {
+                    println("Đăng nhập thành công cho user: $username")
+                    onLoginSuccess()
+                } else {
+                    println("Sai tài khoản hoặc mật khẩu")
+                }
+            }
         )
 
 

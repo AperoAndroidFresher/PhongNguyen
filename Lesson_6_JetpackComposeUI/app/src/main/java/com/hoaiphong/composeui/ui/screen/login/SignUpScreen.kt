@@ -23,11 +23,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.data.model.User
+import com.hoaiphong.composeui.data.model.UserManager
 import com.hoaiphong.composeui.ui.screen.myinfo.ErrText
 
 @Preview(showBackground = true)
 @Composable
-fun SignUpScreen(onBackClick: () -> Unit = {}) {
+fun SignUpScreen(
+    onBackClick: () -> Unit = {},
+    onSignUpSuccess: (username: String, password: String) -> Unit = { _, _ -> }
+) {
     val focusManager = LocalFocusManager.current
 
     var username by rememberSaveable { mutableStateOf("") }
@@ -182,7 +187,8 @@ fun SignUpScreen(onBackClick: () -> Unit = {}) {
                 }
 
                 if (!hasError) {
-
+                    UserManager.addUser(User(username, password, email))
+                    onSignUpSuccess(username, password)
                 }
             }
         )
