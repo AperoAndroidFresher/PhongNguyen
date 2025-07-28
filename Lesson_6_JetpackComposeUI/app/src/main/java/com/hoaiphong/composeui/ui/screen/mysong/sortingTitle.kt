@@ -28,7 +28,9 @@ fun sortingTitle(
     modifier: Modifier = Modifier.Companion,
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().background(Color.Companion.Black)
+        modifier = modifier
+            .fillMaxWidth()
+            .background(Color.Companion.Black)
     ) {
         Spacer(modifier = Modifier.Companion.height(32.dp))
 

@@ -4,11 +4,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -18,17 +15,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.hoaiphong.composeui.R
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavHostController) {
-    LaunchedEffect(key1 = true) {
+fun SplashScreen(
+    onNavigateToLogin: () -> Unit
+) {
+    LaunchedEffect(Unit) {
         delay(2000)
-        navController.navigate("login") {
-            popUpTo("splash") { inclusive = true }
-        }
+        onNavigateToLogin() // <- gọi callback để chuyển màn
     }
 
     Box(
@@ -40,12 +36,10 @@ fun SplashScreen(navController: NavHostController) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Image(
                 painter = painterResource(id = R.drawable.logo),
-                contentDescription = "",
-                modifier = Modifier
-                    .size(250.dp)
-                    .align(Alignment.CenterHorizontally)
+                contentDescription = null,
+                modifier = Modifier.size(250.dp)
             )
-            Text("Apero Music", fontSize = 20.sp)
+            Text("Apero Music", fontSize = 20.sp, color = Color.White)
         }
     }
 }

@@ -6,10 +6,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
@@ -17,37 +20,38 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.platform.LocalFocusManager
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.data.model.UserManager
 
 @Preview(showBackground = true)
 @Composable
 fun LoginScreen(
     modifier: Modifier = Modifier,
-    onSignUpClick: () -> Unit = {}
- ) {
+    onSignUpClick: () -> Unit = {},
+    onLoginSuccess: () -> Unit = {},
+    defaultUsername: String = "",
+    defaultPassword: String = ""
+) {
     val focusManager = LocalFocusManager.current
 
-    var username by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    var username by rememberSaveable { mutableStateOf(defaultUsername) }
+    var password by rememberSaveable { mutableStateOf(defaultPassword) }
     var rememberMeChecked by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        modifier = modifier.fillMaxSize()
+        modifier = modifier
+            .fillMaxSize()
             .background(color = Color.Black)
             .padding(16.dp)
             .pointerInput(Unit) {
@@ -103,7 +107,14 @@ fun LoginScreen(
 
         LoginButton(
             text = "Log in",
-            onClick = { /* Handle login click */ }
+            onClick = {
+                if (UserManager.validateLogin(username, password)) {
+                    println("Đăng nhập thành công cho user: $username")
+                    onLoginSuccess()
+                } else {
+                    println("Sai tài khoản hoặc mật khẩu")
+                }
+            }
         )
 
 

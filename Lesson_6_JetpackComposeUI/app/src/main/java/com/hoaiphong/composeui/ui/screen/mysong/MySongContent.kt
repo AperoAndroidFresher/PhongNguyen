@@ -16,6 +16,7 @@ fun PreviewSongDropdownMenu() {
         onRemoveClick = {}
     )
 }
+
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 fun PreviewMyListItem() {
@@ -31,6 +32,7 @@ fun PreviewMyListItem() {
         onRemoveClick = {}
     )
 }
+
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
 fun PreviewMyColumnItem() {

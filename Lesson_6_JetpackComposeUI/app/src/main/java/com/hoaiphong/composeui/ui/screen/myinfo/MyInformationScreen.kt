@@ -85,7 +85,7 @@ fun MyInformation(modifier: Modifier = Modifier) {
         typography = currentTheme.typography,
         shapes = currentTheme.shapes
     )
-      {
+    {
         Box(
             modifier = modifier
                 .background(MaterialTheme.colorScheme.background)
@@ -115,7 +115,8 @@ fun MyInformation(modifier: Modifier = Modifier) {
                         contentDescription = "Toggle Theme Icon",
                         modifier = Modifier
                             .clickable {
-                                currentTheme = if (currentTheme == lightMode) darkMode else lightMode
+                                currentTheme =
+                                    if (currentTheme == lightMode) darkMode else lightMode
                             },
                     )
                     Text(
@@ -158,9 +159,11 @@ fun MyInformation(modifier: Modifier = Modifier) {
 
                 // Name and Phone
                 Row {
-                    Column(modifier = Modifier
-                        .weight(1f)
-                        .padding(end = 4.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(end = 4.dp)
+                    ) {
                         MyInput(
                             value = name,
                             onValueChange = { name = it },
@@ -177,9 +180,11 @@ fun MyInformation(modifier: Modifier = Modifier) {
                         }
                     }
 
-                    Column(modifier = Modifier
-                        .weight(1f)
-                        .padding(start = 4.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(start = 4.dp)
+                    ) {
                         MyInput(
                             value = phone,
                             onValueChange = { phone = it },

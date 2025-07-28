@@ -16,8 +16,8 @@ data class ThemeData(
     val shapes: Shapes
 )
 
-enum class ThemeType{
-    LightMode,DarkMode
+enum class ThemeType {
+    LightMode, DarkMode
 }
 
 var lightMode = ThemeData(

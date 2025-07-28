@@ -1,9 +1,15 @@
 package com.hoaiphong.composeui.ui.screen.login
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Email
@@ -11,8 +17,12 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,11 +33,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.data.model.User
+import com.hoaiphong.composeui.data.model.UserManager
 import com.hoaiphong.composeui.ui.screen.myinfo.ErrText
 
 @Preview(showBackground = true)
 @Composable
-fun SignUpScreen(onBackClick: () -> Unit = {}) {
+fun SignUpScreen(
+    onBackClick: () -> Unit = {},
+    onSignUpSuccess: (username: String, password: String) -> Unit = { _, _ -> }
+) {
     val focusManager = LocalFocusManager.current
 
     var username by rememberSaveable { mutableStateOf("") }
@@ -157,13 +172,19 @@ fun SignUpScreen(onBackClick: () -> Unit = {}) {
             onClick = {
                 var hasError = false
 
-                if (username.isBlank() || !username.matches(usernameRegex) || !username.matches(noWhitespaceRegex)) {
+                if (username.isBlank() || !username.matches(usernameRegex) || !username.matches(
+                        noWhitespaceRegex
+                    )
+                ) {
                     usernameError = true
                     username = "" // clear nếu lỗi
                     hasError = true
                 }
 
-                if (password.isBlank() || !password.matches(passwordRegex) || !password.matches(noWhitespaceRegex)) {
+                if (password.isBlank() || !password.matches(passwordRegex) || !password.matches(
+                        noWhitespaceRegex
+                    )
+                ) {
                     passwordError = true
                     password = ""
                     hasError = true
@@ -175,14 +196,18 @@ fun SignUpScreen(onBackClick: () -> Unit = {}) {
                     hasError = true
                 }
 
-                if (email.isBlank() || !email.matches(emailRegex) || !email.matches(noWhitespaceRegex)) {
+                if (email.isBlank() || !email.matches(emailRegex) || !email.matches(
+                        noWhitespaceRegex
+                    )
+                ) {
                     emailError = true
                     email = ""
                     hasError = true
                 }
 
                 if (!hasError) {
-
+                    UserManager.addUser(User(username, password, email))
+                    onSignUpSuccess(username, password)
                 }
             }
         )
