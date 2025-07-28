@@ -3,13 +3,13 @@ package com.hoaiphong.composeui.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
-import com.hoaiphong.composeui.ui.navigation.Home as HomeRoute
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import com.hoaiphong.composeui.ui.navigation.Home
 import com.hoaiphong.composeui.ui.screen.login.LoginScreen
 import com.hoaiphong.composeui.ui.screen.login.SignUpScreen
 import com.hoaiphong.composeui.ui.screen.splash.SplashScreen
+import com.hoaiphong.composeui.ui.navigation.Home as HomeRoute
 
 @Composable
 fun AppNavGraph() {
@@ -54,6 +54,7 @@ fun AppNavGraph() {
                 is HomeRoute -> NavEntry(route) {
                     TopLevelNavGraph(topLevelBackStack)
                 }
+
                 else -> error("Unknown route: $route")
             }
         }

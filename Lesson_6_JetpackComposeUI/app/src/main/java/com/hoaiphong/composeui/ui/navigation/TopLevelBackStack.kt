@@ -5,12 +5,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import kotlin.collections.remove
 
-class TopLevelBackStack<T: Any>(startKey: T) {
+class TopLevelBackStack<T : Any>(startKey: T) {
 
     // Maintain a stack for each top level route
-    private var topLevelStacks : LinkedHashMap<T, SnapshotStateList<T>> = linkedMapOf(
+    private var topLevelStacks: LinkedHashMap<T, SnapshotStateList<T>> = linkedMapOf(
         startKey to mutableStateListOf(startKey)
     )
 
@@ -35,10 +34,10 @@ class TopLevelBackStack<T: Any>(startKey: T) {
         updateBackStack()
     }
 
-    fun addTopLevel(key: T){
+    fun addTopLevel(key: T) {
 
         // If the top level doesn't exist, add it
-        if (topLevelStacks[key] == null){
+        if (topLevelStacks[key] == null) {
             topLevelStacks.put(key, mutableStateListOf(key))
         } else {
             // Otherwise just move it to the end of the stacks
@@ -52,7 +51,7 @@ class TopLevelBackStack<T: Any>(startKey: T) {
         updateBackStack()
     }
 
-    fun add(key: T){
+    fun add(key: T) {
         topLevelStacks[topLevelKey]?.add(key)
         updateBackStack()
     }
@@ -72,7 +71,7 @@ class TopLevelBackStack<T: Any>(startKey: T) {
         updateBackStack()
     }
 
-    fun removeLast(){
+    fun removeLast() {
         val removedKey = topLevelStacks[topLevelKey]?.removeLastOrNull()
         // If the removed key was a top level key, remove the associated top level stack
         topLevelStacks.remove(removedKey)

@@ -29,6 +29,7 @@ fun TopLevelNavGraph(
                                     topLevelBackStack.clear(target)
                                 }
                             }
+
                             is MyInformationScreen -> {
                                 topLevelBackStack.addTopLevel(target)
                                 topLevelBackStack.clear(target)
@@ -84,6 +85,7 @@ private fun handleNavigation(
                 topLevelBackStack.addTopLevel(target)
             }
         }
+
         is MyInformationScreen -> {
             topLevelBackStack.addTopLevel(target)
         }

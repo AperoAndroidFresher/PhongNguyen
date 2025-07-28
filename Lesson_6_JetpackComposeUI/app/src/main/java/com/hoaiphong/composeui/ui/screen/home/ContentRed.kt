@@ -59,6 +59,7 @@ fun ContentBase(
         }
     }
 }
+
 @Composable
 fun ColumnScope.Title(title: String) {
     Text(
