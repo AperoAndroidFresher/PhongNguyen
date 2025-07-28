@@ -6,15 +6,20 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.hoaiphong.composeui.ui.screen.login.LoginScreen
 import com.hoaiphong.composeui.ui.screen.login.SignUpScreen
+import com.hoaiphong.composeui.ui.screen.splash.SplashScreen
 
 object Routes {
+    const val SPLASH = "splash"
     const val LOGIN = "login"
     const val SIGN_UP = "sign_up"
 }
 
 @Composable
 fun AppNavGraph(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = Routes.LOGIN) {
+    NavHost(navController = navController, startDestination = Routes.SPLASH) {
+        composable(Routes.SPLASH) {
+            SplashScreen(navController)
+        }
         composable(Routes.LOGIN) {
             LoginScreen(
                 onSignUpClick = {
