@@ -32,7 +32,6 @@ fun TopLevelNavGraph(
 
                             is MyInformationScreen -> {
                                 topLevelBackStack.addTopLevel(target)
-                                topLevelBackStack.clear(target)
                             }
                         }
                     }

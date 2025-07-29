@@ -1,5 +1,10 @@
 package com.hoaiphong.composeui.ui.screen.myinfo
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -17,12 +22,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,8 +43,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
@@ -52,10 +61,17 @@ import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.ui.theme.darkMode
 import com.hoaiphong.composeui.ui.theme.lightMode
 import kotlinx.coroutines.delay
+import java.io.File
+import java.io.FileOutputStream
 
 @Preview(showBackground = true, name = "Form")
 @Composable
-fun MyInformation(modifier: Modifier = Modifier) {
+fun MyInformation(
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    val avatarPath = rememberSaveable { mutableStateOf<String?>(null) }
+
     val focusManager = LocalFocusManager.current
     var currentTheme by remember { mutableStateOf(darkMode) }
     val scrollState = rememberScrollState()
@@ -74,6 +90,9 @@ fun MyInformation(modifier: Modifier = Modifier) {
     var isPhoneValid by remember { mutableStateOf(true) }
     var isUniversityValid by remember { mutableStateOf(true) }
 
+    val onSelectImage = rememberImagePickerLauncher(context) {
+        avatarPath.value = it
+    }
     LaunchedEffect(showPopup) {
         if (showPopup) {
             delay(2000)
@@ -139,21 +158,33 @@ fun MyInformation(modifier: Modifier = Modifier) {
                     }
                 }
 
-                // Avatar
-                Image(
-                    painter = painterResource(id = R.drawable.avata),
-                    contentDescription = "",
+                Box(
                     modifier = Modifier
                         .size(150.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .clip(CircleShape)
-                        .border(
-                            width = 2.dp,
-                            color = MaterialTheme.colorScheme.primary,
-                            shape = CircleShape
-                        ),
-                    contentScale = ContentScale.Crop,
-                )
+                        .align(Alignment.CenterHorizontally),
+                ) {
+
+                    AvatarImage( avatarPath = avatarPath.value,
+                        modifier = Modifier.size(150.dp))
+
+                    if (isEditing) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_photo),
+                            contentDescription = "Edit Avatar",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .offset(y = 16.dp)
+                                .size(36.dp)
+                                .background(
+                                    color = MaterialTheme.colorScheme.background,
+                                    shape = CircleShape
+                                )
+                                .padding(4.dp)
+                                .clickable { onSelectImage() }
+                        )
+                    }
+                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
@@ -275,3 +306,4 @@ fun MyInformation(modifier: Modifier = Modifier) {
         }
     }
 }
+
