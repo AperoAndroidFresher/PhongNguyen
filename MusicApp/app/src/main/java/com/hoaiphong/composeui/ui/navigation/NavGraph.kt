@@ -10,7 +10,6 @@ import com.hoaiphong.composeui.ui.screen.login.LoginScreen
 import com.hoaiphong.composeui.ui.screen.login.SignUpScreen
 import com.hoaiphong.composeui.ui.screen.splash.SplashScreen
 import com.hoaiphong.composeui.ui.navigation.Home as HomeRoute
-
 @Composable
 fun AppNavGraph() {
     val topLevelBackStack = remember { TopLevelBackStack<Any>(Home) }
