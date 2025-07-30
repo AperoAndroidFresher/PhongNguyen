@@ -6,7 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.AppTheme
-import com.hoaiphong.composeui.navigation.AppNavGraph
+import com.hoaiphong.composeui.ui.navigation.AppNavGraph
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,8 +14,7 @@ class MainActivity : ComponentActivity() {
         //enableEdgeToEdge()
         setContent {
             AppTheme {
-                val navController = rememberNavController()
-                AppNavGraph(navController = navController)
+                AppNavGraph()
             }
         }
     }
