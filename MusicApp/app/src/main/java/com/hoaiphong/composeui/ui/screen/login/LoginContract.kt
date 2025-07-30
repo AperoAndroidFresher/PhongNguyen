@@ -1,12 +1,11 @@
 package com.hoaiphong.composeui.ui.screen.login
 
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 
 data class LoginState(
     val username: String = "",
     val password: String = "",
-    val rememberMe: Boolean = false
+    val rememberMe: Boolean = false,
+    val passwordVisible: Boolean = false
 )
 
 sealed interface LoginIntent {
@@ -15,16 +14,7 @@ sealed interface LoginIntent {
     data class RememberMeChanged(val checked: Boolean) : LoginIntent
     object SubmitLogin : LoginIntent
     object NavigateToSignUp : LoginIntent
+    object TogglePasswordVisibility : LoginIntent
 }
 
-sealed interface LoginEffect {
-    object NavigateToHome : LoginEffect
-    object NavigateToSignUp : LoginEffect
-    data class ShowToast(val message: String) : LoginEffect
-}
 
-interface LoginViewModelContract {
-    val state: StateFlow<LoginState>
-    val effect: SharedFlow<LoginEffect>
-    fun dispatch(intent: LoginIntent)
-}

@@ -100,15 +100,14 @@ fun TextInput(
             .background(Color(0xFF1A1A1A), shape = RoundedCornerShape(12.dp))
     )
 }
-
 @Composable
 fun PasswordInput(
-    password: String = "",
-    onPasswordChange: (String) -> Unit = {},
+    password: String,
+    onPasswordChange: (String) -> Unit,
+    passwordVisible: Boolean,
+    onPasswordVisibilityChange: () -> Unit,
     labelText: String = "Password"
 ) {
-    var passwordVisible by remember { mutableStateOf(false) }
-
     OutlinedTextField(
         value = password,
         onValueChange = onPasswordChange,
@@ -126,7 +125,7 @@ fun PasswordInput(
             else
                 R.drawable.ic_enable
 
-            IconButton(onClick = { passwordVisible = !passwordVisible }) {
+            IconButton(onClick = onPasswordVisibilityChange) {
                 Icon(
                     painter = painterResource(id = iconResId),
                     contentDescription = if (passwordVisible) "Hide password" else "Show password",
@@ -156,7 +155,6 @@ fun PasswordInput(
             .background(Color(0xFF1A1A1A), shape = RoundedCornerShape(12.dp))
     )
 }
-
 @Composable
 fun RememberMeCheckbox(
     checked: Boolean,
