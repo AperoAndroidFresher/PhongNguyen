@@ -9,7 +9,7 @@ fun LoginScreen(
     viewModel: LoginViewModel,
     onSignUpClick: () -> Unit,
     onLoginSuccess: () -> Unit,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
