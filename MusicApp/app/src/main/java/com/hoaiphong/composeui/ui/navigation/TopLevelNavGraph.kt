@@ -4,11 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.hoaiphong.composeui.ui.navigation.MyInformationScreen
 import com.hoaiphong.composeui.ui.screen.home.ContentRed
 import com.hoaiphong.composeui.ui.screen.home.HomeScreen
 import com.hoaiphong.composeui.ui.screen.layout.SharedBottom
-import com.hoaiphong.composeui.ui.screen.myinfo.MyInformation
-import com.hoaiphong.composeui.ui.screen.mysong.PlaylistSong
+import com.hoaiphong.composeui.ui.screen.myinfo.InformationScreen
+import com.hoaiphong.composeui.ui.screen.mysong.PlaylistSongScreen
 
 @Composable
 fun TopLevelNavGraph(
@@ -51,7 +52,7 @@ fun TopLevelNavGraph(
                         }
                     }
                 ) {
-                    PlaylistSong()
+                    PlaylistSongScreen()
                 }
             }
             entry<Song> {
@@ -68,7 +69,7 @@ fun TopLevelNavGraph(
                 }
             }
             entry<MyInformationScreen> {
-                MyInformation()
+                InformationScreen()
             }
         }
     )
