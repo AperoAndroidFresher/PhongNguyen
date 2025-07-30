@@ -27,6 +27,9 @@ class LoginViewModel : ViewModel() {
             is LoginIntent.RememberMeChanged -> {
                 _state.update { it.copy(rememberMe = intent.checked) }
             }
+            is LoginIntent.TogglePasswordVisibility -> {
+                _state.update { it.copy(passwordVisible = !it.passwordVisible) }
+            }
             is LoginIntent.SubmitLogin -> {
                 val current = _state.value
                 if (UserManager.validateLogin(current.username, current.password)) {
