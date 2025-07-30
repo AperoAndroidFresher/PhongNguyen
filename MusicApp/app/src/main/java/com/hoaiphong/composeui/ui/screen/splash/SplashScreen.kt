@@ -24,7 +24,7 @@ fun SplashScreen(
 ) {
     LaunchedEffect(Unit) {
         delay(2000)
-        onNavigateToLogin() // <- gọi callback để chuyển màn
+        onNavigateToLogin()
     }
 
     Box(
