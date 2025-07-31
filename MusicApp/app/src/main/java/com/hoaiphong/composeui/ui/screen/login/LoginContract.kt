@@ -18,3 +18,8 @@ sealed interface LoginIntent {
 }
 
 
+sealed interface LoginEffect {
+    object NavigateToHome : LoginEffect
+    object NavigateToSignUp : LoginEffect
+    data class ShowToast(val message: String) : LoginEffect
+}

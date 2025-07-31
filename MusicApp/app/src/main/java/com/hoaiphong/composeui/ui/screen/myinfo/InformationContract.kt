@@ -30,3 +30,8 @@ sealed interface MyInfoIntent {
 
 
 }
+
+sealed interface MyInfoEffect {
+    object ShowSuccessDialog : MyInfoEffect
+    data class ShowToast(val message: String) : MyInfoEffect
+}
