@@ -1,5 +1,7 @@
 package com.hoaiphong.composeui.ui.screen.mysong
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -15,6 +17,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -27,18 +30,39 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.data.model.getAllMp3File
+
 @Composable
 fun PlaylistSongScreen(
     modifier: Modifier = Modifier,
-    viewModel: PlaylistViewModel = remember { PlaylistViewModel() }
+    viewModel: PlaylistViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     val state by viewModel.uiState.collectAsState()
 
+    LaunchedEffect(Unit) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is PlaylistEffect.ShowToast -> {
+                    Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    LaunchedEffect(Unit) {
+        val songs = getAllMp3File(context)
+        Log.d("Mp3Test", "Found ${songs.size} songs")
+        songs.forEach { Log.d("Mp3Test", it.toString()) }
+        viewModel.dispatch(PlaylistIntent.LoadSongs)
+    }
     Box(
         modifier = modifier
             .background(Color(0xFF121212))
@@ -71,7 +95,7 @@ fun PlaylistSongScreen(
                         modifier = Modifier
                             .size(25.dp)
                             .clickable {
-                                viewModel.onEvent(
+                                viewModel.dispatch(
                                     PlaylistIntent.ToggleView(!state.isColumnView)
                                 )
                             }
@@ -91,12 +115,12 @@ fun PlaylistSongScreen(
             if (state.isColumnView) {
                 ColumnSongList(
                     songs = state.songs.toMutableStateList(),
-                    onRemoveClick = { index -> viewModel.onEvent(PlaylistIntent.RemoveSong(index)) }
+                    onRemoveClick = { index -> viewModel.dispatch(PlaylistIntent.RemoveSong(index)) }
                 )
             } else {
                 GridSongList(
                     songs = state.songs.toMutableStateList(),
-                    onRemoveClick = { index -> viewModel.onEvent(PlaylistIntent.RemoveSong(index)) }
+                    onRemoveClick = { index -> viewModel.dispatch(PlaylistIntent.RemoveSong(index)) }
                 )
             }
         }

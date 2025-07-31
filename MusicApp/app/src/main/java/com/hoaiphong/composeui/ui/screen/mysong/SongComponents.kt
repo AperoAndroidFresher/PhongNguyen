@@ -44,6 +44,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.data.model.Song
 
@@ -62,7 +63,7 @@ fun MyListItem(
         verticalAlignment = Alignment.Companion.CenterVertically
     ) {
         Image(
-            painter = painterResource(id = song.imageResId),
+            painter = rememberAsyncImagePainter(song.image),
             contentDescription = "",
             modifier = Modifier.Companion
                 .size(70.dp)
@@ -98,7 +99,7 @@ fun MyListItem(
             verticalAlignment = Alignment.Companion.CenterVertically
         ) {
             Text(
-                text = song.time,
+                text = song.duration.toDurationFormatted(),
                 fontSize = 20.sp,
                 color = Color.Companion.White,
                 maxLines = 1,
@@ -128,7 +129,7 @@ fun MyListItem(
 
 @Composable
 fun MyColumnItem(
-    song: Song = Song(),
+    song: Song,
     modifier: Modifier = Modifier.Companion,
     onRemoveClick: () -> Unit
 ) {
@@ -144,7 +145,7 @@ fun MyColumnItem(
                 .clip(RoundedCornerShape(10.dp))
         ) {
             Image(
-                painter = painterResource(id = song.imageResId),
+                painter = rememberAsyncImagePainter(song.image),
                 contentDescription = "",
                 modifier = Modifier.Companion.matchParentSize(),
                 contentScale = ContentScale.Companion.Crop
@@ -203,7 +204,7 @@ fun MyColumnItem(
         Spacer(modifier = Modifier.Companion.height(8.dp))
 
         Text(
-            song.time,
+            text = song.duration.toDurationFormatted(),
             color = Color.Companion.White,
             fontSize = 20.sp,
             maxLines = 1,
