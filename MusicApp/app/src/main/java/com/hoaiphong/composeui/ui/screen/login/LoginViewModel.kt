@@ -16,8 +16,13 @@ class LoginViewModel : ViewModel() {
     private val _effect = Channel<LoginEffect>(Channel.BUFFERED)
     val effect = _effect.receiveAsFlow()
 
+    fun prefillCredentials(username: String, password: String) {
+        _state.update {
+            it.copy(username = username, password = password)
+        }
+    }
     fun dispatch(intent: LoginIntent) {
-        when (intent) {
+            when (intent) {
             is LoginIntent.UsernameChanged -> {
                 _state.update { it.copy(username = intent.username) }
             }
@@ -38,6 +43,7 @@ class LoginViewModel : ViewModel() {
                     _effect.trySend(LoginEffect.ShowToast("Sai tài khoản hoặc mật khẩu"))
                 }
             }
+
             is LoginIntent.NavigateToSignUp -> {
                 _effect.trySend(LoginEffect.NavigateToSignUp)
             }

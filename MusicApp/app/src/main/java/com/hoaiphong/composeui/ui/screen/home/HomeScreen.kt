@@ -16,6 +16,7 @@ import com.hoaiphong.composeui.ui.navigation.MyInformationScreen
 
 @Composable
 fun HomeScreen(
+    modifier: Modifier = Modifier,
     onNavigate: (Any) -> Unit
 ) {
     Box(modifier = Modifier.fillMaxSize()) {

@@ -1,11 +1,12 @@
 package com.hoaiphong.composeui.ui.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.hoaiphong.composeui.ui.navigation.MyInformationScreen
-import com.hoaiphong.composeui.ui.screen.home.ContentRed
+import com.hoaiphong.composeui.ui.screen.myalbum.ContentRed
 import com.hoaiphong.composeui.ui.screen.home.HomeScreen
 import com.hoaiphong.composeui.ui.screen.layout.SharedBottom
 import com.hoaiphong.composeui.ui.screen.myinfo.InformationScreen
@@ -36,8 +37,9 @@ fun TopLevelNavGraph(
                             }
                         }
                     }
-                ) {
+                ) { padding ->
                     HomeScreen(
+                        modifier = Modifier.padding(padding),
                         onNavigate = { target -> handleNavigation(target, topLevelBackStack) }
                     )
                 }
@@ -51,8 +53,8 @@ fun TopLevelNavGraph(
                             topLevelBackStack.clear(target)
                         }
                     }
-                ) {
-                    PlaylistSongScreen()
+                ) { padding ->
+                    PlaylistSongScreen(modifier = Modifier.padding(padding))
                 }
             }
             entry<Song> {
@@ -64,8 +66,11 @@ fun TopLevelNavGraph(
                             topLevelBackStack.clear(target)
                         }
                     }
-                ) {
-                    ContentRed("Song screen")
+                ) { padding ->
+                    ContentRed(
+                        title = "Song screen",
+                        modifier = Modifier.padding(padding)
+                    )
                 }
             }
             entry<MyInformationScreen> {
