@@ -1,33 +1,71 @@
 package com.hoaiphong.composeui.data.model
 
-import com.hoaiphong.composeui.R
+import android.content.ContentResolver
+import android.content.Context
+import android.media.MediaMetadataRetriever
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Log
 
 data class Song(
-    val name: String = "Name of Song",
-    val author: String = "Name of Author",
-    val time: String = "Time of Song",
-    val imageResId: Int = R.drawable.song1
+    val id: Long,
+    val name: String,
+    val author: String,
+    val duration: String,
+    val image: ByteArray?,
+    val data: String,
 )
 
-val songList = listOf(
-    Song("Song #1", "Author A", "3:10", R.drawable.song1),
-    Song("Song #2", "Author B", "3:15", R.drawable.song2),
-    Song("Song #3", "Author C", "4:05", R.drawable.song3),
-    Song("Song #4", "Author D", "5:20", R.drawable.song4),
-    Song("Song #5", "Author E", "4:45", R.drawable.song5),
-    Song("Song #6", "Author F", "3:33", R.drawable.song1),
-    Song("Song #7", "Author G", "5:12", R.drawable.song2),
-    Song("Song #8", "Author H", "4:25", R.drawable.song3),
-    Song("Song #9", "Author I", "3:50", R.drawable.song4),
-    Song("Song #10", "Author J", "4:10", R.drawable.song5),
-    Song("Song #11", "Author K", "3:18", R.drawable.song1),
-    Song("Song #12", "Author L", "5:00", R.drawable.song2),
-    Song("Song #13", "Author M", "4:35", R.drawable.song3),
-    Song("Song #14", "Author N", "3:22", R.drawable.song4),
-    Song("Song #15", "Author O", "5:45", R.drawable.song5),
-    Song("Song #16", "Author P", "4:55", R.drawable.song1),
-    Song("Song #17", "Author Q", "3:40", R.drawable.song2),
-    Song("Song #18", "Author R", "4:15", R.drawable.song3),
-    Song("Song #19", "Author S", "5:05", R.drawable.song4),
-    Song("Song #20", "Author T", "4:42", R.drawable.song5)
-)
+fun getAllMp3File(context: Context): List<Song> {
+    val songList = mutableListOf<Song>()
+    val contentResolver: ContentResolver = context.contentResolver
+    val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    val selection = "${MediaStore.Audio.Media.DURATION} > 0"
+    val projection = arrayOf(
+        MediaStore.Audio.Media._ID,
+        MediaStore.Audio.Media.TITLE,
+        MediaStore.Audio.Media.ARTIST,
+        MediaStore.Audio.Media.DURATION,
+        MediaStore.Audio.Media.DATA
+    )
+
+    val cursor = contentResolver.query(uri, projection, selection, null, null)
+    cursor?.use {
+        val idColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media._ID)
+        val titleColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
+        val artistColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.ARTIST)
+        val durationColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+        val dataColumn = it.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+
+        while (it.moveToNext()) {
+            val id = it.getLong(idColumn)
+            val title = it.getString(titleColumn)
+            val artist = it.getString(artistColumn)
+            val duration = it.getString(durationColumn)
+            val data = it.getString(dataColumn)
+
+            // Extract embedded image
+            val imageBytes = try {
+                val retriever = MediaMetadataRetriever()
+                retriever.setDataSource(data)
+                val bytes = retriever.embeddedPicture
+                retriever.release()
+                bytes
+            } catch (e: Exception) {
+                null
+            }
+            val song = Song(
+                id = id,
+                name = title,
+                author = artist,
+                duration = duration,
+                image = imageBytes,
+                data = data
+            )
+            songList.add(song)
+        }
+    }
+
+    Log.d("SongDebug", "Total songs found: ${songList.size}")
+    return songList
+}

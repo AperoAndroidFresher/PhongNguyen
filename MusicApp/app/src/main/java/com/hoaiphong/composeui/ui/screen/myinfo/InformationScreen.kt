@@ -25,7 +25,7 @@ fun InformationScreen(
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
 
-    val launcher = rememberImagePickerLauncher(context) { uri ->
+    val launcher = rememberImagePicker(context) { uri ->
         viewModel.dispatch(MyInfoIntent.AvatarChanged(uri))
     }
 

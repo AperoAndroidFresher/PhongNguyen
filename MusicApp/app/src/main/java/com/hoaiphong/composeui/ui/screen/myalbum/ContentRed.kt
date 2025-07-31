@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.screen.home
+package com.hoaiphong.composeui.ui.screen.myalbum
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background

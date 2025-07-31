@@ -41,6 +41,8 @@ fun AppNavGraph() {
                     LoginScreen(
                         viewModel = loginViewModel,
                         navController = navController,
+                        defaultUsername = route.defaultUsername,
+                        defaultPassword = route.defaultPassword,
                         onSignUpClick = {
                             backStack.add(SignUp)
                         },

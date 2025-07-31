@@ -1,32 +1,72 @@
 package com.hoaiphong.composeui.ui.screen.mysong
 
-import androidx.lifecycle.ViewModel
-import com.hoaiphong.composeui.data.model.songList
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.hoaiphong.composeui.data.model.getAllMp3File
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-class PlaylistViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(
-        PlaylistState(
-            songs = songList,
-            isColumnView = true
-        )
-    )
-    val uiState: StateFlow<PlaylistState> = _uiState
+class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
 
-    fun onEvent(intent: PlaylistIntent) {
+    private val _uiState = MutableStateFlow(PlaylistState())
+    val uiState: StateFlow<PlaylistState> = _uiState.asStateFlow()
+
+    private val _effect = MutableSharedFlow<PlaylistEffect>()
+    val effect: SharedFlow<PlaylistEffect> = _effect.asSharedFlow()
+
+    init {
+        dispatch(PlaylistIntent.LoadSongs)
+    }
+
+    fun dispatch(intent: PlaylistIntent) {
         when (intent) {
             is PlaylistIntent.ToggleView -> {
                 _uiState.update { it.copy(isColumnView = intent.isColumn) }
             }
 
             is PlaylistIntent.RemoveSong -> {
-                _uiState.update {
-                    val updatedSongs = it.songs.toMutableList().apply {
-                        removeAt(intent.index)
+                _uiState.update { currentState ->
+                    val updatedSongs = currentState.songs.toMutableList()
+                    if (intent.index in updatedSongs.indices) {
+                        updatedSongs.removeAt(intent.index)
+                        viewModelScope.launch {
+                            _effect.emit(PlaylistEffect.ShowToast("Đã xoá bài hát"))
+                        }
                     }
-                    it.copy(songs = updatedSongs)
+                    currentState.copy(songs = updatedSongs)
+                }
+            }
+
+            is PlaylistIntent.LoadSongs -> {
+                viewModelScope.launch {
+                    _uiState.update { it.copy(isLoading = true) }
+                    val songs = getAllMp3File(getApplication()).map { SongItemState(song = it) }
+                    _uiState.update {
+                        it.copy(songs = songs, isLoading = false)
+                    }
+                }
+            }
+
+            is PlaylistIntent.ToggleDropdown -> {
+                _uiState.update { state ->
+                    val updated = state.songs.mapIndexed { index, item ->
+                        if (index == intent.index) {
+                            item.copy(isMenuExpanded = !item.isMenuExpanded)
+                        } else {
+                            item.copy(isMenuExpanded = false)
+                        }
+                    }
+                    state.copy(songs = updated)
+                }
+            }
+
+            is PlaylistIntent.DismissDropdown -> {
+                _uiState.update { state ->
+                    val updated = state.songs.map {
+                        it.copy(isMenuExpanded = false)
+                    }
+                    state.copy(songs = updated)
                 }
             }
         }
