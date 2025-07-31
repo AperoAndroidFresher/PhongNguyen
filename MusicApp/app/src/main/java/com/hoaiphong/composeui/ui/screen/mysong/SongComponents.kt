@@ -47,177 +47,176 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.data.model.Song
-
 @Composable
 fun MyListItem(
-    song: Song,
-    modifier: Modifier = Modifier.Companion,
-    onRemoveClick: () -> Unit
+    song: SongItemState,
+    modifier: Modifier = Modifier,
+    onRemoveClick: () -> Unit,
+    onDropdownToggle: () -> Unit,
+    onDismissDropdown: () -> Unit
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
     Row(
         modifier = modifier
             .fillMaxWidth()
             .padding(4.dp),
         horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.Companion.CenterVertically
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = rememberAsyncImagePainter(song.image),
-            contentDescription = "",
-            modifier = Modifier.Companion
+            painter = rememberAsyncImagePainter(song.song.image),
+            contentDescription = null,
+            modifier = Modifier
                 .size(70.dp)
                 .padding(5.dp)
                 .clip(RoundedCornerShape(10.dp))
         )
 
-        Spacer(modifier = Modifier.Companion.width(8.dp))
+        Spacer(modifier = Modifier.width(8.dp))
 
         Column(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .weight(1f)
                 .padding(end = 4.dp)
         ) {
             Text(
-                song.name,
-                fontWeight = FontWeight.Companion.Bold,
+                text = song.song.name,
+                fontWeight = FontWeight.Bold,
                 fontSize = 20.sp,
-                color = Color.Companion.White,
+                color = Color.White,
                 maxLines = 1,
-                overflow = TextOverflow.Companion.Ellipsis
+                overflow = TextOverflow.Ellipsis
             )
             Text(
-                song.author,
-                color = Color.Companion.LightGray,
+                text = song.song.author,
+                color = Color.LightGray,
                 fontSize = 16.sp,
                 maxLines = 1,
-                overflow = TextOverflow.Companion.Ellipsis
+                overflow = TextOverflow.Ellipsis
             )
         }
-        Spacer(modifier = Modifier.Companion.width(8.dp))
+
+        Spacer(modifier = Modifier.width(8.dp))
+
         Row(
-            verticalAlignment = Alignment.Companion.CenterVertically
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = song.duration.toDurationFormatted(),
+                text = song.song.duration.toDurationFormatted(),
                 fontSize = 20.sp,
-                color = Color.Companion.White,
+                color = Color.White,
                 maxLines = 1,
-                overflow = TextOverflow.Companion.Ellipsis
+                overflow = TextOverflow.Ellipsis
             )
 
             IconButton(
-                onClick = { expanded = true },
-                modifier = Modifier.Companion.size(24.dp)
+                onClick = onDropdownToggle,
+                modifier = Modifier.size(24.dp)
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_about),
                     contentDescription = "More Options",
-                    tint = Color.Companion.White,
-                    modifier = Modifier.Companion.size(18.dp)
+                    tint = Color.White,
+                    modifier = Modifier.size(18.dp)
                 )
             }
+
             SongDropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false },
-                onRemoveClick = onRemoveClick,
+                expanded = song.isMenuExpanded,
+                onDismissRequest = onDismissDropdown,
+                onRemoveClick = onRemoveClick
             )
         }
     }
 }
-
-
 @Composable
 fun MyColumnItem(
-    song: Song,
-    modifier: Modifier = Modifier.Companion,
-    onRemoveClick: () -> Unit
+    song: SongItemState,
+    modifier: Modifier = Modifier,
+    onRemoveClick: () -> Unit,
+    onDropdownToggle: () -> Unit,
+    onDismissDropdown: () -> Unit
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
-
     Column(
         modifier = modifier.padding(16.dp),
-        horizontalAlignment = Alignment.Companion.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier.Companion
+            modifier = Modifier
                 .size(135.dp)
                 .clip(RoundedCornerShape(10.dp))
         ) {
             Image(
-                painter = rememberAsyncImagePainter(song.image),
-                contentDescription = "",
-                modifier = Modifier.Companion.matchParentSize(),
-                contentScale = ContentScale.Companion.Crop
+                painter = rememberAsyncImagePainter(song.song.image),
+                contentDescription = null,
+                modifier = Modifier.matchParentSize(),
+                contentScale = ContentScale.Crop
             )
 
             Box(
-                modifier = Modifier.Companion
-                    .align(Alignment.Companion.TopEnd)
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
                     .padding(8.dp)
             ) {
                 IconButton(
-                    onClick = { expanded = true },
-                    modifier = Modifier.Companion
-                        .background(Color.Companion.Black.copy(alpha = 0.6f), shape = CircleShape)
+                    onClick = onDropdownToggle,
+                    modifier = Modifier
+                        .background(Color.Black.copy(alpha = 0.6f), shape = CircleShape)
                         .size(32.dp)
                 ) {
                     Image(
                         painter = painterResource(id = R.drawable.ic_about),
-                        contentDescription = "",
-                        modifier = Modifier.Companion.size(12.dp),
-                        colorFilter = ColorFilter.Companion.tint(Color.Companion.White)
+                        contentDescription = null,
+                        modifier = Modifier.size(12.dp),
+                        colorFilter = ColorFilter.tint(Color.White)
                     )
                 }
 
                 SongDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
+                    expanded = song.isMenuExpanded,
+                    onDismissRequest = onDismissDropdown,
                     onRemoveClick = onRemoveClick,
                 )
             }
         }
 
-        Spacer(modifier = Modifier.Companion.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            song.name,
-            fontWeight = FontWeight.Companion.Bold,
+            song.song.name,
+            fontWeight = FontWeight.Bold,
             fontSize = 20.sp,
-            color = Color.Companion.White,
+            color = Color.White,
             maxLines = 1,
-            overflow = TextOverflow.Companion.Ellipsis
-
+            overflow = TextOverflow.Ellipsis
         )
 
-        Spacer(modifier = Modifier.Companion.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            song.author,
-            color = Color.Companion.Gray,
+            song.song.author,
+            color = Color.Gray,
             fontSize = 16.sp,
             maxLines = 1,
-            overflow = TextOverflow.Companion.Ellipsis
-
+            overflow = TextOverflow.Ellipsis
         )
 
-        Spacer(modifier = Modifier.Companion.height(8.dp))
+        Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = song.duration.toDurationFormatted(),
-            color = Color.Companion.White,
+            text = song.song.duration.toDurationFormatted(),
+            color = Color.White,
             fontSize = 20.sp,
             maxLines = 1,
-            overflow = TextOverflow.Companion.Ellipsis
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
-
-
 @Composable
 fun GridSongList(
-    songs: SnapshotStateList<Song>,
+    songs: List<SongItemState>,
     onRemoveClick: (Int) -> Unit,
+    onDropdownToggle: (Int) -> Unit,
+    onDismissDropdown: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalGrid(
@@ -228,7 +227,29 @@ fun GridSongList(
         items(songs.size) { index ->
             MyColumnItem(
                 song = songs[index],
-                onRemoveClick = { onRemoveClick(index) }
+                onRemoveClick = { onRemoveClick(index) },
+                onDropdownToggle = { onDropdownToggle(index) },
+                onDismissDropdown = { onDismissDropdown(index) }
+            )
+        }
+    }
+}
+
+@Composable
+fun ColumnSongList(
+    songs: List<SongItemState>,
+    onRemoveClick: (Int) -> Unit,
+    onDropdownToggle: (Int) -> Unit,
+    onDismissDropdown: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    LazyColumn(modifier = modifier.fillMaxSize()) {
+        items(songs.size) { index ->
+            MyListItem(
+                song = songs[index],
+                onRemoveClick = { onRemoveClick(index) },
+                onDropdownToggle = { onDropdownToggle(index) },
+                onDismissDropdown = { onDismissDropdown(index) }
             )
         }
     }
@@ -252,26 +273,6 @@ fun DropdownMenuItemShareDisabled() {
         }
     )
 }
-
-
-@Composable
-fun ColumnSongList(
-    songs: SnapshotStateList<Song>,
-    onRemoveClick: (Int) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    LazyColumn(
-        modifier = modifier.fillMaxSize()
-    ) {
-        items(songs.size) { index ->
-            MyListItem(
-                song = songs[index],
-                onRemoveClick = { onRemoveClick(index) }
-            )
-        }
-    }
-}
-
 
 @Composable
 fun SongDropdownMenu(

@@ -41,10 +41,32 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             is PlaylistIntent.LoadSongs -> {
                 viewModelScope.launch {
                     _uiState.update { it.copy(isLoading = true) }
-                    val songs = getAllMp3File(getApplication())
+                    val songs = getAllMp3File(getApplication()).map { SongItemState(song = it) }
                     _uiState.update {
                         it.copy(songs = songs, isLoading = false)
                     }
+                }
+            }
+
+            is PlaylistIntent.ToggleDropdown -> {
+                _uiState.update { state ->
+                    val updated = state.songs.mapIndexed { index, item ->
+                        if (index == intent.index) {
+                            item.copy(isMenuExpanded = !item.isMenuExpanded)
+                        } else {
+                            item.copy(isMenuExpanded = false)
+                        }
+                    }
+                    state.copy(songs = updated)
+                }
+            }
+
+            is PlaylistIntent.DismissDropdown -> {
+                _uiState.update { state ->
+                    val updated = state.songs.map {
+                        it.copy(isMenuExpanded = false)
+                    }
+                    state.copy(songs = updated)
                 }
             }
         }

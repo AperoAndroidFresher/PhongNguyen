@@ -114,13 +114,17 @@ fun PlaylistSongScreen(
 
             if (state.isColumnView) {
                 ColumnSongList(
-                    songs = state.songs.toMutableStateList(),
-                    onRemoveClick = { index -> viewModel.dispatch(PlaylistIntent.RemoveSong(index)) }
+                    songs = state.songs,
+                    onRemoveClick = { index -> viewModel.dispatch(PlaylistIntent.RemoveSong(index)) },
+                    onDropdownToggle = { index -> viewModel.dispatch(PlaylistIntent.ToggleDropdown(index)) },
+                    onDismissDropdown = { index -> viewModel.dispatch(PlaylistIntent.DismissDropdown(index)) }
                 )
             } else {
                 GridSongList(
-                    songs = state.songs.toMutableStateList(),
-                    onRemoveClick = { index -> viewModel.dispatch(PlaylistIntent.RemoveSong(index)) }
+                    songs = state.songs,
+                    onRemoveClick = { index -> viewModel.dispatch(PlaylistIntent.RemoveSong(index)) },
+                    onDropdownToggle = { index -> viewModel.dispatch(PlaylistIntent.ToggleDropdown(index)) },
+                    onDismissDropdown = { index -> viewModel.dispatch(PlaylistIntent.DismissDropdown(index)) }
                 )
             }
         }

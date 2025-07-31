@@ -6,8 +6,6 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
-import androidx.core.net.toUri
-import com.hoaiphong.composeui.R
 
 data class Song(
     val id: Long,
@@ -15,7 +13,7 @@ data class Song(
     val author: String,
     val duration: String,
     val image: ByteArray?,
-    val data: String
+    val data: String,
 )
 
 fun getAllMp3File(context: Context): List<Song> {
