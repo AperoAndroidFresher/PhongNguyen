@@ -13,7 +13,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.compose.AppTheme
 import com.hoaiphong.composeui.ui.navigation.AppNavGraph
-import com.hoaiphong.composeui.ui.screen.library.LibraryScreen
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
