@@ -1,6 +1,11 @@
 package com.hoaiphong.composeui.ui.screen.myinfo
 
 
+import android.content.Context
+import android.net.Uri
+import androidx.activity.compose.ManagedActivityResultLauncher
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -189,4 +194,15 @@ fun SuccessPopupContent(modifier: Modifier = Modifier.Companion) {
             )
         }
     }
+}
+
+@Composable
+fun rememberImagePicker(
+    context: Context,
+    onImagePicked: (Uri?) -> Unit
+): ManagedActivityResultLauncher<String, Uri?> {
+    return rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent(),
+        onResult = onImagePicked
+    )
 }
