@@ -206,3 +206,23 @@ fun rememberImagePicker(
         onResult = onImagePicked
     )
 }
+
+@Composable
+fun LibraryButton(
+    text: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
+    isSelected: Boolean = false
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .width(150.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceTint),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
+        border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.surfaceTint)
+    ) {
+        Text(text, color = MaterialTheme.colorScheme.onSecondary)
+    }
+}

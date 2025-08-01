@@ -1,6 +1,8 @@
 package com.hoaiphong.composeui
 
 import android.Manifest
+import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -11,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.compose.AppTheme
 import com.hoaiphong.composeui.ui.navigation.AppNavGraph
+import com.hoaiphong.composeui.ui.screen.library.LibraryScreen
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -26,6 +29,7 @@ class MainActivity : ComponentActivity() {
                 1
             )
         }
+
         setContent {
             AppTheme {
                 AppNavGraph()

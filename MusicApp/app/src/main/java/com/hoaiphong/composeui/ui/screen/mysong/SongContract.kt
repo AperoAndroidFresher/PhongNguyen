@@ -1,11 +1,6 @@
 package com.hoaiphong.composeui.ui.screen.mysong
 
-import com.hoaiphong.composeui.data.model.Song
-
-data class SongItemState(
-    val song: Song,
-    val isMenuExpanded: Boolean = false
-)
+import com.hoaiphong.composeui.comon.SongItemState
 
 sealed interface PlaylistIntent {
     data class ToggleView(val isColumn: Boolean) : PlaylistIntent

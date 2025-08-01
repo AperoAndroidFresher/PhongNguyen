@@ -1,0 +1,28 @@
+package com.hoaiphong.composeui.ui.screen.library
+
+import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.data.model.Playlist
+
+
+sealed interface LibraryIntent {
+    data object LoadLocalSongs : LibraryIntent
+    data object LoadRemoteSongs : LibraryIntent
+    data class ToggleDropdown(val index: Int) : LibraryIntent
+    data object DismissDropdown : LibraryIntent
+
+    data class ShowAddToPlaylistDialog(val index: Int) : LibraryIntent
+    data object DismissAddToPlaylistDialog : LibraryIntent
+}
+
+data class LibraryState(
+    val songs: List<SongItemState> = emptyList(),
+    val isLocalSelected: Boolean = true,
+
+    val showAddToPlaylistDialog: Boolean = false,
+    val selectedSongIndexForPlaylist: Int? = null,
+
+    val isDialogVisible: Boolean = false,
+    val selectedSongIndex: Int? = null,
+)
+
+sealed interface LibraryEffect

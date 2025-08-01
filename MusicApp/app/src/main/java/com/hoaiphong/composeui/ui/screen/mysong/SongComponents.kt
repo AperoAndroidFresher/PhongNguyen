@@ -1,6 +1,7 @@
 package com.hoaiphong.composeui.ui.screen.mysong
 
 
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,7 +48,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.hoaiphong.composeui.R
-import com.hoaiphong.composeui.data.model.Song
+import com.hoaiphong.composeui.comon.SongItemState
+
 @Composable
 fun MyListItem(
     song: SongItemState,
@@ -256,19 +259,23 @@ fun ColumnSongList(
 }
 
 @Composable
-fun DropdownMenuItemShareDisabled() {
+fun DropdownMenuItemShare() {
+    val context = LocalContext.current
+
     DropdownMenuItem(
-        text = {
-            Text("Share (coming soon)", color = Color.Companion.Gray)
+        text = { Text("Share", color = Color.White) },
+        onClick = {
+            val intent = Intent(Intent.ACTION_SEND).apply {
+                type = "audio/*"
+            }
+            context.startActivity(Intent.createChooser(intent, "Share with"))
         },
-        onClick = { },
-        enabled = false,
         leadingIcon = {
             Image(
-                painter = painterResource(id = R.drawable.ic_about),
+                painter = painterResource(id = R.drawable.ic_share),
                 contentDescription = null,
-                modifier = Modifier.Companion.size(18.dp),
-                colorFilter = ColorFilter.Companion.tint(Color.Companion.White)
+                modifier = Modifier.size(18.dp),
+                colorFilter = ColorFilter.tint(Color.White)
             )
         }
     )
@@ -296,7 +303,7 @@ fun SongDropdownMenu(
                 onDismissRequest()
                 onRemoveClick()
             }
-            DropdownMenuItemShareDisabled()
+            DropdownMenuItemShare()
         }
     }
 }
@@ -323,3 +330,132 @@ fun DropdownMenuItemRemove(onClick: () -> Unit) {
     )
 }
 
+@Composable
+fun DropdownMenuItemAdd(onClick: () -> Unit) {
+    DropdownMenuItem(
+        text = {
+            Text(
+                "Add to playlist",
+                fontWeight = FontWeight.Companion.Bold,
+                color = Color.Companion.White
+            )
+        },
+        onClick = onClick,
+        leadingIcon = {
+            Image(
+                painter = painterResource(id = R.drawable.ic_add_to_playlist),
+                contentDescription = null,
+                modifier = Modifier.Companion.size(18.dp),
+                colorFilter = ColorFilter.Companion.tint(Color.Companion.White)
+            )
+        }
+    )
+}
+@Composable
+fun PlaylistDropdownMenu(
+    expanded: Boolean,
+    onDismissRequest: () -> Unit,
+    onAddClick: () -> Unit,
+    modifier: Modifier = Modifier.Companion
+) {
+    Box(
+        modifier = modifier.wrapContentSize(Alignment.Companion.TopStart)
+    ) {
+        DropdownMenu(
+            expanded = expanded,
+            onDismissRequest = onDismissRequest,
+            modifier = modifier
+                .width(290.dp)
+                .background(Color.Companion.Black.copy(alpha = 0.8f)),
+            offset = DpOffset(x = -30.dp, y = 10.dp)
+        ) {
+            DropdownMenuItemAdd {
+                onDismissRequest()
+                onAddClick()
+            }
+            DropdownMenuItemShare()
+        }
+    }
+}
+
+@Composable
+fun MyPlayListItem(
+    song: SongItemState,
+    modifier: Modifier = Modifier,
+    onAddClick: () -> Unit,
+    onDropdownToggle: () -> Unit,
+    onDismissDropdown: () -> Unit
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(4.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(song.song.image),
+            contentDescription = null,
+            modifier = Modifier
+                .size(70.dp)
+                .padding(5.dp)
+                .clip(RoundedCornerShape(10.dp))
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Column(
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 4.dp)
+        ) {
+            Text(
+                text = song.song.name,
+                fontWeight = FontWeight.Bold,
+                fontSize = 20.sp,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            Text(
+                text = song.song.author,
+                color = Color.LightGray,
+                fontSize = 16.sp,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = song.song.duration.toDurationFormatted(),
+                fontSize = 20.sp,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            IconButton(
+                onClick = onDropdownToggle,
+                modifier = Modifier.size(24.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_about),
+                    contentDescription = "More Options",
+                    tint = Color.White,
+                    modifier = Modifier.size(18.dp)
+                )
+            }
+
+            PlaylistDropdownMenu(
+                expanded = song.isMenuExpanded,
+                onDismissRequest = onDismissDropdown,
+                onAddClick = onAddClick
+            )
+        }
+    }
+}
