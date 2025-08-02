@@ -50,7 +50,8 @@ import com.hoaiphong.composeui.R
 @Composable
 fun PlaylistScreen(
     modifier: Modifier = Modifier,
-    viewModel: PlayListViewModel = viewModel()
+    viewModel: PlayListViewModel = viewModel(),
+    onNavigateToPlaylistSongs: (String) -> Unit
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
@@ -150,6 +151,9 @@ fun PlaylistScreen(
                         val playlist = state.playlists[index]
                         PlaylistItem(
                             playlist = playlist,
+                            onClick = {
+                                onNavigateToPlaylistSongs(playlist.name)
+                            },
                             onRemoveClick = {
                                 viewModel.dispatch(PlaylistIntent.RemovePlaylist(playlist.name))
                             },

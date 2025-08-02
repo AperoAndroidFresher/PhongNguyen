@@ -33,7 +33,6 @@ data object Song : TopLevelRoute {
     override val icon = Icons.AutoMirrored.Filled.List
 }
 
-
-
+data class PlaylistSongs(val playlistName: String) : Route
 
 

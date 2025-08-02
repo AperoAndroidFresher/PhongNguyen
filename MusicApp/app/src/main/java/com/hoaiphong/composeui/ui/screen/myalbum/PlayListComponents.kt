@@ -114,6 +114,7 @@ fun PlaylistItem(
     playlist: Playlist,
     modifier: Modifier = Modifier,
     showMenu: Boolean = true,
+    onClick: () -> Unit = {}, // <-- Thêm callback
     onRemoveClick: () -> Unit = {},
     onRename: (oldName: String, newName: String) -> Unit = { _, _ -> }
 ) {
@@ -124,6 +125,7 @@ fun PlaylistItem(
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
             .background(Color.DarkGray)
+            .clickable { onClick() }
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -147,7 +149,9 @@ fun PlaylistItem(
 
         // Playlist name and song count
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = if (showMenu) 8.dp else 0.dp) // tránh đè vào menu
         ) {
             Text(
                 playlist.name,
@@ -167,7 +171,9 @@ fun PlaylistItem(
         if (showMenu) {
             // Dropdown menu
             Box {
-                IconButton(onClick = { menuState = MenuState.Expanded }) {
+                IconButton(
+                    onClick = { menuState = MenuState.Expanded }
+                ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_about),
                         contentDescription = null,

@@ -37,13 +37,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.data.model.PlaylistManager
 import com.hoaiphong.composeui.data.model.getAllMp3File
+import com.hoaiphong.composeui.ui.navigation.PlaylistSongs
 
 @Composable
 fun PlaylistSongScreen(
+    entry: PlaylistSongs,
     modifier: Modifier = Modifier,
     viewModel: PlaylistViewModel = viewModel()
 ) {
+    val playlistName = entry.playlistName
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsState()
 
@@ -57,12 +61,13 @@ fun PlaylistSongScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        val songs = getAllMp3File(context)
-        Log.d("Mp3Test", "Found ${songs.size} songs")
-        songs.forEach { Log.d("Mp3Test", it.toString()) }
-        viewModel.dispatch(PlaylistIntent.LoadSongs)
+    LaunchedEffect(playlistName) {
+        val playlist = PlaylistManager.getPlaylistByName(playlistName)
+        playlist?.let {
+            viewModel.dispatch(PlaylistIntent.LoadSpecificSongs(it.songs))
+        }
     }
+
     Box(
         modifier = modifier
             .background(Color(0xFF121212))
@@ -77,7 +82,7 @@ fun PlaylistSongScreen(
                     .padding(horizontal = 14.dp)
             ) {
                 Text(
-                    text = "My Playlist",
+                    text = playlistName,
                     fontSize = 25.sp,
                     color = Color.White,
                     textAlign = TextAlign.Center,

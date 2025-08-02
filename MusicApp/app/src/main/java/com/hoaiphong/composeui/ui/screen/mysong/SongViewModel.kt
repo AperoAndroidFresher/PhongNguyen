@@ -70,6 +70,13 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                     state.copy(songs = updated)
                 }
             }
+            is PlaylistIntent.LoadSpecificSongs -> {
+                _uiState.update {
+                    it.copy(songs = intent.songs.map { song ->
+                        SongItemState(song = song)
+                    })
+                }
+            }
         }
     }
 }
