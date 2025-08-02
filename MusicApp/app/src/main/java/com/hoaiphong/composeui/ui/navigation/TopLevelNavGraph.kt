@@ -9,6 +9,8 @@ import androidx.navigation3.ui.NavDisplay
 import com.hoaiphong.composeui.ui.screen.myalbum.ContentRed
 import com.hoaiphong.composeui.ui.screen.home.HomeScreen
 import com.hoaiphong.composeui.ui.screen.layout.SharedBottom
+import com.hoaiphong.composeui.ui.screen.library.LibraryScreen
+import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistScreen
 import com.hoaiphong.composeui.ui.screen.myinfo.InformationScreen
 import com.hoaiphong.composeui.ui.screen.mysong.PlaylistSongScreen
 
@@ -54,7 +56,12 @@ fun TopLevelNavGraph(
                         }
                     }
                 ) { padding ->
-                    PlaylistSongScreen(modifier = Modifier.padding(padding))
+                    LibraryScreen(
+                        modifier = Modifier.padding(padding),
+                        onNavigateToPlaylistScreen = {
+                            topLevelBackStack.addTopLevel(Song)
+                        }
+                    )
                 }
             }
             entry<Song> {
@@ -67,14 +74,19 @@ fun TopLevelNavGraph(
                         }
                     }
                 ) { padding ->
-                    ContentRed(
-                        title = "Song screen",
-                        modifier = Modifier.padding(padding)
+                    PlaylistScreen(
+                        modifier = Modifier.padding(padding),
+                        onNavigateToPlaylistSongs = { playlistName ->
+                            topLevelBackStack.addTopLevel(PlaylistSongs(playlistName))
+                        }
                     )
                 }
             }
             entry<MyInformationScreen> {
                 InformationScreen()
+            }
+            entry<PlaylistSongs> { playlistSongs ->
+                PlaylistSongScreen(entry = playlistSongs)
             }
         }
     )

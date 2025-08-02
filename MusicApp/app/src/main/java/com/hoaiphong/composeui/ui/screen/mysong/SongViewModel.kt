@@ -3,6 +3,7 @@ package com.hoaiphong.composeui.ui.screen.mysong
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.hoaiphong.composeui.comon.SongItemState
 import com.hoaiphong.composeui.data.model.getAllMp3File
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -67,6 +68,13 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                         it.copy(isMenuExpanded = false)
                     }
                     state.copy(songs = updated)
+                }
+            }
+            is PlaylistIntent.LoadSpecificSongs -> {
+                _uiState.update {
+                    it.copy(songs = intent.songs.map { song ->
+                        SongItemState(song = song)
+                    })
                 }
             }
         }
