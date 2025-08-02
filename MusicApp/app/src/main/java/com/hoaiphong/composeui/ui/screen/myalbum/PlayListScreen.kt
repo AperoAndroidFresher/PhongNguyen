@@ -150,7 +150,12 @@ fun PlaylistScreen(
                         val playlist = state.playlists[index]
                         PlaylistItem(
                             playlist = playlist,
-                            onMoreClick = { /* mở menu hoặc action sheet */ }
+                            onRemoveClick = {
+                                viewModel.dispatch(PlaylistIntent.RemovePlaylist(playlist.name))
+                            },
+                            onRename = { oldName, newName ->
+                                viewModel.dispatch(PlaylistIntent.RenamePlaylist(oldName, newName))
+                            }
                         )
                     }
                 }

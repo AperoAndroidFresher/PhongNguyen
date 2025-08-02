@@ -19,4 +19,14 @@ object PlaylistManager {
     fun addSongToPlaylist(playlistName: String, song: Song) {
         playlists.find { it.name == playlistName }?.songs?.add(song)
     }
+    fun renamePlaylist(oldName: String, newName: String) {
+        val index = playlists.indexOfFirst { it.name == oldName }
+        if (index != -1) {
+            val current = playlists[index]
+            playlists[index] = current.copy(name = newName)
+        }
+    }
+    fun removePlaylist(name: String) {
+        playlists.removeIf { it.name == name }
+    }
 }
