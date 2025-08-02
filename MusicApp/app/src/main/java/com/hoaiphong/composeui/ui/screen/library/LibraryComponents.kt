@@ -2,12 +2,16 @@ package com.hoaiphong.composeui.ui.screen.library
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -24,32 +28,37 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-@Preview(showBackground = true)
+import com.hoaiphong.composeui.data.model.Playlist
+import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistIntent
+import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistItem
+
 @Composable
 fun ChoosePlaylistDialog(
-    onDismiss: () -> Unit={},
-    onAddClick: () -> Unit={},
+    playlists: List<Playlist>,
+    onDismiss: () -> Unit,
+    onAddClick: () -> Unit,
+    onPlaylistSelected: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
-
-        AlertDialog(
-            onDismissRequest = onDismiss,
-            containerColor = Color(0xFF1E1E1E),
-
-            title = {
-                Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Choose playlist",
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        textAlign = TextAlign.Center
-                    )
-                }
-            },
-            text = {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        containerColor = Color(0xFF1E1E1E),
+        title = {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "Choose playlist",
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+            }
+        },
+        text = {
+            if (playlists.isEmpty()) {
+                // Nếu không có playlist
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -80,10 +89,25 @@ fun ChoosePlaylistDialog(
                         }
                     }
                 }
-            },
-            confirmButton = {}
-        )
-
-
+            } else {
+                LazyColumn(
+                    contentPadding = PaddingValues(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(playlists.size) { index ->
+                        val playlist = playlists[index]
+                        PlaylistItem(
+                            playlist = playlist,
+                            showMenu = false, // Ẩn menu dropdown và rename dialog
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Color.DarkGray, shape = RoundedCornerShape(10.dp))
+                                .clickable { onPlaylistSelected(playlist.name) }
+                        )
+                    }
+                }
+            }
+        },
+        confirmButton = {}
+    )
 }
-

@@ -3,6 +3,7 @@ package com.hoaiphong.composeui.ui.screen.library
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.data.model.PlaylistManager
 import com.hoaiphong.composeui.data.model.getAllMp3File
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -50,7 +51,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 _uiState.update {
                     it.copy(
                         showAddToPlaylistDialog = true,
-                        selectedSongIndexForPlaylist = intent.index
+                        selectedSongIndexForPlaylist = intent.index,
+                        playlists = PlaylistManager.getPlaylists()
                     )
                 }
             }
@@ -63,7 +65,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                     )
                 }
             }
-
+            is LibraryIntent.LoadPlaylists -> {
+                _uiState.update {
+                    it.copy(playlists = PlaylistManager.getPlaylists())
+                }
+            }
         }
     }
 }

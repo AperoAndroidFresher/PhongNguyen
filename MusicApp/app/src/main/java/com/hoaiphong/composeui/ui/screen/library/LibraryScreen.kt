@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hoaiphong.composeui.data.model.PlaylistManager
 import com.hoaiphong.composeui.ui.screen.myinfo.LibraryButton
 import com.hoaiphong.composeui.ui.screen.mysong.MyPlayListItem
 
@@ -88,13 +89,18 @@ fun LibraryScreen(
         }
         if (state.showAddToPlaylistDialog) {
             ChoosePlaylistDialog(
-                onDismiss = {
-                    viewModel.dispatch(LibraryIntent.DismissAddToPlaylistDialog)
-                },
+                playlists = state.playlists,
+                onDismiss = { viewModel.dispatch(LibraryIntent.DismissAddToPlaylistDialog) },
                 onAddClick = {
-                    // TODO: Thêm logic tạo playlist mới
-                    println("Create new playlist")
                     viewModel.dispatch(LibraryIntent.DismissAddToPlaylistDialog)
+                    //viewModel.dispatch(LibraryIntent.ShowAddPlaylistDialog)
+                },
+                onPlaylistSelected = { playlistName ->
+                    state.selectedSongIndexForPlaylist?.let { index ->
+                        val song = state.songs[index].song
+                        PlaylistManager.addSongToPlaylist(playlistName, song)
+                        viewModel.dispatch(LibraryIntent.DismissAddToPlaylistDialog)
+                    }
                 }
             )
         }

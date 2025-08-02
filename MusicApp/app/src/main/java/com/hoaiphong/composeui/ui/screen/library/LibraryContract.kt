@@ -12,6 +12,8 @@ sealed interface LibraryIntent {
 
     data class ShowAddToPlaylistDialog(val index: Int) : LibraryIntent
     data object DismissAddToPlaylistDialog : LibraryIntent
+
+    object LoadPlaylists : LibraryIntent
 }
 
 data class LibraryState(
@@ -23,6 +25,8 @@ data class LibraryState(
 
     val isDialogVisible: Boolean = false,
     val selectedSongIndex: Int? = null,
+
+    val playlists: List<Playlist> = emptyList(),
 )
 
 sealed interface LibraryEffect

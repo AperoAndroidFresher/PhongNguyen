@@ -113,6 +113,7 @@ fun PlaylistItemPreview() {
 fun PlaylistItem(
     playlist: Playlist,
     modifier: Modifier = Modifier,
+    showMenu: Boolean = true,
     onRemoveClick: () -> Unit = {},
     onRename: (oldName: String, newName: String) -> Unit = { _, _ -> }
 ) {
@@ -163,48 +164,51 @@ fun PlaylistItem(
             )
         }
 
-        // Dropdown menu
-        Box {
-            IconButton(onClick = { menuState = MenuState.Expanded }) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_about),
-                    contentDescription = null,
-                    tint = Color.White,
-                    modifier = Modifier.size(16.dp)
-                )
+        if (showMenu) {
+            // Dropdown menu
+            Box {
+                IconButton(onClick = { menuState = MenuState.Expanded }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_about),
+                        contentDescription = null,
+                        tint = Color.White,
+                        modifier = Modifier.size(16.dp)
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = menuState is MenuState.Expanded,
+                    onDismissRequest = { menuState = MenuState.None }
+                ) {
+                    PlaylistDropdownMenu(
+                        expanded = true,
+                        onDismissRequest = { menuState = MenuState.None },
+                        onRemoveClick = {
+                            menuState = MenuState.None
+                            onRemoveClick()
+                        },
+                        onRenameClick = {
+                            menuState = MenuState.ShowRenameDialog
+                        }
+                    )
+                }
             }
 
-            DropdownMenu(
-                expanded = menuState is MenuState.Expanded,
-                onDismissRequest = { menuState = MenuState.None }
-            ) {
-                PlaylistDropdownMenu(
-                    expanded = true,
-                    onDismissRequest = { menuState = MenuState.None },
-                    onRemoveClick = {
+            // Rename dialog
+            if (menuState is MenuState.ShowRenameDialog) {
+                RenamePlaylistDialog(
+                    currentName = playlist.name,
+                    onDismiss = { menuState = MenuState.None },
+                    onConfirm = { newName ->
                         menuState = MenuState.None
-                        onRemoveClick()
-                    },
-                    onRenameClick = {
-                        menuState = MenuState.ShowRenameDialog
+                        onRename(playlist.name, newName)
                     }
                 )
             }
         }
-
-        // Rename dialog
-        if (menuState is MenuState.ShowRenameDialog) {
-            RenamePlaylistDialog(
-                currentName = playlist.name,
-                onDismiss = { menuState = MenuState.None },
-                onConfirm = { newName ->
-                    menuState = MenuState.None
-                    onRename(playlist.name, newName)
-                }
-            )
-        }
     }
 }
+
 @Composable
 fun RenamePlaylistDialog(
     currentName: String,
