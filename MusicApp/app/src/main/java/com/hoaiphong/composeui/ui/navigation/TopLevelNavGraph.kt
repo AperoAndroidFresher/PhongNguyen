@@ -56,7 +56,12 @@ fun TopLevelNavGraph(
                         }
                     }
                 ) { padding ->
-                    LibraryScreen(modifier = Modifier.padding(padding))
+                    LibraryScreen(
+                        modifier = Modifier.padding(padding),
+                        onNavigateToPlaylistScreen = {
+                            topLevelBackStack.addTopLevel(Song)
+                        }
+                    )
                 }
             }
             entry<Song> {

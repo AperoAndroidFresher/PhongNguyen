@@ -30,7 +30,8 @@ import com.hoaiphong.composeui.ui.screen.mysong.MyPlayListItem
 @Composable
 fun LibraryScreen(
     modifier: Modifier = Modifier,
-    viewModel: LibraryViewModel = viewModel()
+    viewModel: LibraryViewModel = viewModel(),
+    onNavigateToPlaylistScreen: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
     LaunchedEffect(Unit) {
@@ -93,7 +94,7 @@ fun LibraryScreen(
                 onDismiss = { viewModel.dispatch(LibraryIntent.DismissAddToPlaylistDialog) },
                 onAddClick = {
                     viewModel.dispatch(LibraryIntent.DismissAddToPlaylistDialog)
-                    //viewModel.dispatch(LibraryIntent.ShowAddPlaylistDialog)
+                    onNavigateToPlaylistScreen()
                 },
                 onPlaylistSelected = { playlistName ->
                     state.selectedSongIndexForPlaylist?.let { index ->

@@ -57,7 +57,7 @@ fun ChoosePlaylistDialog(
     onDismiss: () -> Unit,
     onAddClick: () -> Unit,
     onPlaylistSelected: (String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     AlertDialog(
         onDismissRequest = onDismiss,
