@@ -1,11 +1,15 @@
 package com.hoaiphong.composeui.ui.screen.myalbum
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.data.model.PlaylistManager
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+
 class PlayListViewModel : ViewModel() {
     private val _state = MutableStateFlow(PlayListState())
     val state: StateFlow<PlayListState> = _state.asStateFlow()
@@ -14,32 +18,37 @@ class PlayListViewModel : ViewModel() {
         when (intent) {
             is PlaylistIntent.AddPlaylist -> {
                 if (intent.name.isNotBlank()) {
-                    PlaylistManager.addPlaylist(intent.name.trim())
-                    _state.update {
-                        it.copy(
-                            playlists = PlaylistManager.getPlaylists().toList(),
-                            showAddDialog = false
-                        )
+                    viewModelScope.launch(Dispatchers.IO) {
+                        PlaylistManager.addPlaylist(intent.name.trim())
+                        val updated = PlaylistManager.getPlaylists().toList()
+                        _state.update {
+                            it.copy(
+                                playlists = updated,
+                                showAddDialog = false
+                            )
+                        }
                     }
                 }
             }
 
             is PlaylistIntent.RemovePlaylist -> {
-                PlaylistManager.removePlaylist(intent.name)
-                _state.update {
-                    it.copy(
-                        playlists = PlaylistManager.getPlaylists().toList()
-                    )
+                viewModelScope.launch(Dispatchers.IO) {
+                    PlaylistManager.removePlaylist(intent.name)
+                    val updated = PlaylistManager.getPlaylists().toList()
+                    _state.update { it.copy(playlists = updated) }
                 }
             }
 
             is PlaylistIntent.RenamePlaylist -> {
-                PlaylistManager.renamePlaylist(intent.oldName, intent.newName)
-                _state.update {
-                    it.copy(
-                        playlists = PlaylistManager.getPlaylists().toList(),
-                        selectedPlaylistIndexForRename = null
-                    )
+                viewModelScope.launch(Dispatchers.IO) {
+                    PlaylistManager.renamePlaylist(intent.oldName, intent.newName)
+                    val updated = PlaylistManager.getPlaylists().toList()
+                    _state.update {
+                        it.copy(
+                            playlists = updated,
+                            selectedPlaylistIndexForRename = null
+                        )
+                    }
                 }
             }
 

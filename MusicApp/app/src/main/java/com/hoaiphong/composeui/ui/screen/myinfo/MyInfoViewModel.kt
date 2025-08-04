@@ -1,21 +1,61 @@
 package com.hoaiphong.composeui.ui.screen.myinfo
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import com.hoaiphong.composeui.db.AppDatabase
+import com.hoaiphong.composeui.db.repository.UserRepositoryImpl
+import com.hoaiphong.composeui.ui.screen.login.LoginEffect
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
-class MyInfoViewModel : ViewModel() {
+class MyInfoViewModel(application: Application) : AndroidViewModel(application) {
+
     private val _state = MutableStateFlow(MyInfoState())
     val state: StateFlow<MyInfoState> = _state
 
     private val _effect = MutableSharedFlow<MyInfoEffect>()
     val effect: SharedFlow<MyInfoEffect> = _effect
 
+    init {
+        // Load user data from DB when ViewModel starts
+        viewModelScope.launch {
+            val sharedPref = application.getSharedPreferences("user_prefs", Application.MODE_PRIVATE)
+            val savedUsername = sharedPref.getString("username", null)
+
+            if (!savedUsername.isNullOrBlank()) {
+                try {
+                    val userRepository = UserRepositoryImpl(application)
+                    val user = userRepository.findUserByUsername(savedUsername)
+                    _state.update {
+                        it.copy(
+                            name = user.fullName.orEmpty(),
+                            phone = user.phoneNumber.orEmpty(),
+                            university = user.universityName.orEmpty(),
+                            description = user.description.orEmpty(),
+                            avatarUri = user.imgUrl.takeIf { it.isNotBlank() }?.toUri()
+                        )
+                    }
+                    Log.d("MyInfoViewModel", "Loaded user info: name=${user.fullName}, phone=${user.phoneNumber}, university=${user.universityName}, avatar=${user.imgUrl}")
+                } catch (e: Exception) {
+                    _effect.emit(MyInfoEffect.ShowToast("Không thể tải dữ liệu người dùng"))
+                }
+            } else {
+                _effect.emit(MyInfoEffect.ShowToast("Không tìm thấy tài khoản đã đăng nhập"))
+            }
+        }
+    }
     fun dispatch(intent: MyInfoIntent) {
         when (intent) {
             is MyInfoIntent.NameChanged -> _state.update { it.copy(name = intent.value, isNameValid = true) }
@@ -41,9 +81,34 @@ class MyInfoViewModel : ViewModel() {
                             showDialog = true
                         )
                     }
+
                     viewModelScope.launch {
-                        _effect.emit(MyInfoEffect.ShowSuccessDialog)
+                        try {
+                            val sharedPref = getApplication<Application>().getSharedPreferences("user_prefs", Application.MODE_PRIVATE)
+                            val savedUsername = sharedPref.getString("username", null)
+
+                            if (savedUsername.isNullOrBlank()) {
+                                _effect.emit(MyInfoEffect.ShowToast("Không tìm thấy tài khoản đã đăng nhập"))
+                                return@launch
+                            }
+
+                            val userRepository = UserRepositoryImpl(application)
+                            userRepository.updateUser(
+                                username = savedUsername,
+                                fullName = current.name,
+                                phongNumber = current.phone,
+                                universityName = current.university,
+                                description = current.description,
+                                imgUrl = current.avatarUri?.toString() ?: ""
+                            )
+
+                            _effect.emit(MyInfoEffect.ShowSuccessDialog)
+                            _effect.emit(MyInfoEffect.ShowToast("Cập nhật thông tin thành công"))
+                        } catch (e: Exception) {
+                            _effect.emit(MyInfoEffect.ShowToast("Cập nhật thất bại: ${e.message}"))
+                        }
                     }
+
                 } else {
                     _state.update {
                         it.copy(
@@ -55,10 +120,8 @@ class MyInfoViewModel : ViewModel() {
                 }
             }
 
-
         }
     }
-
     fun dismissDialog() {
         _state.update { it.copy(showDialog = false) }
     }
