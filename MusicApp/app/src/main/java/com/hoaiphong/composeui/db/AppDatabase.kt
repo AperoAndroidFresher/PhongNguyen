@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.hoaiphong.composeui.db.dao.PlayListDAO
+import com.hoaiphong.composeui.db.dao.PlaylistSongCrossRefDAO
 import com.hoaiphong.composeui.db.dao.SongDAO
 import com.hoaiphong.composeui.db.dao.UserDAO
 import com.hoaiphong.composeui.db.entity.Playlist
@@ -17,6 +18,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDAO
     abstract fun songDao(): SongDAO
     abstract fun playListDao(): PlayListDAO
+    abstract fun playlistSongCrossRefDAO(): PlaylistSongCrossRefDAO
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null

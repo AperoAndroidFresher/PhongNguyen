@@ -7,6 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.comon.SongItemState
 import com.hoaiphong.composeui.data.model.PlaylistManager
 import com.hoaiphong.composeui.data.model.getAllMp3File
+import com.hoaiphong.composeui.data.model.toEntity
+import com.hoaiphong.composeui.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -25,6 +27,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 viewModelScope.launch(Dispatchers.IO) {
                     val raw = getAllMp3File(application)
                     val wrapped = raw.map { SongItemState(it) }
+
+                    val songEntities = raw.map { it.toEntity() }
+                    val db = AppDatabase.getInstance(application)
+                    db.songDao().insertAll(*songEntities.toTypedArray())
+
                     _uiState.update {
                         it.copy(
                             songs = wrapped,
