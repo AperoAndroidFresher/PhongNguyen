@@ -4,11 +4,20 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.data.model.PlaylistManager
 import com.hoaiphong.composeui.data.model.getAllMp3File
+import com.hoaiphong.composeui.data.model.toModel
+import com.hoaiphong.composeui.db.AppDatabase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
+    private val db = AppDatabase.getInstance(application)
+    private val playlistManager = PlaylistManager(
+        db.playListDao(),
+        db.songDao(),
+        db.playlistSongCrossRefDAO()
+    )
 
     private val _uiState = MutableStateFlow(PlaylistState())
     val uiState: StateFlow<PlaylistState> = _uiState.asStateFlow()
@@ -18,6 +27,20 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
 
     init {
         dispatch(PlaylistIntent.LoadSongs)
+    }
+    fun loadPlaylistById(playlistId: Long) {
+        viewModelScope.launch {
+            val playlistWithSongs = playlistManager.getPlaylistWithSongsById(playlistId)
+            playlistWithSongs?.let {
+                val modelSongs = playlistWithSongs.songs.map { it.toModel() }
+                _uiState.update { oldState ->
+                    oldState.copy(
+                        songs = modelSongs.map { SongItemState(it) },
+                        playlistWithSongs = playlistWithSongs
+                    )
+                }
+            }
+        }
     }
 
     fun dispatch(intent: PlaylistIntent) {

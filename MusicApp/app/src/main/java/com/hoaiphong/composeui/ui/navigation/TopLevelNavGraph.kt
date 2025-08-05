@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.hoaiphong.composeui.ui.screen.myalbum.ContentRed
 import com.hoaiphong.composeui.ui.screen.home.HomeScreen
 import com.hoaiphong.composeui.ui.screen.layout.SharedBottom
 import com.hoaiphong.composeui.ui.screen.library.LibraryScreen
@@ -76,8 +75,8 @@ fun TopLevelNavGraph(
                 ) { padding ->
                     PlaylistScreen(
                         modifier = Modifier.padding(padding),
-                        onNavigateToPlaylistSongs = { playlistName ->
-                            topLevelBackStack.addTopLevel(PlaylistSongs(playlistName))
+                        onNavigateToPlaylistSongs = { playlistId ->
+                            topLevelBackStack.addTopLevel(PlaylistSongs(playlistId))
                         }
                     )
                 }
