@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -40,13 +41,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.hoaiphong.composeui.R
-import com.hoaiphong.composeui.data.model.Playlist
-import com.hoaiphong.composeui.ui.screen.myalbum.MenuState
-import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistDropdownMenu
-import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistIntent
-import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistItem
-import com.hoaiphong.composeui.ui.screen.myalbum.RenamePlaylistDialog
-
+import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
 
 
 @Composable
@@ -69,10 +64,10 @@ fun LibraryButton(
 }
 @Composable
 fun ChoosePlaylistDialog(
-    playlists: List<Playlist>,
+    playlists: List<PlaylistWithSongs>,
     onDismiss: () -> Unit,
     onAddClick: () -> Unit,
-    onPlaylistSelected: (String) -> Unit,
+    onPlaylistSelected: (Long) -> Unit, // 👈 nhận ID kiểu Long
     modifier: Modifier = Modifier,
 ) {
     AlertDialog(
@@ -128,27 +123,33 @@ fun ChoosePlaylistDialog(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(playlists.size) { index ->
-                        val playlist = playlists[index]
+                    items(playlists) { playlistWithSongs ->
                         ChoosePlaylistItem(
-                            playlist = playlist,
+                            playlistWithSongs = playlistWithSongs,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color.DarkGray, shape = RoundedCornerShape(10.dp))
-                                .clickable { onPlaylistSelected(playlist.name) }
+                                .clickable {
+                                    onPlaylistSelected(playlistWithSongs.playlist.playlistId)
+                                }
                         )
                     }
                 }
             }
         },
-        confirmButton = {}
+        confirmButton = {},
+        modifier = modifier
     )
 }
+
+
 @Composable
 fun ChoosePlaylistItem(
-    playlist: Playlist,
+    playlistWithSongs: PlaylistWithSongs,
     modifier: Modifier = Modifier,
 ) {
+    val playlist = playlistWithSongs.playlist
+    val songs = playlistWithSongs.songs
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -164,7 +165,7 @@ fun ChoosePlaylistItem(
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = playlist.songs.firstOrNull()?.image ?: R.drawable.ic_add_to_playlist
+                    model = songs.firstOrNull()?.image ?: R.drawable.ic_add_to_playlist
                 ),
                 contentDescription = null,
                 modifier = Modifier.matchParentSize(),
@@ -174,20 +175,21 @@ fun ChoosePlaylistItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // Playlist name and song count
         Column(
             modifier = Modifier.weight(1f)
         ) {
+            playlist.name?.let {
+                Text(
+                    it,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
             Text(
-                playlist.name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.White,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                "${playlist.songs.size} songs",
+                "${songs.size} songs",
                 color = Color.Gray,
                 fontSize = 14.sp
             )

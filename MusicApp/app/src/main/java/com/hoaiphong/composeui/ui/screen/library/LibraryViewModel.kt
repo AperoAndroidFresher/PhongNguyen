@@ -6,6 +6,7 @@ import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.comon.SongItemState
 import com.hoaiphong.composeui.data.model.PlaylistManager
+import com.hoaiphong.composeui.data.model.Song
 import com.hoaiphong.composeui.data.model.getAllMp3File
 import com.hoaiphong.composeui.data.model.toEntity
 import com.hoaiphong.composeui.db.AppDatabase
@@ -13,13 +14,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
+    private val db = AppDatabase.getInstance(application)
+    private val playlistManager = PlaylistManager(
+        db.playListDao(),
+        db.songDao(),
+        db.playlistSongCrossRefDAO()
+    )
+
     private val _uiState = MutableStateFlow(LibraryState())
     val uiState: StateFlow<LibraryState> = _uiState.asStateFlow()
-
+    fun addSongToPlaylist(playlistId: Long, song: Song) {
+        viewModelScope.launch {
+            playlistManager.addSongToPlaylist(playlistId, song)
+        }
+    }
     fun dispatch(intent: LibraryIntent) {
         when (intent) {
             is LibraryIntent.LoadLocalSongs -> {
@@ -67,12 +80,16 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             }
 
             is LibraryIntent.ShowAddToPlaylistDialog -> {
-                _uiState.update {
-                    it.copy(
-                        showAddToPlaylistDialog = true,
-                        selectedSongIndexForPlaylist = intent.index,
-                        playlists = PlaylistManager.getPlaylists()
-                    )
+                viewModelScope.launch(Dispatchers.IO) {
+                    playlistManager.getPlaylistsWithSongs().collectLatest { playlists ->
+                        _uiState.update {
+                            it.copy(
+                                showAddToPlaylistDialog = true,
+                                selectedSongIndexForPlaylist = intent.index,
+                                playlists = playlists
+                            )
+                        }
+                    }
                 }
             }
 
@@ -86,8 +103,12 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             }
 
             is LibraryIntent.LoadPlaylists -> {
-                _uiState.update {
-                    it.copy(playlists = PlaylistManager.getPlaylists())
+                viewModelScope.launch(Dispatchers.IO) {
+                    playlistManager.getPlaylistsWithSongs().collectLatest { playlists ->
+                        _uiState.update {
+                            it.copy(playlists = playlists)
+                        }
+                    }
                 }
             }
         }
