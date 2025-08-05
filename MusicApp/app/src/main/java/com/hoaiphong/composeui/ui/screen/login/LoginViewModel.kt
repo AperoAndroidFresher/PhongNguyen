@@ -2,11 +2,8 @@ package com.hoaiphong.composeui.ui.screen.login
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.application
-import androidx.lifecycle.viewModelScope
-import com.hoaiphong.composeui.db.AppDatabase
-import com.hoaiphong.composeui.db.repository.UserRepository
+import com.hoaiphong.composeui.data.model.UserSession
 import com.hoaiphong.composeui.db.repository.UserRepositoryImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -28,14 +25,12 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     private val _effect = Channel<LoginEffect>(Channel.BUFFERED)
     val effect = _effect.receiveAsFlow()
 
-    // Prefill từ SavedStateHandle hoặc màn hình khác gửi sang
     fun prefillCredentials(username: String, password: String) {
         _state.update {
             it.copy(username = username, password = password)
         }
     }
 
-    // Xử lý login
     private fun handleLogin() {
         val current = _state.value
         CoroutineScope(Dispatchers.IO).launch {
@@ -43,8 +38,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 val userRepository = UserRepositoryImpl(application)
                 val user = userRepository.login(current.username, current.password)
                 if (user != null) {
-                    val sharedPref = application.getSharedPreferences("user_prefs", Application.MODE_PRIVATE)
-                    sharedPref.edit().putString("username", current.username).apply()
+                    UserSession.username = user.userName
                     _effect.send(LoginEffect.NavigateToHome)
                 } else {
                     _effect.send(LoginEffect.ShowToast("Sai tài khoản hoặc mật khẩu"))

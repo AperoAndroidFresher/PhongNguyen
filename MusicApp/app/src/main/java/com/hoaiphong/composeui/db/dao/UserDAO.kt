@@ -14,7 +14,7 @@ interface UserDAO {
         FROM user
         """
     )
-    suspend  fun getAll(): List<User>
+    suspend  fun getAllUser(): List<User>
 
     @Query("""
         SELECT * 
@@ -35,7 +35,7 @@ interface UserDAO {
     suspend fun updateUser(user: User)
 
     @Insert
-    suspend  fun insertAll(vararg users: User)
+    suspend  fun insertAllUser(vararg users: User)
 
     @Delete
     suspend  fun delete(user: User)
