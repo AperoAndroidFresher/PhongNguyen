@@ -41,8 +41,9 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
-import com.hoaiphong.composeui.data.model.Playlist
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.db.entity.Playlist
+import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
 import com.hoaiphong.composeui.ui.screen.mysong.DropdownMenuItemRemove
 import com.hoaiphong.composeui.ui.screen.mysong.DropdownMenuItemShare
 import com.hoaiphong.composeui.ui.screen.mysong.SongDropdownMenu
@@ -93,32 +94,19 @@ fun DropdownMenuItemRename(onClick: () -> Unit) {
         }
     )
 }
-@Preview(showBackground = true, backgroundColor = 0xFF121212)
-@Composable
-fun PlaylistItemPreview() {
-    val samplePlaylist = Playlist(
-        name = "My Playlist",
-        songs = mutableListOf() // hoặc thêm bài hát giả nếu muốn ảnh hiện ra
-    )
-
-    PlaylistItem(
-        playlist = samplePlaylist,
-        modifier = Modifier
-            .background(Color(0xFF121212))
-            .padding(16.dp),
-        onRemoveClick = {}
-    )
-}
 @Composable
 fun PlaylistItem(
-    playlist: Playlist,
+    playlistWithSongs: PlaylistWithSongs,
     modifier: Modifier = Modifier,
     showMenu: Boolean = true,
-    onClick: () -> Unit = {}, // <-- Thêm callback
+    onClick: () -> Unit = {},
     onRemoveClick: () -> Unit = {},
-    onRename: (oldName: String, newName: String) -> Unit = { _, _ -> }
+    onRename: (playlistId: Long, newName: String) -> Unit = { _, _ -> }
 ) {
     var menuState by remember { mutableStateOf<MenuState>(MenuState.None) }
+
+    val playlist = playlistWithSongs.playlist
+    val songs = playlistWithSongs.songs
 
     Row(
         modifier = modifier
@@ -137,7 +125,7 @@ fun PlaylistItem(
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = playlist.songs.firstOrNull()?.image ?: R.drawable.ic_add_to_playlist
+                    model = songs.firstOrNull()?.image ?: R.drawable.ic_add_to_playlist
                 ),
                 contentDescription = null,
                 modifier = Modifier.matchParentSize(),
@@ -151,10 +139,10 @@ fun PlaylistItem(
         Column(
             modifier = Modifier
                 .weight(1f)
-                .padding(end = if (showMenu) 8.dp else 0.dp) // tránh đè vào menu
+                .padding(end = if (showMenu) 8.dp else 0.dp)
         ) {
             Text(
-                playlist.name,
+                text = playlist.name ?: "Untitled",
                 fontWeight = FontWeight.Bold,
                 fontSize = 18.sp,
                 color = Color.White,
@@ -162,14 +150,13 @@ fun PlaylistItem(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                "${playlist.songs.size} songs",
+                text = "${songs.size} songs",
                 color = Color.Gray,
                 fontSize = 14.sp
             )
         }
 
         if (showMenu) {
-            // Dropdown menu
             Box {
                 IconButton(
                     onClick = { menuState = MenuState.Expanded }
@@ -182,10 +169,7 @@ fun PlaylistItem(
                     )
                 }
 
-                DropdownMenu(
-                    expanded = menuState is MenuState.Expanded,
-                    onDismissRequest = { menuState = MenuState.None }
-                ) {
+                if (menuState is MenuState.Expanded) {
                     PlaylistDropdownMenu(
                         expanded = true,
                         onDismissRequest = { menuState = MenuState.None },
@@ -199,19 +183,19 @@ fun PlaylistItem(
                     )
                 }
             }
-
-            // Rename dialog
-            if (menuState is MenuState.ShowRenameDialog) {
-                RenamePlaylistDialog(
-                    currentName = playlist.name,
-                    onDismiss = { menuState = MenuState.None },
-                    onConfirm = { newName ->
-                        menuState = MenuState.None
-                        onRename(playlist.name, newName)
-                    }
-                )
-            }
         }
+    }
+
+    if (showMenu && menuState is MenuState.ShowRenameDialog) {
+        val currentName = playlist.name ?: ""
+        RenamePlaylistDialog(
+            currentName = currentName,
+            onDismiss = { menuState = MenuState.None },
+            onConfirm = { newName ->
+                menuState = MenuState.None
+                onRename(playlist.playlistId, newName)
+            }
+        )
     }
 }
 

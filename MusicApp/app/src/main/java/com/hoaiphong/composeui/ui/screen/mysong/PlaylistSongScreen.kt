@@ -47,7 +47,7 @@ fun PlaylistSongScreen(
     modifier: Modifier = Modifier,
     viewModel: PlaylistViewModel = viewModel()
 ) {
-    val playlistName = entry.playlistName
+    val playlistId = entry.playlistId
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsState()
 
@@ -61,11 +61,8 @@ fun PlaylistSongScreen(
         }
     }
 
-    LaunchedEffect(playlistName) {
-        val playlist = PlaylistManager.getPlaylistByName(playlistName)
-        playlist?.let {
-            viewModel.dispatch(PlaylistIntent.LoadSpecificSongs(it.songs))
-        }
+    LaunchedEffect(playlistId) {
+        viewModel.loadPlaylistById(playlistId)
     }
 
     Box(
@@ -82,7 +79,7 @@ fun PlaylistSongScreen(
                     .padding(horizontal = 14.dp)
             ) {
                 Text(
-                    text = playlistName,
+                    text = state.playlistWithSongs?.playlist?.name ?: "Playlist",
                     fontSize = 25.sp,
                     color = Color.White,
                     textAlign = TextAlign.Center,
