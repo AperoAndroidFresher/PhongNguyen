@@ -11,7 +11,7 @@ import com.hoaiphong.composeui.db.entity.PlaylistSongCrossRef
 interface PlaylistSongCrossRefDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insertPlaylistSongCrossRef(playlistId: Long, crossRef: Long)
+    suspend fun insertPlaylistSongCrossRef(crossRef: PlaylistSongCrossRef)
 
     @Delete
     suspend fun deletePlaylistSongCrossRef(crossRef: PlaylistSongCrossRef)
