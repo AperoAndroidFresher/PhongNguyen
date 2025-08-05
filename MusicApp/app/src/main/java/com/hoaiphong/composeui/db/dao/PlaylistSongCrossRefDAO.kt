@@ -11,14 +11,34 @@ import com.hoaiphong.composeui.db.entity.PlaylistSongCrossRef
 interface PlaylistSongCrossRefDAO {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(crossRef: PlaylistSongCrossRef)
+    suspend fun insertPlaylistSongCrossRef(playlistId: Long, crossRef: Long)
 
     @Delete
-    suspend fun delete(crossRef: PlaylistSongCrossRef)
+    suspend fun deletePlaylistSongCrossRef(crossRef: PlaylistSongCrossRef)
 
     @Query("""
         DELETE FROM PlaylistSongCrossRef 
         WHERE playlistId = :playlistId AND songId = :songId
     """)
-    suspend fun deleteByIds(playlistId: Long, songId: Long)
+    suspend fun deleteByPlaylistSongCrossRefIds(playlistId: Long, songId: Long)
+
+    @Query("""
+        DELETE FROM PlaylistSongCrossRef 
+        WHERE playlistId = :playlistId
+    """)
+    suspend fun deleteAllPlaylistSongCrossRefByPlaylistId(playlistId: Long)
+
+    @Query("""
+        SELECT songId FROM PlaylistSongCrossRef 
+        WHERE playlistId = :playlistId
+    """)
+    suspend fun getSongIdsByPlaylistId(playlistId: Long): List<Long>
+
+    @Query("""
+        SELECT EXISTS(
+            SELECT 1 FROM PlaylistSongCrossRef 
+            WHERE playlistId = :playlistId AND songId = :songId
+        )
+    """)
+    suspend fun isSongInPlaylist(playlistId: Long, songId: Long): Boolean
 }

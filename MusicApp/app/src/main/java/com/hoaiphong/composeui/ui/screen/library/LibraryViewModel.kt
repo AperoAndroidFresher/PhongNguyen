@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(LibraryState())
     val uiState: StateFlow<LibraryState> = _uiState.asStateFlow()
@@ -30,7 +29,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
                     val songEntities = raw.map { it.toEntity() }
                     val db = AppDatabase.getInstance(application)
-                    db.songDao().insertAll(*songEntities.toTypedArray())
+                    db.songDao().insertAllSong(*songEntities.toTypedArray())
 
                     _uiState.update {
                         it.copy(

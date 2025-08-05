@@ -15,19 +15,19 @@ interface SongDAO {
         SELECT *
         FROM song
     """)
-    suspend  fun getAll(): List<Song>
+    suspend  fun getAllSong(): List<Song>
 
     @Query("""
         DELETE FROM song
         WHERE songId = :id
     """)
-    suspend fun deleteById(id: Long)
+    suspend fun deleteSongById(id: Long)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(song: Song)
+    suspend fun insertSong(song: Song)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(vararg songs: Song)
+    suspend fun insertAllSong(vararg songs: Song)
 
     @Delete
     suspend fun delete(song: Song)

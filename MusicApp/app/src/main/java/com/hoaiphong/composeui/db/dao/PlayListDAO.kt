@@ -15,23 +15,23 @@ interface PlayListDAO {
         SELECT *
         FROM playlist
     """)
-    suspend  fun getAll(): List<Playlist>
+    suspend  fun getAllPlaylist(): List<Playlist>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(playlist: Playlist)
+    suspend fun insertPlaylist(playlist: Playlist)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(playlists: List<Playlist>)
+    suspend fun insertAllPlaylist(playlists: List<Playlist>)
 
     @Query("""
         DELETE FROM playlist
         WHERE playlistId = :id
         """
     )
-    suspend fun deleteById(id: Long)
+    suspend fun deletePlaylistById(id: Long)
 
     @Update
-    suspend fun update(playlist: Playlist)
+    suspend fun updatePlaylist(playlist: Playlist)
 
     @Transaction
     @Query("""
@@ -41,4 +41,12 @@ interface PlayListDAO {
         """
     )
     suspend fun getPlaylistWithSongs(playlistId: Long): PlaylistWithSongs
+
+    @Query("""
+        SELECT *
+        FROM playlist
+        WHERE playlist_name LIKE :playlistName 
+        LIMIT 1
+    """)
+    suspend fun findByPlaylistName(playlistName: String): Playlist?
 }
