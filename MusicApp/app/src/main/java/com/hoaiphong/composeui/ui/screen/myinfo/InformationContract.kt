@@ -21,14 +21,10 @@ sealed interface MyInfoIntent {
     data class PhoneChanged(val value: String) : MyInfoIntent
     data class UniversityChanged(val value: String) : MyInfoIntent
     data class DescriptionChanged(val value: String) : MyInfoIntent
-
     object Submit : MyInfoIntent
     object ToggleTheme : MyInfoIntent
-
     data class ToggleEditing(val editing: Boolean) : MyInfoIntent
     data class AvatarChanged(val uri: Uri?) : MyInfoIntent
-
-
 }
 
 sealed interface MyInfoEffect {

@@ -1,5 +1,6 @@
 package com.hoaiphong.composeui.ui.screen.library
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -20,9 +21,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -51,6 +55,26 @@ import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistIntent
 import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistItem
 import com.hoaiphong.composeui.ui.screen.myalbum.RenamePlaylistDialog
 
+
+
+@Composable
+fun LibraryButton(
+    modifier: Modifier = Modifier,
+    text: String,
+    onClick: () -> Unit = {}
+) {
+    Button(
+        onClick = onClick,
+        modifier = modifier
+            .width(150.dp),
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceTint),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
+        border = BorderStroke(1.dp, color = MaterialTheme.colorScheme.surfaceTint)
+    ) {
+        Text(text, color = MaterialTheme.colorScheme.onSecondary)
+    }
+}
 @Composable
 fun ChoosePlaylistDialog(
     playlists: List<Playlist>,

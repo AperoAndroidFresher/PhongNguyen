@@ -1,17 +1,19 @@
 package com.hoaiphong.composeui.ui.screen.signup
 
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
-import com.hoaiphong.composeui.data.model.User
-import com.hoaiphong.composeui.data.model.UserManager
-import com.hoaiphong.composeui.ui.screen.login.LoginIntent
-import com.hoaiphong.composeui.ui.screen.signup.SignUpEffect.*
+import androidx.lifecycle.application
+import androidx.lifecycle.viewModelScope
+import com.hoaiphong.composeui.db.AppDatabase
+import com.hoaiphong.composeui.db.repository.UserRepository
+import com.hoaiphong.composeui.db.repository.UserRepositoryImpl
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class SignUpViewModel : ViewModel() {
+class SignUpViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _state = MutableStateFlow(SignUpState())
     val state: StateFlow<SignUpState> = _state.asStateFlow()
@@ -24,23 +26,32 @@ class SignUpViewModel : ViewModel() {
             is SignUpIntent.UsernameChanged -> {
                 _state.update { it.copy(username = intent.value, usernameError = false) }
             }
+
             is SignUpIntent.PasswordChanged -> {
                 _state.update { it.copy(password = intent.value, passwordError = false) }
             }
+
             is SignUpIntent.ConfirmPasswordChanged -> {
                 _state.update { it.copy(confirmPassword = intent.value, confirmPasswordError = false) }
             }
+
             is SignUpIntent.EmailChanged -> {
                 _state.update { it.copy(email = intent.value, emailError = false) }
             }
+
             is SignUpIntent.TogglePasswordVisibility -> {
                 _state.update { it.copy(passwordVisible = !it.passwordVisible) }
             }
-            is SignUpIntent.SubmitSignUp -> handleSignUp()
-            is SignUpIntent.BackClicked -> CoroutineScope(Dispatchers.Main).launch {
-                _effect.send(NavigateBack("", ""))
+
+            is SignUpIntent.SubmitSignUp -> {
+                handleSignUp()
             }
 
+            is SignUpIntent.BackClicked -> {
+                viewModelScope.launch {
+                    _effect.send(SignUpEffect.NavigateBack("", ""))
+                }
+            }
         }
     }
 
@@ -73,10 +84,21 @@ class SignUpViewModel : ViewModel() {
             hasError = true
         }
 
-        if (!hasError) {
-            UserManager.addUser(User(state.username, state.password, state.email))
-            CoroutineScope(Dispatchers.Main).launch {
-                _effect.send(SignUpEffect.NavigateBack(state.username, state.password))
+        if (hasError) return
+
+        viewModelScope.launch {
+            try {
+                val userRepository = UserRepositoryImpl(application)
+                val user = userRepository.register(
+                    username = state.username,
+                    password = state.password,
+                    email = state.email
+                )
+
+                _effect.send(SignUpEffect.NavigateBack(user.userName, user.password ?: ""))
+            } catch (e: Exception) {
+                Log.e("SignUpViewModel", "Sign up failed", e)
+                _effect.send(SignUpEffect.ShowToast("Đăng ký thất bại: ${e.message}"))
             }
         }
     }

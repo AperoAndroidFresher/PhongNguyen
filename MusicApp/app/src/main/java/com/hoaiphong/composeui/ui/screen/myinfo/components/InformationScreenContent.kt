@@ -1,11 +1,5 @@
-package com.hoaiphong.composeui.ui.screen.myinfo
+package com.hoaiphong.composeui.ui.screen.myinfo.components
 
-import android.widget.Toast
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -33,15 +27,81 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.ui.screen.myinfo.MyInfoIntent
+import com.hoaiphong.composeui.ui.screen.myinfo.MyInfoState
+import com.hoaiphong.composeui.ui.theme.darkMode
+import com.hoaiphong.composeui.ui.theme.lightMode
+
+
+@Preview(showBackground = true, name = "Information Screen Content")
+@Composable
+fun PreviewInformationScreenContentDarkTheme() {
+    val state = MyInfoState(
+        avatarUri = null,
+        name = "Nguyễn Văn A",
+        phone = "0123456789",
+        university = "Đại học Bách Khoa",
+        description = "Tôi là một lập trình viên Android thích Jetpack Compose.",
+        isNameValid = true,
+        isPhoneValid = true,
+        isUniversityValid = true,
+        isEditing = true,
+        isDarkMode = true
+    )
+
+    MaterialTheme(
+        colorScheme = darkMode.color,
+        typography = darkMode.typography,
+        shapes = darkMode.shapes
+    ) {
+        InformationScreenContent(
+            state = state,
+            onIntent = {},
+            onPickImage = {}
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "Information Screen Content")
+@Composable
+fun PreviewInformationScreenContentLightTheme() {
+    val state = MyInfoState(
+        avatarUri = null,
+        name = "Nguyễn Văn A",
+        phone = "0123456789",
+        university = "Đại học Bách Khoa",
+        description = "Tôi là một lập trình viên Android thích Jetpack Compose.",
+        isNameValid = true,
+        isPhoneValid = true,
+        isUniversityValid = true,
+        isEditing = true,
+        isDarkMode = false
+    )
+
+    MaterialTheme(
+        colorScheme = lightMode.color,
+        typography = lightMode.typography,
+        shapes = lightMode.shapes
+    ) {
+        InformationScreenContent(
+            state = state,
+            onIntent = {},
+            onPickImage = {}
+        )
+    }
+}
 
 @Composable
 fun InformationScreenContent(
@@ -49,8 +109,13 @@ fun InformationScreenContent(
     onIntent: (MyInfoIntent) -> Unit,
     onPickImage: () -> Unit
 ) {
+    val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
+    val painter = rememberAsyncImagePainter(
+        model = ImageRequest.Builder(context)
+            .data(state.avatarUri ?: R.drawable.avata).build()
+    )
 
     Box(
         modifier = Modifier
@@ -108,8 +173,7 @@ fun InformationScreenContent(
 
             // Avatar
             Image(
-                painter = state.avatarUri?.let { rememberAsyncImagePainter(it) }
-                    ?: painterResource(id = R.drawable.avata),
+                painter = painter,
                 contentDescription = "Avatar",
                 modifier = Modifier
                     .size(150.dp)

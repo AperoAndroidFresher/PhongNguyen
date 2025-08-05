@@ -1,5 +1,6 @@
 package com.hoaiphong.composeui.ui.screen.myinfo
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
@@ -15,18 +16,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hoaiphong.composeui.ui.screen.myinfo.components.InformationScreenContent
+import com.hoaiphong.composeui.ui.screen.myinfo.components.SuccessPopupContent
 import com.hoaiphong.composeui.ui.theme.darkMode
 import com.hoaiphong.composeui.ui.theme.lightMode
+import com.hoaiphong.composeui.utils.rememberImagePicker
 import kotlinx.coroutines.delay
+
 @Composable
 fun InformationScreen(
-    viewModel: MyInfoViewModel = viewModel()
+    viewModel: InfoViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
-
     val launcher = rememberImagePicker(context) { uri ->
-        viewModel.dispatch(MyInfoIntent.AvatarChanged(uri))
+        uri?.let {
+            try {
+                context.contentResolver.takePersistableUriPermission(
+                    it,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION
+                )
+            } catch (e: Exception) {
+                null
+            }
+            viewModel.dispatch(MyInfoIntent.AvatarChanged(uri))
+        }
     }
 
     LaunchedEffect(Unit) {
