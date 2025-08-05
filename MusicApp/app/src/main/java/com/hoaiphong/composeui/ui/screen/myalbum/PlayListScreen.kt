@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -46,16 +47,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.data.model.UserSession
 
 @Composable
 fun PlaylistScreen(
     modifier: Modifier = Modifier,
     viewModel: PlayListViewModel = viewModel(),
-    onNavigateToPlaylistSongs: (String) -> Unit
+    onNavigateToPlaylistSongs: (Long) -> Unit
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
-
     var newPlaylistName by rememberSaveable { mutableStateOf("") }
 
     Box(
@@ -101,8 +102,7 @@ fun PlaylistScreen(
 
             if (state.playlists.isEmpty()) {
                 Box(
-                    modifier = Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -146,19 +146,20 @@ fun PlaylistScreen(
                 LazyColumn(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
-                )  {
-                    items(state.playlists.size) { index ->
-                        val playlist = state.playlists[index]
+                ) {
+                    itemsIndexed(state.playlists) { index, playlistWithCount ->
+                        val playlist = playlistWithCount.playlist
+
                         PlaylistItem(
-                            playlist = playlist,
+                            playlistWithSongs = playlistWithCount,
                             onClick = {
-                                onNavigateToPlaylistSongs(playlist.name)
+                                onNavigateToPlaylistSongs(playlist.playlistId)
                             },
                             onRemoveClick = {
-                                viewModel.dispatch(PlaylistIntent.RemovePlaylist(playlist.name))
+                                viewModel.dispatch(PlaylistIntent.RemovePlaylist(playlist.playlistId))
                             },
-                            onRename = { oldName, newName ->
-                                viewModel.dispatch(PlaylistIntent.RenamePlaylist(oldName, newName))
+                            onRename = { playlistId, newName ->
+                                viewModel.dispatch(PlaylistIntent.RenamePlaylist(playlistId, newName))
                             }
                         )
                     }
@@ -166,15 +167,14 @@ fun PlaylistScreen(
             }
         }
 
+        // Dialog thêm playlist
         if (state.showAddDialog) {
             AlertDialog(
                 onDismissRequest = {
                     viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
                     newPlaylistName = ""
                 },
-                title = {
-                    Text(text = "New Playlist")
-                },
+                title = { Text(text = "New Playlist") },
                 text = {
                     OutlinedTextField(
                         value = newPlaylistName,
@@ -185,7 +185,12 @@ fun PlaylistScreen(
                 confirmButton = {
                     Button(
                         onClick = {
-                            viewModel.dispatch(PlaylistIntent.AddPlaylist(newPlaylistName))
+                            viewModel.dispatch(
+                                PlaylistIntent.AddPlaylist(
+                                    name = newPlaylistName,
+                                    ownerUsername = UserSession.username ?: return@Button
+                                )
+                            )
                             newPlaylistName = ""
                         }
                     ) {

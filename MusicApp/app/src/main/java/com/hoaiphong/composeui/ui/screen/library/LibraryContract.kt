@@ -1,7 +1,8 @@
 package com.hoaiphong.composeui.ui.screen.library
 
 import com.hoaiphong.composeui.comon.SongItemState
-import com.hoaiphong.composeui.data.model.Playlist
+import com.hoaiphong.composeui.db.entity.Playlist
+import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
 
 
 sealed interface LibraryIntent {
@@ -26,7 +27,7 @@ data class LibraryState(
     val isDialogVisible: Boolean = false,
     val selectedSongIndex: Int? = null,
 
-    val playlists: List<Playlist> = emptyList(),
+    val playlists: List<PlaylistWithSongs> = emptyList(),
 )
 
 sealed interface LibraryEffect

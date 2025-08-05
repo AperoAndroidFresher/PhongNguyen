@@ -1,27 +1,25 @@
 package com.hoaiphong.composeui.ui.screen.myalbum
 
-import com.hoaiphong.composeui.data.model.Playlist
+import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
 
 
 sealed interface PlaylistIntent {
     data object ShowAddPlaylistDialog : PlaylistIntent
     data object DismissAddPlaylistDialog : PlaylistIntent
-    data class AddPlaylist(val name: String) : PlaylistIntent
+    data class AddPlaylist(val name: String, val ownerUsername: String) : PlaylistIntent
 
-    data class RenamePlaylist(val oldName: String, val newName: String) : PlaylistIntent
-    data class RemovePlaylist(val name: String) : PlaylistIntent
+    data class RenamePlaylist(val playlistId: Long, val newName: String) : PlaylistIntent
+    data class RemovePlaylist(val playlistId: Long) : PlaylistIntent
 
     data class ShowDropdown(val index: Int) : PlaylistIntent
-
     object DismissDropdown : PlaylistIntent
 
     data class ShowRenameDialog(val index: Int) : PlaylistIntent
-
     object DismissRenameDialog : PlaylistIntent
 }
 
 data class PlayListState(
-    val playlists: List<Playlist> = emptyList(),
+    val playlists: List<PlaylistWithSongs> = emptyList(),
     val showAddDialog: Boolean = false,
     val selectedPlaylistIndexForDropdown: Int? = null,
     val selectedPlaylistIndexForRename: Int? = null

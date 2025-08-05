@@ -17,44 +17,31 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.hoaiphong.composeui.R
-import com.hoaiphong.composeui.data.model.Playlist
-import com.hoaiphong.composeui.ui.screen.myalbum.MenuState
-import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistDropdownMenu
-import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistIntent
-import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistItem
-import com.hoaiphong.composeui.ui.screen.myalbum.RenamePlaylistDialog
-
+import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
 
 
 @Composable
@@ -77,10 +64,10 @@ fun LibraryButton(
 }
 @Composable
 fun ChoosePlaylistDialog(
-    playlists: List<Playlist>,
+    playlists: List<PlaylistWithSongs>,
     onDismiss: () -> Unit,
     onAddClick: () -> Unit,
-    onPlaylistSelected: (String) -> Unit,
+    onPlaylistSelected: (Long) -> Unit, // 👈 nhận ID kiểu Long
     modifier: Modifier = Modifier,
 ) {
     AlertDialog(
@@ -101,7 +88,6 @@ fun ChoosePlaylistDialog(
         },
         text = {
             if (playlists.isEmpty()) {
-                // Nếu không có playlist
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -137,27 +123,33 @@ fun ChoosePlaylistDialog(
                     contentPadding = PaddingValues(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-                    items(playlists.size) { index ->
-                        val playlist = playlists[index]
+                    items(playlists) { playlistWithSongs ->
                         ChoosePlaylistItem(
-                            playlist = playlist,
+                            playlistWithSongs = playlistWithSongs,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .background(Color.DarkGray, shape = RoundedCornerShape(10.dp))
-                                .clickable { onPlaylistSelected(playlist.name) }
+                                .clickable {
+                                    onPlaylistSelected(playlistWithSongs.playlist.playlistId)
+                                }
                         )
                     }
                 }
             }
         },
-        confirmButton = {}
+        confirmButton = {},
+        modifier = modifier
     )
 }
+
+
 @Composable
 fun ChoosePlaylistItem(
-    playlist: Playlist,
+    playlistWithSongs: PlaylistWithSongs,
     modifier: Modifier = Modifier,
 ) {
+    val playlist = playlistWithSongs.playlist
+    val songs = playlistWithSongs.songs
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -166,7 +158,6 @@ fun ChoosePlaylistItem(
             .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        // Thumbnail
         Box(
             modifier = Modifier
                 .size(80.dp)
@@ -174,7 +165,7 @@ fun ChoosePlaylistItem(
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = playlist.songs.firstOrNull()?.image ?: R.drawable.ic_add_to_playlist
+                    model = songs.firstOrNull()?.image ?: R.drawable.ic_add_to_playlist
                 ),
                 contentDescription = null,
                 modifier = Modifier.matchParentSize(),
@@ -184,20 +175,21 @@ fun ChoosePlaylistItem(
 
         Spacer(modifier = Modifier.width(12.dp))
 
-        // Playlist name and song count
         Column(
             modifier = Modifier.weight(1f)
         ) {
+            playlist.name?.let {
+                Text(
+                    it,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
             Text(
-                playlist.name,
-                fontWeight = FontWeight.Bold,
-                fontSize = 18.sp,
-                color = Color.White,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                "${playlist.songs.size} songs",
+                "${songs.size} songs",
                 color = Color.Gray,
                 fontSize = 14.sp
             )

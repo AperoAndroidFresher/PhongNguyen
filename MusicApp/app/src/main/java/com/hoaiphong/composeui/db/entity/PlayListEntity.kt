@@ -20,6 +20,6 @@ import androidx.room.PrimaryKey
 )
 data class Playlist(
     @PrimaryKey(autoGenerate = true) val playlistId: Long = 0,
-    val name: String,
-    @ColumnInfo(name = "owner_username") val ownerUsername: String
+    @ColumnInfo(name = "playlist_name")val name: String? = null,
+    @ColumnInfo(name = "owner_username") val ownerUsername: String? = null
 )
