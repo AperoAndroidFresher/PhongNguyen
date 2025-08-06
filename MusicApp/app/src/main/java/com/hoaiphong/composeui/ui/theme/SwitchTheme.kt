@@ -5,9 +5,6 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.ui.unit.dp
-import com.example.compose.darkScheme
-import com.example.compose.lightScheme
-import com.example.ui.theme.AppTypography
 
 data class ThemeData(
     val type: ThemeType,

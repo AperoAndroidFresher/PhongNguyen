@@ -3,7 +3,6 @@ package com.hoaiphong.composeui.db.repository.impl
 import android.content.Context
 import com.hoaiphong.composeui.db.AppDatabase
 import com.hoaiphong.composeui.db.entity.Playlist
-import com.hoaiphong.composeui.db.entity.PlaylistSongCrossRef
 import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
 import com.hoaiphong.composeui.db.repository.PlaylistRepository
 

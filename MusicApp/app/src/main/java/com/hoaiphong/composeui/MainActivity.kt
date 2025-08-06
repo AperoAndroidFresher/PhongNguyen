@@ -1,8 +1,6 @@
 package com.hoaiphong.composeui
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -11,7 +9,7 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.compose.AppTheme
+import com.hoaiphong.composeui.ui.theme.AppTheme
 import com.hoaiphong.composeui.ui.navigation.AppNavGraph
 
 class MainActivity : ComponentActivity() {

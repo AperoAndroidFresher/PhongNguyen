@@ -1,10 +1,9 @@
-package com.hoaiphong.composeui.db.repository
+package com.hoaiphong.composeui.db.repository.impl
 
 import android.content.Context
-import androidx.lifecycle.application
 import com.hoaiphong.composeui.db.AppDatabase
-import com.hoaiphong.composeui.db.dao.UserDAO
 import com.hoaiphong.composeui.db.entity.User
+import com.hoaiphong.composeui.db.repository.UserRepository
 
 class UserRepositoryImpl(
     context: Context

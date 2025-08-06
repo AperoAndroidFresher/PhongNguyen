@@ -3,12 +3,9 @@ package com.hoaiphong.composeui.ui.screen.signup
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
-import com.hoaiphong.composeui.db.AppDatabase
-import com.hoaiphong.composeui.db.repository.UserRepository
-import com.hoaiphong.composeui.db.repository.UserRepositoryImpl
+import com.hoaiphong.composeui.db.repository.impl.UserRepositoryImpl
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

@@ -18,7 +18,6 @@ import retrofit2.Response
 import android.util.Log
 import com.hoaiphong.composeui.api.SongAPIResponse
 import com.hoaiphong.composeui.api.SongRetrofitClient
-import com.hoaiphong.composeui.ui.screen.mysong.toDurationFormatted
 import kotlinx.coroutines.delay
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {

@@ -1,6 +1,5 @@
 package com.hoaiphong.composeui.ui.screen.signup
 
-import com.hoaiphong.composeui.ui.screen.login.LoginIntent
 
 data class SignUpState(
     val username: String = "",
