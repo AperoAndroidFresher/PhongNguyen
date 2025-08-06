@@ -23,7 +23,7 @@ interface SongDAO {
     """)
     suspend fun deleteSongById(id: Long)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertSong(song: Song)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -31,9 +31,6 @@ interface SongDAO {
 
     @Delete
     suspend fun delete(song: Song)
-
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun addSongToPlaylist(crossRef: PlaylistSongCrossRef)
 
     @Delete
     suspend fun removeSongFromPlaylist(crossRef: PlaylistSongCrossRef)

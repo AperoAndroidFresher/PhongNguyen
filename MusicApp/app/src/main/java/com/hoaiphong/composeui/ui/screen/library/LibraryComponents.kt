@@ -67,7 +67,7 @@ fun ChoosePlaylistDialog(
     playlists: List<PlaylistWithSongs>,
     onDismiss: () -> Unit,
     onAddClick: () -> Unit,
-    onPlaylistSelected: (Long) -> Unit, // 👈 nhận ID kiểu Long
+    onPlaylistSelected: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AlertDialog(

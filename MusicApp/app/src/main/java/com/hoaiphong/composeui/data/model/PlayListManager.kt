@@ -48,7 +48,7 @@ class PlaylistManager(
         songDAO.insertSong(songEntity)
 
         // Thêm quan hệ playlist-song
-        songDAO.addSongToPlaylist(
+        crossRefDAO.addSongToPlaylist(
             PlaylistSongCrossRef(
                 playlistId = playlistId,
                 songId = song.id
@@ -57,9 +57,7 @@ class PlaylistManager(
     }
 
     suspend fun renamePlaylist(playlistId: Long, newName: String) {
-        val playlist = playListDAO.getAllPlaylist().find { it.playlistId == playlistId } ?: return
-        val updated = playlist.copy(name = newName)
-        playListDAO.updatePlaylist(updated)
+        playListDAO.renamePlaylist(playlistId, newName)
     }
 
     suspend fun removePlaylist(playlistId: Long) {

@@ -41,4 +41,7 @@ interface PlaylistSongCrossRefDAO {
         )
     """)
     suspend fun isSongInPlaylist(playlistId: Long, songId: Long): Boolean
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addSongToPlaylist(crossRef: PlaylistSongCrossRef)
 }
