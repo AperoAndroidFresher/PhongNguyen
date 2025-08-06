@@ -103,7 +103,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                         } ?: emptyList()
 
                         _uiState.update {
-                            it.copy(songs = songs, isLoading = false)
+                            it.copy(songs = songs, isLoading = false, hasNetworkError = false)
                         }
                     } else {
                         Log.e("Retrofit", "Lỗi response: ${response.code()}")
@@ -112,7 +112,12 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
                 override fun onFailure(call: Call<List<SongAPIResponse>>, t: Throwable) {
                     Log.e("Retrofit", "Lỗi mạng/API: ${t.message}")
-                    _uiState.update { it.copy(isLoading = false) }
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            hasNetworkError = true
+                        )
+                    }
                 }
             })
         }
