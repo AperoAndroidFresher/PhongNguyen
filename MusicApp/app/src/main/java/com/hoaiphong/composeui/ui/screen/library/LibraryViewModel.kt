@@ -12,6 +12,14 @@ import com.hoaiphong.composeui.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import android.util.Log
+import com.hoaiphong.composeui.api.SongAPIResponse
+import com.hoaiphong.composeui.api.SongRetrofitClient
+import com.hoaiphong.composeui.ui.screen.mysong.toDurationFormatted
+import kotlinx.coroutines.delay
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -73,11 +81,43 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private fun loadRemoteSongs() {
-        _uiState.update {
-            it.copy(
-                songs = emptyList(),
-                isLocalSelected = false
-            )
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, songs = emptyList(), isLocalSelected = false) }
+            delay(2000)
+            SongRetrofitClient.build().getSongApiResponse().enqueue(object : Callback<List<SongAPIResponse>> {
+                override fun onResponse(call: Call<List<SongAPIResponse>>, response: Response<List<SongAPIResponse>>) {
+                    if (response.isSuccessful) {
+                        val songs = response.body()?.map {
+                            SongItemState(
+                                Song(
+                                    id = 0,
+                                    name = it.title,
+                                    author = it.artist,
+                                    duration = it.duration,
+                                    image = null,
+                                    data = it.path
+                                )
+                            )
+                        } ?: emptyList()
+
+                        _uiState.update {
+                            it.copy(songs = songs, isLoading = false, hasNetworkError = false)
+                        }
+                    } else {
+                        Log.e("Retrofit", "Lỗi response: ${response.code()}")
+                    }
+                }
+
+                override fun onFailure(call: Call<List<SongAPIResponse>>, t: Throwable) {
+                    Log.e("Retrofit", "Lỗi mạng/API: ${t.message}")
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            hasNetworkError = true
+                        )
+                    }
+                }
+            })
         }
     }
 

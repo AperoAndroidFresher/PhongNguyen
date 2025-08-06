@@ -29,6 +29,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
     init {
         dispatch(PlaylistIntent.LoadSongs)
     }
+
     fun loadPlaylistById(playlistId: Long) {
         viewModelScope.launch {
             val playlistWithSongs = playlistManager.getPlaylistWithSongsById(playlistId)
@@ -51,15 +52,32 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             }
 
             is PlaylistIntent.RemoveSong -> {
-                _uiState.update { currentState ->
-                    val updatedSongs = currentState.songs.toMutableList()
-                    if (intent.index in updatedSongs.indices) {
-                        updatedSongs.removeAt(intent.index)
-                        viewModelScope.launch {
-                            _effect.emit(PlaylistEffect.ShowToast("Đã xoá bài hát"))
+                viewModelScope.launch {
+                    val currentState = _uiState.value
+                    val playlistWithSongs = currentState.playlistWithSongs
+                    if (playlistWithSongs == null) return@launch
+                    if (intent.index !in currentState.songs.indices) return@launch
+
+                    val songItemState = currentState.songs[intent.index]
+                    val songId = songItemState.song.id
+                    val playlistId = playlistWithSongs.playlist.playlistId
+
+                    playlistManager.removeSongFromPlaylist(playlistId, songId)
+                    val updatedPlaylist = playlistManager.getPlaylistWithSongsById(playlistId)
+                    if (updatedPlaylist != null) {
+                        val modelSongs = updatedPlaylist.songs.map { it.toModel() }
+                        _uiState.update { old ->
+                            old.copy(
+                                songs = modelSongs.map { SongItemState(it) },
+                                playlistWithSongs = updatedPlaylist
+                            )
+                        }
+                    } else {
+                        _uiState.update { old ->
+                            val updated = old.songs.toMutableList().apply { removeAt(intent.index) }
+                            old.copy(songs = updated)
                         }
                     }
-                    currentState.copy(songs = updatedSongs)
                 }
             }
 
@@ -94,6 +112,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                     state.copy(songs = updated)
                 }
             }
+
             is PlaylistIntent.LoadSpecificSongs -> {
                 _uiState.update {
                     it.copy(songs = intent.songs.map { song ->
