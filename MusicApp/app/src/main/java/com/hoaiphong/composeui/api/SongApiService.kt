@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 
 interface SongApiService {
-    @GET("Remote_audio.json")
+    @GET("/techtrek/Remote_audio.json")
     fun getPhotos(): Call<List<SongAPIResponse>>
 }
