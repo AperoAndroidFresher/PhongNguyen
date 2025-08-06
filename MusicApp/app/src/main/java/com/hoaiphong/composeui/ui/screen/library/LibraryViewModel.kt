@@ -12,6 +12,13 @@ import com.hoaiphong.composeui.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import android.util.Log
+import com.hoaiphong.composeui.api.SongAPIResponse
+import com.hoaiphong.composeui.api.SongRetrofitClient
+import com.hoaiphong.composeui.ui.screen.mysong.toDurationFormatted
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -79,6 +86,36 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                 isLocalSelected = false
             )
         }
+        SongRetrofitClient.imageService.getPhotos().enqueue(object : Callback<List<SongAPIResponse>> {
+            override fun onResponse(call: Call<List<SongAPIResponse>>, response: Response<List<SongAPIResponse>>) {
+                if (response.isSuccessful) {
+                    val images = response.body() ?: emptyList()
+                    val songs = images.map {
+                        Log.d("DCMMM", "onResponse: ${it.duration.toDurationFormatted()}")
+                        SongItemState(
+                            Song(
+                                id = 0,
+                                name = it.title,
+                                author = it.artist,
+                                duration = it.duration,
+                                image = null,
+                                data = it.path
+                            )
+
+                        )
+                    }
+                    _uiState.update { currentState ->
+                        currentState.copy(songs = songs)
+                    }
+                } else {
+                    Log.e("Retrofit", "Lỗi response: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<SongAPIResponse>>, t: Throwable) {
+                Log.e("Retrofit", "Lỗi mạng/API: ${t.message}")
+            }
+        })
     }
 
     private fun toggleDropdown(index: Int) {
