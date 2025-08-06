@@ -83,10 +83,8 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private fun loadRemoteSongs() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true, songs = emptyList(), isLocalSelected = false) }
-
             delay(2000)
-
-            SongRetrofitClient.imageService.getPhotos().enqueue(object : Callback<List<SongAPIResponse>> {
+            SongRetrofitClient.build().getSongApiResponse().enqueue(object : Callback<List<SongAPIResponse>> {
                 override fun onResponse(call: Call<List<SongAPIResponse>>, response: Response<List<SongAPIResponse>>) {
                     if (response.isSuccessful) {
                         val songs = response.body()?.map {
