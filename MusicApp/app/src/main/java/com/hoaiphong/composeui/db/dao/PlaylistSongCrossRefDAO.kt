@@ -16,30 +16,38 @@ interface PlaylistSongCrossRefDAO {
     @Delete
     suspend fun deletePlaylistSongCrossRef(crossRef: PlaylistSongCrossRef)
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM PlaylistSongCrossRef 
         WHERE playlistId = :playlistId AND songId = :songId
-    """)
+    """
+    )
     suspend fun deleteByPlaylistSongCrossRefIds(playlistId: Long, songId: Long)
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM PlaylistSongCrossRef 
         WHERE playlistId = :playlistId
-    """)
+    """
+    )
     suspend fun deleteAllPlaylistSongCrossRefByPlaylistId(playlistId: Long)
 
-    @Query("""
+    @Query(
+        """
         SELECT songId FROM PlaylistSongCrossRef 
         WHERE playlistId = :playlistId
-    """)
+    """
+    )
     suspend fun getSongIdsByPlaylistId(playlistId: Long): List<Long>
 
-    @Query("""
+    @Query(
+        """
         SELECT EXISTS(
             SELECT 1 FROM PlaylistSongCrossRef 
             WHERE playlistId = :playlistId AND songId = :songId
         )
-    """)
+    """
+    )
     suspend fun isSongInPlaylist(playlistId: Long, songId: Long): Boolean
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)

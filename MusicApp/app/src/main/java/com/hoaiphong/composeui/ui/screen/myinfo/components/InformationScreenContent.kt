@@ -91,30 +91,21 @@ fun PreviewInformationScreenContentLightTheme() {
     )
 
     MaterialTheme(
-        colorScheme = lightMode.color,
-        typography = lightMode.typography,
-        shapes = lightMode.shapes
+        colorScheme = lightMode.color, typography = lightMode.typography, shapes = lightMode.shapes
     ) {
-        InformationScreenContent(
-            state = state,
-            onIntent = {},
-            onPickImage = {}
-        )
+        InformationScreenContent(state = state, onIntent = {}, onPickImage = {})
     }
 }
 
 @Composable
 fun InformationScreenContent(
-    state: MyInfoState,
-    onIntent: (MyInfoIntent) -> Unit,
-    onPickImage: () -> Unit
+    state: MyInfoState, onIntent: (MyInfoIntent) -> Unit, onPickImage: () -> Unit
 ) {
     val context = LocalContext.current
     val focusManager = LocalFocusManager.current
     val scrollState = rememberScrollState()
     val painter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(context)
-            .data(state.avatarUri ?: R.drawable.avata).build()
+        model = ImageRequest.Builder(context).data(state.avatarUri ?: R.drawable.avata).build()
     )
 
     Box(
@@ -123,8 +114,7 @@ fun InformationScreenContent(
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectTapGestures(onTap = { focusManager.clearFocus() })
-            }
-    ) {
+            }) {
         Column(
             modifier = Modifier
                 .padding(8.dp)
@@ -166,8 +156,7 @@ fun InformationScreenContent(
                                 onIntent(MyInfoIntent.UniversityChanged(state.university))
                                 onIntent(MyInfoIntent.DescriptionChanged(state.description))
                                 onIntent(MyInfoIntent.ToggleEditing(true))
-                            }
-                    )
+                            })
                 }
             }
 
@@ -263,8 +252,7 @@ fun InformationScreenContent(
 
             if (state.isEditing) {
                 Box(
-                    modifier = Modifier.fillMaxWidth(),
-                    contentAlignment = Alignment.Center
+                    modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
                 ) {
                     MyButton(text = "Submit") {
                         onIntent(MyInfoIntent.Submit)

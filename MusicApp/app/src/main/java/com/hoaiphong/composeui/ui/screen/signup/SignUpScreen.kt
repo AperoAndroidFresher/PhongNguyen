@@ -36,6 +36,7 @@ import com.hoaiphong.composeui.ui.screen.login.LoginButton
 import com.hoaiphong.composeui.ui.screen.login.PasswordInput
 import com.hoaiphong.composeui.ui.screen.login.TextInput
 import com.hoaiphong.composeui.ui.screen.myinfo.components.ErrText
+
 @Composable
 fun SignUpScreen(
     viewModel: SignUpViewModel,
@@ -51,6 +52,7 @@ fun SignUpScreen(
                 is SignUpEffect.NavigateBack -> {
                     onSignUpSuccess(effect.username, effect.password)
                 }
+
                 is SignUpEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }

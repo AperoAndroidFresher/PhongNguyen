@@ -10,7 +10,7 @@ data class ThemeData(
     val type: ThemeType,
     val color: ColorScheme,
     var typography: Typography,
-    val shapes: Shapes
+    val shapes: Shapes,
 )
 
 enum class ThemeType {
@@ -24,8 +24,8 @@ var lightMode = ThemeData(
     shapes = Shapes(
         small = RoundedCornerShape(4.dp),
         medium = RoundedCornerShape(8.dp),
-        large = RoundedCornerShape(10.dp)
-    )
+        large = RoundedCornerShape(10.dp),
+    ),
 )
 
 var darkMode = ThemeData(
@@ -35,6 +35,6 @@ var darkMode = ThemeData(
     shapes = Shapes(
         small = RoundedCornerShape(4.dp),
         medium = RoundedCornerShape(8.dp),
-        large = RoundedCornerShape(10.dp)
-    )
+        large = RoundedCornerShape(10.dp),
+    ),
 )

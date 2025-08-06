@@ -1,4 +1,5 @@
 package com.hoaiphong.composeui.ui.screen.myalbum
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -89,8 +90,7 @@ fun PlaylistScreen(
                             .size(25.dp)
                             .clickable {
                                 viewModel.dispatch(PlaylistIntent.ShowAddPlaylistDialog)
-                            }
-                    )
+                            })
                 }
             }
 
@@ -165,45 +165,36 @@ fun PlaylistScreen(
 
         // Dialog thêm playlist
         if (state.showAddDialog) {
-            AlertDialog(
-                onDismissRequest = {
-                    viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
-                    newPlaylistName = ""
-                },
-                title = { Text(text = "New Playlist") },
-                text = {
-                    OutlinedTextField(
-                        value = newPlaylistName,
-                        onValueChange = { newPlaylistName = it },
-                        label = { Text("Enter name") }
-                    )
-                },
-                confirmButton = {
-                    Button(
-                        onClick = {
-                            viewModel.dispatch(
-                                PlaylistIntent.AddPlaylist(
-                                    name = newPlaylistName,
-                                    ownerUsername = UserSession.username ?: return@Button
-                                )
+            AlertDialog(onDismissRequest = {
+                viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
+                newPlaylistName = ""
+            }, title = { Text(text = "New Playlist") }, text = {
+                OutlinedTextField(
+                    value = newPlaylistName,
+                    onValueChange = { newPlaylistName = it },
+                    label = { Text("Enter name") })
+            }, confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.dispatch(
+                            PlaylistIntent.AddPlaylist(
+                                name = newPlaylistName,
+                                ownerUsername = UserSession.username ?: return@Button
                             )
-                            newPlaylistName = ""
-                        }
-                    ) {
-                        Text("Add")
-                    }
-                },
-                dismissButton = {
-                    Button(
-                        onClick = {
-                            viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
-                            newPlaylistName = ""
-                        }
-                    ) {
-                        Text("Cancel")
-                    }
+                        )
+                        newPlaylistName = ""
+                    }) {
+                    Text("Add")
                 }
-            )
+            }, dismissButton = {
+                Button(
+                    onClick = {
+                        viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
+                        newPlaylistName = ""
+                    }) {
+                    Text("Cancel")
+                }
+            })
         }
     }
 }

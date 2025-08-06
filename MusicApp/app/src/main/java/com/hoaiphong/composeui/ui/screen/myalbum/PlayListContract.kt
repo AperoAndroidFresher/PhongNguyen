@@ -24,9 +24,11 @@ data class PlayListState(
     val selectedPlaylistIndexForDropdown: Int? = null,
     val selectedPlaylistIndexForRename: Int? = null
 )
+
 sealed class MenuState {
     object None : MenuState()
     object Expanded : MenuState()
     object ShowRenameDialog : MenuState()
 }
+
 sealed interface PlayListEffect

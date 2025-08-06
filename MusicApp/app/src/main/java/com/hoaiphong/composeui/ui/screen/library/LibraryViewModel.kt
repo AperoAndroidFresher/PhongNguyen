@@ -72,8 +72,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
             _uiState.update {
                 it.copy(
-                    songs = wrapped,
-                    isLocalSelected = true
+                    songs = wrapped, isLocalSelected = true
                 )
             }
         }
@@ -81,42 +80,48 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
     private fun loadRemoteSongs() {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, songs = emptyList(), isLocalSelected = false) }
+            _uiState.update {
+                it.copy(
+                    isLoading = true, songs = emptyList(), isLocalSelected = false
+                )
+            }
             delay(2000)
-            SongRetrofitClient.build().getSongApiResponse().enqueue(object : Callback<List<SongAPIResponse>> {
-                override fun onResponse(call: Call<List<SongAPIResponse>>, response: Response<List<SongAPIResponse>>) {
-                    if (response.isSuccessful) {
-                        val songs = response.body()?.map {
-                            SongItemState(
-                                Song(
-                                    id = 0,
-                                    name = it.title,
-                                    author = it.artist,
-                                    duration = it.duration,
-                                    image = null,
-                                    data = it.path
+            SongRetrofitClient.build().getSongApiResponse()
+                .enqueue(object : Callback<List<SongAPIResponse>> {
+                    override fun onResponse(
+                        call: Call<List<SongAPIResponse>>, response: Response<List<SongAPIResponse>>
+                    ) {
+                        if (response.isSuccessful) {
+                            val songs = response.body()?.map {
+                                SongItemState(
+                                    Song(
+                                        id = 0,
+                                        name = it.title,
+                                        author = it.artist,
+                                        duration = it.duration,
+                                        image = null,
+                                        data = it.path
+                                    )
                                 )
-                            )
-                        } ?: emptyList()
+                            } ?: emptyList()
 
-                        _uiState.update {
-                            it.copy(songs = songs, isLoading = false, hasNetworkError = false)
+                            _uiState.update {
+                                it.copy(songs = songs, isLoading = false, hasNetworkError = false)
+                            }
+                        } else {
+                            Log.e("Retrofit", "Lỗi response: ${response.code()}")
                         }
-                    } else {
-                        Log.e("Retrofit", "Lỗi response: ${response.code()}")
                     }
-                }
 
-                override fun onFailure(call: Call<List<SongAPIResponse>>, t: Throwable) {
-                    Log.e("Retrofit", "Lỗi mạng/API: ${t.message}")
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            hasNetworkError = true
-                        )
+                    override fun onFailure(call: Call<List<SongAPIResponse>>, t: Throwable) {
+                        Log.e("Retrofit", "Lỗi mạng/API: ${t.message}")
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false, hasNetworkError = true
+                            )
+                        }
                     }
-                }
-            })
+                })
         }
     }
 
@@ -140,8 +145,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private fun showAddToPlaylistDialog(index: Int) {
         _uiState.update {
             it.copy(
-                showAddToPlaylistDialog = true,
-                selectedSongIndexForPlaylist = index
+                showAddToPlaylistDialog = true, selectedSongIndexForPlaylist = index
             )
         }
     }
@@ -149,8 +153,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private fun dismissAddToPlaylistDialog() {
         _uiState.update {
             it.copy(
-                showAddToPlaylistDialog = false,
-                selectedSongIndexForPlaylist = null
+                showAddToPlaylistDialog = false, selectedSongIndexForPlaylist = null
             )
         }
     }

@@ -18,7 +18,7 @@ data class PlaylistWithSongs(
         associateBy = Junction(PlaylistSongCrossRef::class)
     )
     val songs: List<Song>
-){
+) {
     val songCount: Int
         get() = songs.size
 }

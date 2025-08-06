@@ -83,9 +83,9 @@ fun DropdownMenuItemRename(onClick: () -> Unit) {
                 modifier = Modifier.size(18.dp),
                 colorFilter = ColorFilter.tint(Color.White)
             )
-        }
-    )
+        })
 }
+
 @Composable
 fun PlaylistItem(
     playlistWithSongs: PlaylistWithSongs,
@@ -107,8 +107,7 @@ fun PlaylistItem(
             .background(Color.DarkGray)
             .clickable { onClick() }
             .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+        verticalAlignment = Alignment.CenterVertically) {
         // Thumbnail
         Box(
             modifier = Modifier
@@ -151,8 +150,7 @@ fun PlaylistItem(
         if (showMenu) {
             Box {
                 IconButton(
-                    onClick = { menuState = MenuState.Expanded }
-                ) {
+                    onClick = { menuState = MenuState.Expanded }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_about),
                         contentDescription = null,
@@ -171,8 +169,7 @@ fun PlaylistItem(
                         },
                         onRenameClick = {
                             menuState = MenuState.ShowRenameDialog
-                        }
-                    )
+                        })
                 }
             }
         }
@@ -186,8 +183,7 @@ fun PlaylistItem(
             onConfirm = { newName ->
                 menuState = MenuState.None
                 onRename(playlist.playlistId, newName)
-            }
-        )
+            })
     }
 }
 
@@ -200,8 +196,7 @@ fun RenamePlaylistDialog(
     var text by remember { mutableStateOf(currentName) }
 
     androidx.compose.material3.AlertDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
+        onDismissRequest = onDismiss, confirmButton = {
             Text(
                 "OK",
                 modifier = Modifier
@@ -209,8 +204,7 @@ fun RenamePlaylistDialog(
                     .clickable { onConfirm(text) },
                 color = Color.White
             )
-        },
-        dismissButton = {
+        }, dismissButton = {
             Text(
                 "Cancel",
                 modifier = Modifier
@@ -218,15 +212,10 @@ fun RenamePlaylistDialog(
                     .clickable { onDismiss() },
                 color = Color.Gray
             )
-        },
-        title = { Text("Rename Playlist", color = Color.White) },
-        text = {
+        }, title = { Text("Rename Playlist", color = Color.White) }, text = {
             androidx.compose.material3.TextField(
-                value = text,
-                onValueChange = { text = it },
-                singleLine = true
+                value = text, onValueChange = { text = it }, singleLine = true
             )
-        },
-        containerColor = Color.DarkGray
+        }, containerColor = Color.DarkGray
     )
 }

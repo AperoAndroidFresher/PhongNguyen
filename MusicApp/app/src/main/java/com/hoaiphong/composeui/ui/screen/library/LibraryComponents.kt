@@ -56,14 +56,11 @@ import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
 fun LottieAnimationLoading() {
     val composition by rememberLottieComposition(LottieCompositionSpec.Asset("lottie/lottie_remote_item_loading.json"))
     val progress by animateLottieCompositionAsState(
-        composition,
-        iterations = LottieConstants.IterateForever
+        composition, iterations = LottieConstants.IterateForever
     )
 
     LottieAnimation(
-        composition = composition,
-        progress = { progress },
-        modifier = Modifier.size(100.dp)
+        composition = composition, progress = { progress }, modifier = Modifier.size(100.dp)
     )
 }
 
@@ -75,8 +72,7 @@ fun LibraryButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier
-            .width(150.dp),
+        modifier = modifier.width(150.dp),
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.surfaceTint),
         elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp),
@@ -85,6 +81,7 @@ fun LibraryButton(
         Text(text, color = MaterialTheme.colorScheme.onSecondary)
     }
 }
+
 @Composable
 fun ChoosePlaylistDialog(
     playlists: List<PlaylistWithSongs>,
@@ -94,12 +91,9 @@ fun ChoosePlaylistDialog(
     modifier: Modifier = Modifier,
 ) {
     AlertDialog(
-        onDismissRequest = onDismiss,
-        containerColor = Color(0xFF1E1E1E),
-        title = {
+        onDismissRequest = onDismiss, containerColor = Color(0xFF1E1E1E), title = {
             Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
+                modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = "Choose playlist",
@@ -108,8 +102,7 @@ fun ChoosePlaylistDialog(
                     textAlign = TextAlign.Center
                 )
             }
-        },
-        text = {
+        }, text = {
             if (playlists.isEmpty()) {
                 Box(
                     modifier = Modifier
@@ -153,14 +146,11 @@ fun ChoosePlaylistDialog(
                                 .fillMaxWidth()
                                 .clickable {
                                     onPlaylistSelected(playlistWithSongs.playlist.playlistId)
-                                }
-                        )
+                                })
                     }
                 }
             }
-        },
-        confirmButton = {},
-        modifier = modifier
+        }, confirmButton = {}, modifier = modifier
     )
 }
 
@@ -212,13 +202,12 @@ fun ChoosePlaylistItem(
                 )
             }
             Text(
-                "${songs.size} songs",
-                color = Color.Gray,
-                fontSize = 14.sp
+                "${songs.size} songs", color = Color.Gray, fontSize = 14.sp
             )
         }
     }
 }
+
 @Composable
 fun NoInternetConnectionContent(
     onRetry: () -> Unit,

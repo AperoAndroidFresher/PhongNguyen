@@ -13,12 +13,16 @@ import com.hoaiphong.composeui.db.entity.PlaylistSongCrossRef
 import com.hoaiphong.composeui.db.entity.Song
 import com.hoaiphong.composeui.db.entity.User
 
-@Database(    entities = [User::class, Song::class, Playlist::class, PlaylistSongCrossRef::class], version = 1)
+@Database(
+    entities = [User::class, Song::class, Playlist::class, PlaylistSongCrossRef::class],
+    version = 1
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun userDao(): UserDAO
     abstract fun songDao(): SongDAO
     abstract fun playListDao(): PlayListDAO
     abstract fun playlistSongCrossRefDAO(): PlaylistSongCrossRefDAO
+
     companion object {
         @Volatile
         private var INSTANCE: AppDatabase? = null

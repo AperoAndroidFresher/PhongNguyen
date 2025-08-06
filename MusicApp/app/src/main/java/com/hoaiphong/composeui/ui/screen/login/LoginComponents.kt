@@ -35,9 +35,7 @@ import com.hoaiphong.composeui.R
 
 @Composable
 fun LoginButton(
-    text: String = "Log in",
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    text: String = "Log in", modifier: Modifier = Modifier, onClick: () -> Unit = {}
 ) {
     Button(
         onClick = onClick,
@@ -45,8 +43,7 @@ fun LoginButton(
             .fillMaxWidth()
             .height(50.dp),
         colors = ButtonDefaults.buttonColors(
-            containerColor = Color(0xFF00BCD4),
-            contentColor = Color.White
+            containerColor = Color(0xFF00BCD4), contentColor = Color.White
         ),
         shape = CircleShape
     ) {
@@ -69,9 +66,7 @@ fun TextInput(
         placeholder = { Text(placeholderText, color = Color.Gray) },
         leadingIcon = {
             Icon(
-                imageVector = leadingIcon,
-                contentDescription = null,
-                tint = Color.Gray
+                imageVector = leadingIcon, contentDescription = null, tint = Color.Gray
             )
         },
         visualTransformation = visualTransformation,
@@ -96,6 +91,7 @@ fun TextInput(
             .background(Color(0xFF1A1A1A), shape = RoundedCornerShape(12.dp))
     )
 }
+
 @Composable
 fun PasswordInput(
     password: String,
@@ -116,10 +112,8 @@ fun PasswordInput(
             )
         },
         trailingIcon = {
-            val iconResId = if (passwordVisible)
-                R.drawable.ic_visible
-            else
-                R.drawable.ic_enable
+            val iconResId = if (passwordVisible) R.drawable.ic_visible
+            else R.drawable.ic_enable
 
             IconButton(onClick = onPasswordVisibilityChange) {
                 Icon(
@@ -151,15 +145,13 @@ fun PasswordInput(
             .background(Color(0xFF1A1A1A), shape = RoundedCornerShape(12.dp))
     )
 }
+
 @Composable
 fun RememberMeCheckbox(
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    checked: Boolean, onCheckedChange: (Boolean) -> Unit, modifier: Modifier = Modifier
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
+        verticalAlignment = Alignment.CenterVertically, modifier = modifier
     ) {
         Checkbox(
             checked = checked,
@@ -174,9 +166,7 @@ fun RememberMeCheckbox(
             )
         )
         Text(
-            text = "Remember me",
-            color = Color.White,
-            style = MaterialTheme.typography.bodySmall
+            text = "Remember me", color = Color.White, style = MaterialTheme.typography.bodySmall
         )
     }
 }

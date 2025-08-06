@@ -12,9 +12,11 @@ object SongRetrofitClient {
 
     private val retrofit by lazy { buildRetrofit() }
 
-    fun build(): SongApiService{return retrofit.create(SongApiService::class.java)}
+    fun build(): SongApiService {
+        return retrofit.create(SongApiService::class.java)
+    }
 
-    private fun buildRetrofit(): Retrofit{
+    private fun buildRetrofit(): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(buildClient())
@@ -22,7 +24,7 @@ object SongRetrofitClient {
             .build()
     }
 
-    private fun buildClient(): OkHttpClient{
+    private fun buildClient(): OkHttpClient {
         return OkHttpClient().newBuilder()
             .connectTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)
             .readTimeout(REQUEST_TIMEOUT, TimeUnit.SECONDS)

@@ -12,11 +12,13 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PlayListDAO {
-    @Query("""
+    @Query(
+        """
         SELECT *
         FROM playlist
-    """)
-    suspend  fun getAllPlaylist(): List<Playlist>
+    """
+    )
+    suspend fun getAllPlaylist(): List<Playlist>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPlaylist(playlist: Playlist)
@@ -24,7 +26,8 @@ interface PlayListDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllPlaylist(playlists: List<Playlist>)
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM playlist
         WHERE playlistId = :id
         """
@@ -33,10 +36,13 @@ interface PlayListDAO {
 
     @Update
     suspend fun updatePlaylist(playlist: Playlist)
+
     @Query("UPDATE playlist SET playlist_name = :newName WHERE playlistId = :playlistId")
     suspend fun renamePlaylist(playlistId: Long, newName: String)
+
     @Transaction
-    @Query("""
+    @Query(
+        """
         SELECT *
         FROM playlist
         WHERE playlistId = :playlistId
@@ -44,12 +50,14 @@ interface PlayListDAO {
     )
     suspend fun getPlaylistWithSongs(playlistId: Long): PlaylistWithSongs
 
-    @Query("""
+    @Query(
+        """
         SELECT *
         FROM playlist
         WHERE playlist_name LIKE :playlistName 
         LIMIT 1
-    """)
+    """
+    )
     suspend fun findByPlaylistName(playlistName: String): Playlist?
 
     @Transaction

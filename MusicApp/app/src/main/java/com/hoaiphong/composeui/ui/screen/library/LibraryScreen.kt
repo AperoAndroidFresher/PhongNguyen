@@ -36,10 +36,7 @@ fun LibraryScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Library",
-            fontSize = 25.sp,
-            color = Color.White,
-            textAlign = TextAlign.Center
+            text = "Library", fontSize = 25.sp, color = Color.White, textAlign = TextAlign.Center
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -48,16 +45,14 @@ fun LibraryScreen(
             LibraryButton(
                 text = "Local",
                 modifier = Modifier.width(100.dp),
-                onClick = { viewModel.dispatch(LibraryIntent.LoadLocalSongs) }
-            )
+                onClick = { viewModel.dispatch(LibraryIntent.LoadLocalSongs) })
 
             Spacer(modifier = Modifier.width(20.dp))
 
             LibraryButton(
                 text = "Remote",
                 modifier = Modifier.width(100.dp),
-                onClick = { viewModel.dispatch(LibraryIntent.LoadRemoteSongs) }
-            )
+                onClick = { viewModel.dispatch(LibraryIntent.LoadRemoteSongs) })
         }
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -71,25 +66,19 @@ fun LibraryScreen(
             ) {
                 LottieAnimationLoading()
             }
-        } else if (state.hasNetworkError){
+        } else if (state.hasNetworkError) {
             NoInternetConnectionContent(
-                onRetry = { viewModel.dispatch(LibraryIntent.LoadRemoteSongs) }
-            )
-        }else{
+                onRetry = { viewModel.dispatch(LibraryIntent.LoadRemoteSongs) })
+        } else {
             LazyColumn {
                 itemsIndexed(state.songs) { index, songState ->
-                    MyPlayListItem(
-                        song = songState,
-                        onAddClick = {
-                            viewModel.dispatch(LibraryIntent.ShowAddToPlaylistDialog(index))
-                        },
-                        onDropdownToggle = {
-                            viewModel.dispatch(LibraryIntent.ToggleDropdown(index))
-                        },
-                        onDismissDropdown = {
-                            viewModel.dispatch(LibraryIntent.DismissDropdown)
-                        }
-                    )
+                    MyPlayListItem(song = songState, onAddClick = {
+                        viewModel.dispatch(LibraryIntent.ShowAddToPlaylistDialog(index))
+                    }, onDropdownToggle = {
+                        viewModel.dispatch(LibraryIntent.ToggleDropdown(index))
+                    }, onDismissDropdown = {
+                        viewModel.dispatch(LibraryIntent.DismissDropdown)
+                    })
                 }
             }
         }
@@ -108,8 +97,7 @@ fun LibraryScreen(
                         viewModel.addSongToPlaylist(playlistId, song)
                         viewModel.dispatch(LibraryIntent.DismissAddToPlaylistDialog)
                     }
-                }
-            )
+                })
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.Relation
 import com.hoaiphong.composeui.db.entity.Playlist
 import com.hoaiphong.composeui.db.entity.User
+
 @Entity
 data class UserWithPlaylists(
     @Embedded val user: User,

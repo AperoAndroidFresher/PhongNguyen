@@ -46,7 +46,6 @@ fun LoginScreen(
     }
 
     LoginScreenContent(
-        state = state,
-        onIntent = viewModel::dispatch
+        state = state, onIntent = viewModel::dispatch
     )
 }

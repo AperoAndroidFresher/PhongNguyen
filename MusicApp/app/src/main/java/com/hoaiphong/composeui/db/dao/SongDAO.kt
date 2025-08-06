@@ -9,18 +9,23 @@ import androidx.room.Transaction
 import com.hoaiphong.composeui.db.entity.PlaylistSongCrossRef
 import com.hoaiphong.composeui.db.entity.Song
 import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
+
 @Dao
 interface SongDAO {
-    @Query("""
+    @Query(
+        """
         SELECT *
         FROM song
-    """)
-    suspend  fun getAllSong(): List<Song>
+    """
+    )
+    suspend fun getAllSong(): List<Song>
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM song
         WHERE songId = :id
-    """)
+    """
+    )
     suspend fun deleteSongById(id: Long)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -36,7 +41,8 @@ interface SongDAO {
     suspend fun removeSongFromPlaylist(crossRef: PlaylistSongCrossRef)
 
     @Transaction
-    @Query("""
+    @Query(
+        """
         SELECT *
         FROM playlist
         WHERE playlistId = :playlistId

@@ -9,40 +9,46 @@ import com.hoaiphong.composeui.db.entity.User
 
 @Dao
 interface UserDAO {
-    @Query("""
+    @Query(
+        """
         SELECT * 
         FROM user
         """
     )
-    suspend  fun getAllUser(): List<User>
+    suspend fun getAllUser(): List<User>
 
-    @Query("""
+    @Query(
+        """
         SELECT * 
         FROM user 
-        WHERE user_name IN (:userName)""")
-    suspend  fun loadAllByUserName(userName: String): List<User>
+        WHERE user_name IN (:userName)"""
+    )
+    suspend fun loadAllByUserName(userName: String): List<User>
 
-    @Query("""
+    @Query(
+        """
         SELECT * 
         FROM user 
         WHERE user_name LIKE :userName 
         LIMIT 1
             """
     )
-    suspend  fun findByUserName(userName: String): User?
+    suspend fun findByUserName(userName: String): User?
 
     @Update
     suspend fun updateUser(user: User)
 
     @Insert
-    suspend  fun insertAllUser(vararg users: User)
+    suspend fun insertAllUser(vararg users: User)
 
     @Delete
-    suspend  fun delete(user: User)
+    suspend fun delete(user: User)
 
-    @Query("""
+    @Query(
+        """
         DELETE FROM user 
         WHERE user_name = :userName
-        """)
+        """
+    )
     suspend fun deleteByUserName(userName: String)
 }

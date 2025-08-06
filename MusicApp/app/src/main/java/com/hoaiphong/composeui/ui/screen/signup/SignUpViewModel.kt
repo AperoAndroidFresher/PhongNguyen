@@ -29,7 +29,12 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
             }
 
             is SignUpIntent.ConfirmPasswordChanged -> {
-                _state.update { it.copy(confirmPassword = intent.value, confirmPasswordError = false) }
+                _state.update {
+                    it.copy(
+                        confirmPassword = intent.value,
+                        confirmPasswordError = false
+                    )
+                }
             }
 
             is SignUpIntent.EmailChanged -> {
