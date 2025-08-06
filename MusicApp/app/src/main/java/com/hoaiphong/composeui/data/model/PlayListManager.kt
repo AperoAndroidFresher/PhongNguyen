@@ -1,11 +1,11 @@
 package com.hoaiphong.composeui.data.model
 
-import com.hoaiphong.composeui.db.dao.PlayListDAO
-import com.hoaiphong.composeui.db.dao.PlaylistSongCrossRefDAO
-import com.hoaiphong.composeui.db.dao.SongDAO
-import com.hoaiphong.composeui.db.entity.Playlist
-import com.hoaiphong.composeui.db.entity.PlaylistSongCrossRef
-import com.hoaiphong.composeui.db.entity.relations.PlaylistWithSongs
+import com.hoaiphong.composeui.data.local.room.dao.PlayListDAO
+import com.hoaiphong.composeui.data.local.room.dao.PlaylistSongCrossRefDAO
+import com.hoaiphong.composeui.data.local.room.dao.SongDAO
+import com.hoaiphong.composeui.data.local.model.entity.Playlist
+import com.hoaiphong.composeui.data.local.model.entity.PlaylistSongCrossRef
+import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistManager(

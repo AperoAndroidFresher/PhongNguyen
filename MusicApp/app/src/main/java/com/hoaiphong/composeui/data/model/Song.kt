@@ -20,8 +20,8 @@ fun ByteArray?.toBase64(): String? {
     return this?.let { android.util.Base64.encodeToString(it, android.util.Base64.DEFAULT) }
 }
 
-fun com.hoaiphong.composeui.data.model.Song.toEntity(): com.hoaiphong.composeui.db.entity.Song {
-    return com.hoaiphong.composeui.db.entity.Song(
+fun com.hoaiphong.composeui.data.model.Song.toEntity(): com.hoaiphong.composeui.data.local.model.entity.Song {
+    return com.hoaiphong.composeui.data.local.model.entity.Song(
         songId = id,
         name = name,
         artist = author,
@@ -31,7 +31,7 @@ fun com.hoaiphong.composeui.data.model.Song.toEntity(): com.hoaiphong.composeui.
     )
 }
 
-fun com.hoaiphong.composeui.db.entity.Song.toModel(): com.hoaiphong.composeui.data.model.Song {
+fun com.hoaiphong.composeui.data.local.model.entity.Song.toModel(): com.hoaiphong.composeui.data.model.Song {
     return com.hoaiphong.composeui.data.model.Song(
         id = songId,
         name = name,
