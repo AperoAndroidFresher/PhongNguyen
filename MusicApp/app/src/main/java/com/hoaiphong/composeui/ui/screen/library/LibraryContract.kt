@@ -28,6 +28,7 @@ data class LibraryState(
     val selectedSongIndex: Int? = null,
 
     val playlists: List<PlaylistWithSongs> = emptyList(),
+    val isLoading: Boolean = false,
 )
 
 sealed interface LibraryEffect

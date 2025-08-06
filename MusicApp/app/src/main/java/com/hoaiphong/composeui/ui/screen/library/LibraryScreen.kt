@@ -62,20 +62,31 @@ fun LibraryScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        LazyColumn {
-            itemsIndexed(state.songs) { index, songState ->
-                MyPlayListItem(
-                    song = songState,
-                    onAddClick = {
-                        viewModel.dispatch(LibraryIntent.ShowAddToPlaylistDialog(index))
-                    },
-                    onDropdownToggle = {
-                        viewModel.dispatch(LibraryIntent.ToggleDropdown(index))
-                    },
-                    onDismissDropdown = {
-                        viewModel.dispatch(LibraryIntent.DismissDropdown)
-                    }
-                )
+        if (state.isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0x88000000)),
+                contentAlignment = Alignment.Center
+            ) {
+                LottieAnimationLoading()
+            }
+        } else {
+            LazyColumn {
+                itemsIndexed(state.songs) { index, songState ->
+                    MyPlayListItem(
+                        song = songState,
+                        onAddClick = {
+                            viewModel.dispatch(LibraryIntent.ShowAddToPlaylistDialog(index))
+                        },
+                        onDropdownToggle = {
+                            viewModel.dispatch(LibraryIntent.ToggleDropdown(index))
+                        },
+                        onDismissDropdown = {
+                            viewModel.dispatch(LibraryIntent.DismissDropdown)
+                        }
+                    )
+                }
             }
         }
 

@@ -19,6 +19,7 @@ import android.util.Log
 import com.hoaiphong.composeui.api.SongAPIResponse
 import com.hoaiphong.composeui.api.SongRetrofitClient
 import com.hoaiphong.composeui.ui.screen.mysong.toDurationFormatted
+import kotlinx.coroutines.delay
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -80,42 +81,41 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private fun loadRemoteSongs() {
-        _uiState.update {
-            it.copy(
-                songs = emptyList(),
-                isLocalSelected = false
-            )
-        }
-        SongRetrofitClient.imageService.getPhotos().enqueue(object : Callback<List<SongAPIResponse>> {
-            override fun onResponse(call: Call<List<SongAPIResponse>>, response: Response<List<SongAPIResponse>>) {
-                if (response.isSuccessful) {
-                    val images = response.body() ?: emptyList()
-                    val songs = images.map {
-                        Log.d("DCMMM", "onResponse: ${it.duration.toDurationFormatted()}")
-                        SongItemState(
-                            Song(
-                                id = 0,
-                                name = it.title,
-                                author = it.artist,
-                                duration = it.duration,
-                                image = null,
-                                data = it.path
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, songs = emptyList(), isLocalSelected = false) }
+
+            delay(2000)
+
+            SongRetrofitClient.imageService.getPhotos().enqueue(object : Callback<List<SongAPIResponse>> {
+                override fun onResponse(call: Call<List<SongAPIResponse>>, response: Response<List<SongAPIResponse>>) {
+                    if (response.isSuccessful) {
+                        val songs = response.body()?.map {
+                            SongItemState(
+                                Song(
+                                    id = 0,
+                                    name = it.title,
+                                    author = it.artist,
+                                    duration = it.duration,
+                                    image = null,
+                                    data = it.path
+                                )
                             )
+                        } ?: emptyList()
 
-                        )
+                        _uiState.update {
+                            it.copy(songs = songs, isLoading = false)
+                        }
+                    } else {
+                        Log.e("Retrofit", "Lỗi response: ${response.code()}")
                     }
-                    _uiState.update { currentState ->
-                        currentState.copy(songs = songs)
-                    }
-                } else {
-                    Log.e("Retrofit", "Lỗi response: ${response.code()}")
                 }
-            }
 
-            override fun onFailure(call: Call<List<SongAPIResponse>>, t: Throwable) {
-                Log.e("Retrofit", "Lỗi mạng/API: ${t.message}")
-            }
-        })
+                override fun onFailure(call: Call<List<SongAPIResponse>>, t: Throwable) {
+                    Log.e("Retrofit", "Lỗi mạng/API: ${t.message}")
+                    _uiState.update { it.copy(isLoading = false) }
+                }
+            })
+        }
     }
 
     private fun toggleDropdown(index: Int) {
