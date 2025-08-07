@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.comon.SongItemState
 import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
-import com.hoaiphong.composeui.data.local.Song
+import com.hoaiphong.composeui.data.local.SongLocal
 import com.hoaiphong.composeui.data.local.getAllMp3File
 import com.hoaiphong.composeui.data.local.toEntity
 import com.hoaiphong.composeui.data.local.room.AppDatabase
@@ -56,7 +56,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun addSongToPlaylist(playlistId: Long, song: Song) {
+    fun addSongToPlaylist(playlistId: Long, song: SongLocal) {
         viewModelScope.launch {
             playlistManager.addSongToPlaylist(playlistId, song)
         }
@@ -94,7 +94,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
                         if (response.isSuccessful) {
                             val songs = response.body()?.map {
                                 SongItemState(
-                                    Song(
+                                    SongLocal(
                                         id = 0,
                                         name = it.title,
                                         author = it.artist,

@@ -7,8 +7,9 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
+import com.hoaiphong.composeui.data.local.model.entity.Song
 
-data class Song(
+data class SongLocal(
     val id: Long,
     val name: String,
     val author: String,
@@ -21,8 +22,8 @@ fun ByteArray?.toBase64(): String? {
     return this?.let { Base64.encodeToString(it, Base64.DEFAULT) }
 }
 
-fun Song.toEntity(): com.hoaiphong.composeui.data.local.model.entity.Song {
-    return com.hoaiphong.composeui.data.local.model.entity.Song(
+fun SongLocal.toEntity(): Song {
+    return Song(
         songId = id,
         name = name,
         artist = author,
@@ -32,8 +33,8 @@ fun Song.toEntity(): com.hoaiphong.composeui.data.local.model.entity.Song {
     )
 }
 
-fun com.hoaiphong.composeui.data.local.model.entity.Song.toModel(): Song {
-    return Song(
+fun Song.toModel(): SongLocal {
+    return SongLocal(
         id = songId,
         name = name,
         author = artist,
@@ -43,8 +44,8 @@ fun com.hoaiphong.composeui.data.local.model.entity.Song.toModel(): Song {
     )
 }
 
-fun getAllMp3File(context: Context): List<Song> {
-    val songList = mutableListOf<Song>()
+fun getAllMp3File(context: Context): List<SongLocal> {
+    val songList = mutableListOf<SongLocal>()
     val contentResolver: ContentResolver = context.contentResolver
     val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     val selection = "${MediaStore.Audio.Media.DURATION} > 0"
@@ -81,7 +82,7 @@ fun getAllMp3File(context: Context): List<Song> {
             } catch (e: Exception) {
                 null
             }
-            val song = Song(
+            val song = SongLocal(
                 id = id,
                 name = title,
                 author = artist,

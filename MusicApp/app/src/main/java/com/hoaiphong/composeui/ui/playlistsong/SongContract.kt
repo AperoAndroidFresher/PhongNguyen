@@ -1,7 +1,7 @@
 package com.hoaiphong.composeui.ui.playlistsong
 
 import com.hoaiphong.composeui.comon.SongItemState
-import com.hoaiphong.composeui.data.local.Song
+import com.hoaiphong.composeui.data.local.SongLocal
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 
 sealed interface PlaylistIntent {
@@ -10,7 +10,7 @@ sealed interface PlaylistIntent {
     data class ToggleDropdown(val index: Int) : PlaylistIntent
     data class DismissDropdown(val index: Int) : PlaylistIntent
     object LoadSongs : PlaylistIntent
-    data class LoadSpecificSongs(val songs: List<Song>, val playlistName: String) : PlaylistIntent
+    data class LoadSpecificSongs(val songs: List<SongLocal>, val playlistName: String) : PlaylistIntent
 }
 
 sealed interface PlaylistEffect {
