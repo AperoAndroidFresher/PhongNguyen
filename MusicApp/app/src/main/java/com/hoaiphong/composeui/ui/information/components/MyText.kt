@@ -22,8 +22,7 @@ fun PreviewMyText() {
 
 @Composable
 fun MyText(
-    modifier: Modifier = Modifier.Companion,
-    name: String = "",
+    modifier: Modifier = Modifier,
     label: String = "Input",
 ) {
     Text(

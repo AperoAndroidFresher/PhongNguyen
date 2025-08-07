@@ -46,6 +46,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.comon.UserSession
+import com.hoaiphong.composeui.ui.playlist.components.PlaylistItem
 
 @Composable
 fun PlaylistScreen(
@@ -157,7 +158,12 @@ fun PlaylistScreen(
                                 viewModel.dispatch(PlaylistIntent.RemovePlaylist(playlist.playlistId))
                             },
                             onRename = { playlistId, newName ->
-                                viewModel.dispatch(PlaylistIntent.RenamePlaylist(playlistId, newName))
+                                viewModel.dispatch(
+                                    PlaylistIntent.RenamePlaylist(
+                                        playlistId,
+                                        newName
+                                    )
+                                )
                             }
                         )
                     }

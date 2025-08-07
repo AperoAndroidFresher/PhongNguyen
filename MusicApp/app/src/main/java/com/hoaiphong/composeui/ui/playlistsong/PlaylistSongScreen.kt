@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.ui.navigation.PlaylistSongs
+import com.hoaiphong.composeui.ui.playlistsong.components.ColumnSongList
+import com.hoaiphong.composeui.ui.playlistsong.components.GridSongList
 
 @Composable
 fun PlaylistSongScreen(
@@ -109,15 +111,39 @@ fun PlaylistSongScreen(
                 ColumnSongList(
                     songs = state.songs,
                     onRemoveClick = { index -> viewModel.dispatch(PlaylistIntent.RemoveSong(index)) },
-                    onDropdownToggle = { index -> viewModel.dispatch(PlaylistIntent.ToggleDropdown(index)) },
-                    onDismissDropdown = { index -> viewModel.dispatch(PlaylistIntent.DismissDropdown(index)) }
+                    onDropdownToggle = { index ->
+                        viewModel.dispatch(
+                            PlaylistIntent.ToggleDropdown(
+                                index
+                            )
+                        )
+                    },
+                    onDismissDropdown = { index ->
+                        viewModel.dispatch(
+                            PlaylistIntent.DismissDropdown(
+                                index
+                            )
+                        )
+                    }
                 )
             } else {
                 GridSongList(
                     songs = state.songs,
                     onRemoveClick = { index -> viewModel.dispatch(PlaylistIntent.RemoveSong(index)) },
-                    onDropdownToggle = { index -> viewModel.dispatch(PlaylistIntent.ToggleDropdown(index)) },
-                    onDismissDropdown = { index -> viewModel.dispatch(PlaylistIntent.DismissDropdown(index)) }
+                    onDropdownToggle = { index ->
+                        viewModel.dispatch(
+                            PlaylistIntent.ToggleDropdown(
+                                index
+                            )
+                        )
+                    },
+                    onDismissDropdown = { index ->
+                        viewModel.dispatch(
+                            PlaylistIntent.DismissDropdown(
+                                index
+                            )
+                        )
+                    }
                 )
             }
         }

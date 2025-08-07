@@ -29,7 +29,7 @@ fun PreviewMyInput() {
 
 @Composable
 fun MyInput(
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,

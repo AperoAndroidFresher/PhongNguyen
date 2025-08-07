@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.playlistsong
+package com.hoaiphong.composeui.utils
 
 fun String.toDurationFormatted(): String {
     return try {

@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun SuccessPopupContent(modifier: Modifier = Modifier.Companion) {
+fun SuccessPopupContent(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth(0.8f)
