@@ -1,7 +1,6 @@
 package com.hoaiphong.composeui.ui.information
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
@@ -26,7 +25,8 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
     init {
         // Load user data from DB when ViewModel starts
         viewModelScope.launch {
-            val username = UserSession.username
+            val userSession = UserSession(application)
+            val username = userSession.getSavedUsername()
             if (!username.isNullOrBlank()) {
                 try {
                     val userRepository = UserRepositoryImpl(application)
@@ -40,7 +40,6 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                             avatarUri = user.imgUrl.takeIf { it.isNotBlank() }?.toUri()
                         )
                     }
-                    Log.d("DCM", "me: $user")
                 } catch (e: Exception) {
                     _effect.emit(MyInfoEffect.ShowToast("Không thể tải dữ liệu người dùng"))
                 }
@@ -99,7 +98,8 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
 
                     viewModelScope.launch {
                         try {
-                            val savedUsername = UserSession.username
+                            val userSession = UserSession(application)
+                            val savedUsername = userSession.getSavedUsername()
 
                             if (savedUsername.isNullOrBlank()) {
                                 _effect.emit(MyInfoEffect.ShowToast("Không tìm thấy tài khoản đã đăng nhập"))

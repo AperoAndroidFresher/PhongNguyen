@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
-
+    private val userSession = UserSession(application)
 
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
@@ -29,7 +29,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
             it.copy(username = username, password = password)
         }
     }
-
     private fun handleLogin() {
         val current = _state.value
         CoroutineScope(Dispatchers.IO).launch {
@@ -37,7 +36,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 val userRepository = UserRepositoryImpl(application)
                 val user = userRepository.login(current.username, current.password)
                 if (user != null) {
-                    UserSession.username = user.userName
+                    UserSession(application).saveUser(user.userName)
                     _effect.send(LoginEffect.NavigateToHome)
                 } else {
                     _effect.send(LoginEffect.ShowToast("Sai tài khoản hoặc mật khẩu"))

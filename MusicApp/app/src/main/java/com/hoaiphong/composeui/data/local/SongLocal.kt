@@ -6,7 +6,6 @@ import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Base64
-import android.util.Log
 import com.hoaiphong.composeui.data.local.model.entity.Song
 
 data class SongLocal(
@@ -20,6 +19,16 @@ data class SongLocal(
 
 fun ByteArray?.toBase64(): String? {
     return this?.let { Base64.encodeToString(it, Base64.DEFAULT) }
+}
+
+fun String?.fromBase64ToByteArray(): ByteArray? {
+    return this?.let {
+        try {
+            Base64.decode(it, Base64.DEFAULT)
+        } catch (e: IllegalArgumentException) {
+            null
+        }
+    }
 }
 
 fun SongLocal.toEntity(): Song {
@@ -94,6 +103,5 @@ fun getAllMp3File(context: Context): List<SongLocal> {
         }
     }
 
-    Log.d("SongDebug", "Total songs found: ${songList.size}")
     return songList
 }

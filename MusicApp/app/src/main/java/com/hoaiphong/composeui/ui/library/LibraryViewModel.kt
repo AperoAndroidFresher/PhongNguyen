@@ -12,13 +12,8 @@ import com.hoaiphong.composeui.data.local.room.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import android.util.Log
-import com.hoaiphong.composeui.api.song.SongAPIResponse
-import com.hoaiphong.composeui.api.song.SongRetrofitClient
-import kotlinx.coroutines.delay
+import com.hoaiphong.composeui.data.internalstorage.SongStorage
+import com.hoaiphong.composeui.data.internalstorage.Impl.SongStorageImpl
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -28,6 +23,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         songDAO = db.songDao(),
         crossRefDAO = db.playlistSongCrossRefDAO()
     )
+    private val songRepository: SongStorage = SongStorageImpl(application.applicationContext)
 
     private val _uiState = MutableStateFlow(LibraryState())
     val uiState: StateFlow<LibraryState> = _uiState.asStateFlow()
@@ -78,53 +74,44 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    private fun loadRemoteSongs() {
-        viewModelScope.launch {
-            _uiState.update {
-                it.copy(
-                    isLoading = true, songs = emptyList(), isLocalSelected = false
-                )
+
+    fun loadRemoteSongs() {
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                songs = emptyList(),
+                isLocalSelected = false,
+                hasNetworkError = false
+            )
+        }
+
+        songRepository.loadRemoteSongsAndDownloadFiles { songStates ->
+            if (songStates != null && songStates.isNotEmpty()) {
+                _uiState.update {
+                    it.copy(
+                        songs = songStates,
+                        isLoading = false,
+                        hasNetworkError = false
+                    )
+                }
+            } else if (songStates != null && songStates.isEmpty()) {
+                _uiState.update {
+                    it.copy(
+                        songs = emptyList(),
+                        isLoading = false,
+                        hasNetworkError = false
+                    )
+                }
+            } else {
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        hasNetworkError = true
+                    )
+                }
             }
-            delay(2000)
-            SongRetrofitClient.build().getSongApiResponse()
-                .enqueue(object : Callback<List<SongAPIResponse>> {
-                    override fun onResponse(
-                        call: Call<List<SongAPIResponse>>, response: Response<List<SongAPIResponse>>
-                    ) {
-                        if (response.isSuccessful) {
-                            val songs = response.body()?.map {
-                                SongItemState(
-                                    SongLocal(
-                                        id = 0,
-                                        name = it.title,
-                                        author = it.artist,
-                                        duration = it.duration,
-                                        image = null,
-                                        data = it.path
-                                    )
-                                )
-                            } ?: emptyList()
-
-                            _uiState.update {
-                                it.copy(songs = songs, isLoading = false, hasNetworkError = false)
-                            }
-                        } else {
-                            Log.e("Retrofit", "Lỗi response: ${response.code()}")
-                        }
-                    }
-
-                    override fun onFailure(call: Call<List<SongAPIResponse>>, t: Throwable) {
-                        Log.e("Retrofit", "Lỗi mạng/API: ${t.message}")
-                        _uiState.update {
-                            it.copy(
-                                isLoading = false, hasNetworkError = true
-                            )
-                        }
-                    }
-                })
         }
     }
-
     private fun toggleDropdown(index: Int) {
         _uiState.update {
             val updated = it.songs.mapIndexed { i, item ->
