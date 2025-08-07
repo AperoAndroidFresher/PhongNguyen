@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -38,7 +39,9 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.data.local.fromBase64ToByteArray
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 import com.hoaiphong.composeui.ui.playlistsong.DropdownMenuItemRemove
 
@@ -101,6 +104,7 @@ fun PlaylistItem(
 
     val playlist = playlistWithSongs.playlist
     val songs = playlistWithSongs.songs
+    val imageBytes = songs.firstOrNull()?.image.fromBase64ToByteArray()
 
     Row(
         modifier = modifier
@@ -118,7 +122,11 @@ fun PlaylistItem(
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
-                    model = songs.firstOrNull()?.image ?: R.drawable.ic_add_to_playlist
+                    model = imageBytes?.let {
+                        ImageRequest.Builder(LocalContext.current)
+                            .data(it)
+                            .build()
+                    } ?: R.drawable.song1
                 ),
                 contentDescription = null,
                 modifier = Modifier.matchParentSize(),

@@ -42,6 +42,7 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.comon.SongItemState
 
@@ -61,7 +62,11 @@ fun MyListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = rememberAsyncImagePainter(song.song.image),
+            painter = rememberAsyncImagePainter( model = song.song.image?.let {
+                ImageRequest.Builder(LocalContext.current)
+                    .data(it)
+                    .build()
+            } ?: R.drawable.song1),
             contentDescription = null,
             modifier = Modifier
                 .size(70.dp)
@@ -144,7 +149,11 @@ fun MyColumnItem(
                 .clip(RoundedCornerShape(10.dp))
         ) {
             Image(
-                painter = rememberAsyncImagePainter(song.song.image),
+                painter = rememberAsyncImagePainter( model = song.song.image?.let {
+                    ImageRequest.Builder(LocalContext.current)
+                        .data(it)
+                        .build()
+                } ?: R.drawable.song1),
                 contentDescription = null,
                 modifier = Modifier.matchParentSize(),
                 contentScale = ContentScale.Crop
@@ -389,7 +398,11 @@ fun MyPlayListItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
-            painter = rememberAsyncImagePainter(song.song.image),
+            painter = rememberAsyncImagePainter( model = song.song.image?.let {
+                ImageRequest.Builder(LocalContext.current)
+                    .data(it)
+                    .build()
+            } ?: R.drawable.song1),
             contentDescription = null,
             modifier = Modifier
                 .size(70.dp)
