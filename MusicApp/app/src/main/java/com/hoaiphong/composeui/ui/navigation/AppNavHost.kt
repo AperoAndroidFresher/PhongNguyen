@@ -32,6 +32,10 @@ fun AppNavGraph() {
                         onNavigateToLogin = {
                             backStack.remove(Splash)
                             backStack.add(Login())
+                        },
+                        onNavigateToHome = {
+                            backStack.remove(Splash)
+                            backStack.add(HomeRoute)
                         }
                     )
                 }
