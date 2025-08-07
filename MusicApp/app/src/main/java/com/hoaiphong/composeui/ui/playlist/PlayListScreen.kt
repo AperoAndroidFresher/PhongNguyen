@@ -30,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -55,6 +56,7 @@ fun PlaylistScreen(
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()
     var newPlaylistName by rememberSaveable { mutableStateOf("") }
+    val userSession = remember { UserSession(context) }
 
     Box(
         modifier = modifier
@@ -176,14 +178,18 @@ fun PlaylistScreen(
             }, confirmButton = {
                 Button(
                     onClick = {
+                        val username = userSession.getSavedUsername()
+                        if (username.isNullOrBlank()) return@Button
+
                         viewModel.dispatch(
                             PlaylistIntent.AddPlaylist(
                                 name = newPlaylistName,
-                                ownerUsername = UserSession.username ?: return@Button
+                                ownerUsername = username
                             )
                         )
                         newPlaylistName = ""
-                    }) {
+                    }
+                ) {
                     Text("Add")
                 }
             }, dismissButton = {

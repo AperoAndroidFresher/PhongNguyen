@@ -1,7 +1,6 @@
 package com.hoaiphong.composeui.comon
 
 import android.content.Context
-import android.content.SharedPreferences
 import androidx.core.content.edit
 
 class UserSession(context: Context) {
