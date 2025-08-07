@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.myinfo
+package com.hoaiphong.composeui.ui.information
 
 import android.net.Uri
 

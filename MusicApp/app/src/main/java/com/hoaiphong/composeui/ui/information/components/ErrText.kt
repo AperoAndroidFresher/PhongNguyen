@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.myinfo.components
+package com.hoaiphong.composeui.ui.information.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text

@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.myinfo.components
+package com.hoaiphong.composeui.ui.information.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -39,8 +39,8 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
-import com.hoaiphong.composeui.ui.myinfo.MyInfoIntent
-import com.hoaiphong.composeui.ui.myinfo.MyInfoState
+import com.hoaiphong.composeui.ui.information.MyInfoIntent
+import com.hoaiphong.composeui.ui.information.MyInfoState
 import com.hoaiphong.composeui.ui.theme.darkMode
 import com.hoaiphong.composeui.ui.theme.lightMode
 

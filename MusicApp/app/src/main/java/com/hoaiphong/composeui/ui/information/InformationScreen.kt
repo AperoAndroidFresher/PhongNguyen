@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.myinfo
+package com.hoaiphong.composeui.ui.information
 
 import android.content.Intent
 import android.widget.Toast
@@ -16,8 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.hoaiphong.composeui.ui.myinfo.components.InformationScreenContent
-import com.hoaiphong.composeui.ui.myinfo.components.SuccessPopupContent
+import com.hoaiphong.composeui.ui.information.components.InformationScreenContent
+import com.hoaiphong.composeui.ui.information.components.SuccessPopupContent
 import com.hoaiphong.composeui.ui.theme.darkMode
 import com.hoaiphong.composeui.ui.theme.lightMode
 import com.hoaiphong.composeui.utils.rememberImagePicker

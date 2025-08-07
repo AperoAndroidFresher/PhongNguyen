@@ -10,7 +10,7 @@ import com.hoaiphong.composeui.ui.home.HomeScreen
 import com.hoaiphong.composeui.ui.layout.SharedBottom
 import com.hoaiphong.composeui.ui.library.LibraryScreen
 import com.hoaiphong.composeui.ui.playlist.PlaylistScreen
-import com.hoaiphong.composeui.ui.myinfo.InformationScreen
+import com.hoaiphong.composeui.ui.information.InformationScreen
 import com.hoaiphong.composeui.ui.mysong.PlaylistSongScreen
 
 @Composable

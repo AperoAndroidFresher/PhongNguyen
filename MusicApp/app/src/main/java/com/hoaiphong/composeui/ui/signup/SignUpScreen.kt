@@ -35,7 +35,7 @@ import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.ui.login.LoginButton
 import com.hoaiphong.composeui.ui.login.PasswordInput
 import com.hoaiphong.composeui.ui.login.TextInput
-import com.hoaiphong.composeui.ui.myinfo.components.ErrText
+import com.hoaiphong.composeui.ui.information.components.ErrText
 
 @Composable
 fun SignUpScreen(
