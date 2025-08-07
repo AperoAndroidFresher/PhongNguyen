@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.mysong
+package com.hoaiphong.composeui.ui.playlistsong
 
 import com.hoaiphong.composeui.comon.SongItemState
 import com.hoaiphong.composeui.data.local.Song

@@ -11,7 +11,7 @@ import com.hoaiphong.composeui.ui.layout.SharedBottom
 import com.hoaiphong.composeui.ui.library.LibraryScreen
 import com.hoaiphong.composeui.ui.playlist.PlaylistScreen
 import com.hoaiphong.composeui.ui.information.InformationScreen
-import com.hoaiphong.composeui.ui.mysong.PlaylistSongScreen
+import com.hoaiphong.composeui.ui.playlistsong.PlaylistSongScreen
 
 @Composable
 fun TopLevelNavGraph(

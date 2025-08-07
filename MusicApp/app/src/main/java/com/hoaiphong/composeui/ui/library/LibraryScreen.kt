@@ -13,7 +13,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.hoaiphong.composeui.ui.mysong.MyPlayListItem
+import com.hoaiphong.composeui.ui.playlistsong.MyPlayListItem
 
 @Composable
 fun LibraryScreen(

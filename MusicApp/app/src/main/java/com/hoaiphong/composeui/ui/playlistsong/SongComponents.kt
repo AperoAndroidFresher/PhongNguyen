@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.mysong
+package com.hoaiphong.composeui.ui.playlistsong
 
 
 import android.content.Intent

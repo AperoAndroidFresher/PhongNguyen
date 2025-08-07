@@ -40,7 +40,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
-import com.hoaiphong.composeui.ui.mysong.DropdownMenuItemRemove
+import com.hoaiphong.composeui.ui.playlistsong.DropdownMenuItemRemove
 
 @Composable
 fun PlaylistDropdownMenu(
