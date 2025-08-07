@@ -9,11 +9,11 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
 import com.hoaiphong.composeui.ui.navigation.Home
-import com.hoaiphong.composeui.ui.screen.login.LoginScreen
-import com.hoaiphong.composeui.ui.screen.login.LoginViewModel
-import com.hoaiphong.composeui.ui.screen.signup.SignUpScreen
-import com.hoaiphong.composeui.ui.screen.signup.SignUpViewModel
-import com.hoaiphong.composeui.ui.screen.splash.SplashScreen
+import com.hoaiphong.composeui.ui.login.LoginScreen
+import com.hoaiphong.composeui.ui.login.LoginViewModel
+import com.hoaiphong.composeui.ui.signup.SignUpScreen
+import com.hoaiphong.composeui.ui.signup.SignUpViewModel
+import com.hoaiphong.composeui.ui.splash.SplashScreen
 import com.hoaiphong.composeui.ui.navigation.Home as HomeRoute
 
 @Composable

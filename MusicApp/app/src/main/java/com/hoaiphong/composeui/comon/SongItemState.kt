@@ -1,6 +1,6 @@
 package com.hoaiphong.composeui.comon
 
-import com.hoaiphong.composeui.data.model.Song
+import com.hoaiphong.composeui.data.local.Song
 
 data class SongItemState(
     val song: Song,

@@ -6,12 +6,12 @@ import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.entry
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
-import com.hoaiphong.composeui.ui.screen.home.HomeScreen
-import com.hoaiphong.composeui.ui.screen.layout.SharedBottom
-import com.hoaiphong.composeui.ui.screen.library.LibraryScreen
-import com.hoaiphong.composeui.ui.screen.myalbum.PlaylistScreen
-import com.hoaiphong.composeui.ui.screen.myinfo.InformationScreen
-import com.hoaiphong.composeui.ui.screen.mysong.PlaylistSongScreen
+import com.hoaiphong.composeui.ui.home.HomeScreen
+import com.hoaiphong.composeui.ui.layout.SharedBottom
+import com.hoaiphong.composeui.ui.library.LibraryScreen
+import com.hoaiphong.composeui.ui.playlist.PlaylistScreen
+import com.hoaiphong.composeui.ui.information.InformationScreen
+import com.hoaiphong.composeui.ui.playlistsong.PlaylistSongScreen
 
 @Composable
 fun TopLevelNavGraph(
