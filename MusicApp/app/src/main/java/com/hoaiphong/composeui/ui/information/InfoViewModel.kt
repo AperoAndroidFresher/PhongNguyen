@@ -1,7 +1,6 @@
 package com.hoaiphong.composeui.ui.information
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
@@ -40,7 +39,6 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                             avatarUri = user.imgUrl.takeIf { it.isNotBlank() }?.toUri()
                         )
                     }
-                    Log.d("DCM", "me: $user")
                 } catch (e: Exception) {
                     _effect.emit(MyInfoEffect.ShowToast("Không thể tải dữ liệu người dùng"))
                 }
