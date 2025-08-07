@@ -3,7 +3,7 @@ package com.hoaiphong.composeui.ui.login
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
-import com.hoaiphong.composeui.data.model.UserSession
+import com.hoaiphong.composeui.comon.UserSession
 import com.hoaiphong.composeui.data.repository.impl.UserRepositoryImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

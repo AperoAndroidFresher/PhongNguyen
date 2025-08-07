@@ -44,7 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
-import com.hoaiphong.composeui.data.model.UserSession
+import com.hoaiphong.composeui.comon.UserSession
 
 @Composable
 fun PlaylistScreen(

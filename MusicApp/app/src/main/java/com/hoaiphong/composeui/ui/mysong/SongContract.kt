@@ -1,7 +1,7 @@
 package com.hoaiphong.composeui.ui.mysong
 
 import com.hoaiphong.composeui.comon.SongItemState
-import com.hoaiphong.composeui.data.model.Song
+import com.hoaiphong.composeui.data.local.Song
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 
 sealed interface PlaylistIntent {

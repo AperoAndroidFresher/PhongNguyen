@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.comon.SongItemState
-import com.hoaiphong.composeui.data.model.PlaylistManager
-import com.hoaiphong.composeui.data.model.getAllMp3File
-import com.hoaiphong.composeui.data.model.toModel
+import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
+import com.hoaiphong.composeui.data.local.getAllMp3File
+import com.hoaiphong.composeui.data.local.toModel
 import com.hoaiphong.composeui.data.local.room.AppDatabase
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch

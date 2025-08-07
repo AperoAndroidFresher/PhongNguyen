@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.data.model
+package com.hoaiphong.composeui.comon
 
 object UserSession {
     var username: String? = null

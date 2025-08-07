@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.data.model
+package com.hoaiphong.composeui.data.repository.impl
 
 import com.hoaiphong.composeui.data.local.room.dao.PlayListDAO
 import com.hoaiphong.composeui.data.local.room.dao.PlaylistSongCrossRefDAO
@@ -6,6 +6,8 @@ import com.hoaiphong.composeui.data.local.room.dao.SongDAO
 import com.hoaiphong.composeui.data.local.model.entity.Playlist
 import com.hoaiphong.composeui.data.local.model.entity.PlaylistSongCrossRef
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
+import com.hoaiphong.composeui.data.local.Song
+import com.hoaiphong.composeui.data.local.toEntity
 import kotlinx.coroutines.flow.Flow
 
 class PlaylistManager(
@@ -40,7 +42,7 @@ class PlaylistManager(
         return playListDAO.findByPlaylistName(name)
     }
 
-    suspend fun addSongToPlaylist(playlistId: Long, song: com.hoaiphong.composeui.data.model.Song) {
+    suspend fun addSongToPlaylist(playlistId: Long, song: Song) {
         // Convert sang entity Room
         val songEntity = song.toEntity()
 
