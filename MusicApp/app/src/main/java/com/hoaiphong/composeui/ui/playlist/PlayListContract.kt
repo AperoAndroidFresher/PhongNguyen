@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.myalbum
+package com.hoaiphong.composeui.ui.playlist
 
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 

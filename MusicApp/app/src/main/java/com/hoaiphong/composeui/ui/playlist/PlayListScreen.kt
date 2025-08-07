@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.myalbum
+package com.hoaiphong.composeui.ui.playlist
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

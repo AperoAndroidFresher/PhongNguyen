@@ -9,7 +9,7 @@ import androidx.navigation3.ui.NavDisplay
 import com.hoaiphong.composeui.ui.home.HomeScreen
 import com.hoaiphong.composeui.ui.layout.SharedBottom
 import com.hoaiphong.composeui.ui.library.LibraryScreen
-import com.hoaiphong.composeui.ui.myalbum.PlaylistScreen
+import com.hoaiphong.composeui.ui.playlist.PlaylistScreen
 import com.hoaiphong.composeui.ui.myinfo.InformationScreen
 import com.hoaiphong.composeui.ui.mysong.PlaylistSongScreen
 

@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.myalbum
+package com.hoaiphong.composeui.ui.playlist
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
