@@ -31,9 +31,9 @@ import com.hoaiphong.composeui.comon.SongItemState
 import com.hoaiphong.composeui.utils.toDurationFormatted
 
 @Composable
-fun MyPlayListItem(
+fun SongPlayListItem(
     song: SongItemState,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     onAddClick: () -> Unit,
     onDropdownToggle: () -> Unit,
     onDismissDropdown: () -> Unit,

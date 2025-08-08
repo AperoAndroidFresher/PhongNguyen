@@ -29,12 +29,13 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.ui.components.SongDropdownMenu
 import com.hoaiphong.composeui.utils.toDurationFormatted
 
 @Composable
-fun MyColumnItem(
+fun SongColumnItem(
     song: SongItemState,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
     onRemoveClick: () -> Unit,
     onDropdownToggle: () -> Unit,
     onDismissDropdown: () -> Unit,

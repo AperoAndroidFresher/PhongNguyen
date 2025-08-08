@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.playlistsong.components
+package com.hoaiphong.composeui.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

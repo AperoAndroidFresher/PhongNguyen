@@ -16,7 +16,7 @@ fun ColumnSongList(
 ) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
         items(songs.size) { index ->
-            MyListItem(
+            SongListItem(
                 song = songs[index],
                 onRemoveClick = { onRemoveClick(index) },
                 onDropdownToggle = { onDropdownToggle(index) },

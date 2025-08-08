@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.ui.components.ErrText
 import com.hoaiphong.composeui.ui.information.MyInfoIntent
 import com.hoaiphong.composeui.ui.information.MyInfoState
 import com.hoaiphong.composeui.ui.theme.darkMode
@@ -183,7 +184,7 @@ fun InformationScreenContent(
                         .weight(1f)
                         .padding(end = 4.dp)
                 ) {
-                    MyInput(
+                    InformationInput(
                         value = state.name,
                         onValueChange = { onIntent(MyInfoIntent.NameChanged(it)) },
                         label = "Name",
@@ -204,7 +205,7 @@ fun InformationScreenContent(
                         .weight(1f)
                         .padding(start = 4.dp)
                 ) {
-                    MyInput(
+                    InformationInput(
                         value = state.phone,
                         onValueChange = { onIntent(MyInfoIntent.PhoneChanged(it)) },
                         label = "Phone number",
@@ -221,7 +222,7 @@ fun InformationScreenContent(
             Spacer(modifier = Modifier.height(16.dp))
 
             Column {
-                MyInput(
+                InformationInput(
                     value = state.university,
                     onValueChange = { onIntent(MyInfoIntent.UniversityChanged(it)) },
                     label = "University name",
@@ -235,7 +236,7 @@ fun InformationScreenContent(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            MyInput(
+            InformationInput(
                 value = state.description,
                 onValueChange = { onIntent(MyInfoIntent.DescriptionChanged(it)) },
                 label = "Describe yourself",
@@ -254,7 +255,7 @@ fun InformationScreenContent(
                 Box(
                     modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
                 ) {
-                    MyButton(text = "Submit") {
+                    InformationButton(text = "Submit") {
                         onIntent(MyInfoIntent.Submit)
                     }
                 }

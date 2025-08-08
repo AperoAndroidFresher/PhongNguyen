@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
-import com.hoaiphong.composeui.ui.playlistsong.components.DropdownMenuItemRemove
+import com.hoaiphong.composeui.ui.components.DropdownMenuItemRemove
 
 @Composable
 fun PlaylistDropdownMenu(
@@ -19,7 +19,7 @@ fun PlaylistDropdownMenu(
     onDismissRequest: () -> Unit,
     onRemoveClick: () -> Unit,
     onRenameClick: () -> Unit,
-    modifier: Modifier = Modifier.Companion
+    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = modifier.wrapContentSize(Alignment.Companion.TopStart)

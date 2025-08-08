@@ -16,6 +16,9 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.ui.components.AuthButton
+import com.hoaiphong.composeui.ui.components.PasswordInput
+import com.hoaiphong.composeui.ui.components.TextInput
 import com.hoaiphong.composeui.ui.login.LoginIntent
 import com.hoaiphong.composeui.ui.login.LoginState
 
@@ -73,7 +76,7 @@ fun LoginScreenContent(
         )
         Spacer(Modifier.height(16.dp))
 
-        LoginButton(
+        AuthButton(
             text = "Log in",
             onClick = { onIntent(LoginIntent.SubmitLogin) }
         )

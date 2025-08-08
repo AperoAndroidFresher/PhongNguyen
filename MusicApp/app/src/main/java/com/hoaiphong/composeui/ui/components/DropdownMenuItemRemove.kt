@@ -1,6 +1,5 @@
-package com.hoaiphong.composeui.ui.playlistsong.components
+package com.hoaiphong.composeui.ui.components
 
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.DropdownMenuItem
@@ -9,26 +8,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
 
 @Composable
-fun DropdownMenuItemShare() {
-    val context = LocalContext.current
-
+fun DropdownMenuItemRemove(onClick: () -> Unit) {
     DropdownMenuItem(
-        text = { Text("Share", color = Color.Companion.White) },
-        onClick = {
-            val intent = Intent(Intent.ACTION_SEND).apply {
-                type = "audio/*"
-            }
-            context.startActivity(Intent.createChooser(intent, "Share with"))
+        text = {
+            Text(
+                "Remove from playlist",
+                fontWeight = FontWeight.Companion.Bold,
+                color = Color.Companion.White,
+            )
         },
+        onClick = onClick,
         leadingIcon = {
             Image(
-                painter = painterResource(id = R.drawable.ic_share),
+                painter = painterResource(id = R.drawable.ic_edit),
                 contentDescription = null,
                 modifier = Modifier.Companion.size(18.dp),
                 colorFilter = ColorFilter.Companion.tint(Color.Companion.White),

@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MyButton(
+fun InformationButton(
     modifier: Modifier = Modifier,
     text: String = "Submit",
     onClick: () -> Unit = {}
@@ -34,5 +34,5 @@ fun MyButton(
 @Preview(showBackground = true, name = "My Button")
 @Composable
 fun PreviewMyButton() {
-    MyButton(text = "Submit") {}
+    InformationButton(text = "Submit") {}
 }

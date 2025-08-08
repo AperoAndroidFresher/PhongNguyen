@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.login.components
+package com.hoaiphong.composeui.ui.components
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -12,7 +12,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginButton(
+fun AuthButton(
     modifier: Modifier = Modifier,
     text: String = "Log in",  
     onClick: () -> Unit = {}

@@ -15,7 +15,7 @@ fun GridSongList(
     onRemoveClick: (Int) -> Unit,
     onDropdownToggle: (Int) -> Unit,
     onDismissDropdown: (Int) -> Unit,
-    modifier: Modifier = Modifier.Companion,
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -23,7 +23,7 @@ fun GridSongList(
         modifier = modifier.fillMaxSize(),
     ) {
         items(songs.size) { index ->
-            MyColumnItem(
+            SongColumnItem(
                 song = songs[index],
                 onRemoveClick = { onRemoveClick(index) },
                 onDropdownToggle = { onDropdownToggle(index) },

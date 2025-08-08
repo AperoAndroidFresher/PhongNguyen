@@ -20,10 +20,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
-import com.hoaiphong.composeui.ui.information.components.ErrText
-import com.hoaiphong.composeui.ui.login.components.LoginButton
-import com.hoaiphong.composeui.ui.login.components.PasswordInput
-import com.hoaiphong.composeui.ui.login.components.TextInput
+import com.hoaiphong.composeui.ui.components.ErrText
+import com.hoaiphong.composeui.ui.components.AuthButton
+import com.hoaiphong.composeui.ui.components.PasswordInput
+import com.hoaiphong.composeui.ui.components.TextInput
 import com.hoaiphong.composeui.ui.signup.SignUpIntent
 import com.hoaiphong.composeui.ui.signup.SignUpState
 
@@ -114,7 +114,7 @@ fun SignUpContent(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        LoginButton(
+        AuthButton(
             text = "Sign Up",
             onClick = { onIntent(SignUpIntent.SubmitSignUp) },
         )
