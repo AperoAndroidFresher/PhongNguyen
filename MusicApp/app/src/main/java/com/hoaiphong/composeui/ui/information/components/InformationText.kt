@@ -17,13 +17,12 @@ import androidx.compose.ui.unit.sp
 @Preview(showBackground = true, name = "My Text")
 @Composable
 fun PreviewMyText() {
-    MyText(label = "Name")
+    InformationText(label = "Name")
 }
 
 @Composable
-fun MyText(
-    modifier: Modifier = Modifier.Companion,
-    name: String = "",
+fun InformationText(
+    modifier: Modifier = Modifier,
     label: String = "Input",
 ) {
     Text(

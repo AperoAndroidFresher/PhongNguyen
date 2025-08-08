@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.sp
 @Preview(showBackground = true, name = "My Input - Default")
 @Composable
 fun PreviewMyInput() {
-    MyInput(
+    InformationInput(
         value = "Enter Your Full Name",
         onValueChange = {},
         label = "Name",
@@ -28,8 +28,8 @@ fun PreviewMyInput() {
 }
 
 @Composable
-fun MyInput(
-    modifier: Modifier = Modifier.Companion,
+fun InformationInput(
+    modifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
@@ -39,7 +39,7 @@ fun MyInput(
     enabled: Boolean = true,
 ) {
     Box(modifier = modifier.fillMaxWidth()) {
-        MyText(label = label)
+        InformationText(label = label)
         OutlinedTextField(
             value = value,
             onValueChange = onValueChange,

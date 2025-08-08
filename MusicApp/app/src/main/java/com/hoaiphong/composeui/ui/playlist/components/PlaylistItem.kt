@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.ui.playlist
+package com.hoaiphong.composeui.ui.playlist.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,15 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,13 +24,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -43,53 +36,7 @@ import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.data.local.fromBase64ToByteArray
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
-import com.hoaiphong.composeui.ui.playlistsong.DropdownMenuItemRemove
-
-@Composable
-fun PlaylistDropdownMenu(
-    expanded: Boolean,
-    onDismissRequest: () -> Unit,
-    onRemoveClick: () -> Unit,
-    onRenameClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier.wrapContentSize(Alignment.TopStart)
-    ) {
-        DropdownMenu(
-            expanded = expanded,
-            onDismissRequest = onDismissRequest,
-            modifier = modifier
-                .width(290.dp)
-                .background(Color.Black.copy(alpha = 0.8f)),
-            offset = DpOffset(x = 50.dp, y = 200.dp)
-        ) {
-            DropdownMenuItemRemove {
-                onDismissRequest()
-                onRemoveClick()
-            }
-            DropdownMenuItemRename(onClick = {
-                onDismissRequest()
-                onRenameClick()
-            })
-        }
-    }
-}
-
-@Composable
-fun DropdownMenuItemRename(onClick: () -> Unit) {
-    DropdownMenuItem(
-        text = { Text("Rename", color = Color.White) },
-        onClick = onClick,
-        leadingIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.ic_edit_playlist),
-                contentDescription = null,
-                modifier = Modifier.size(18.dp),
-                colorFilter = ColorFilter.tint(Color.White)
-            )
-        })
-}
+import com.hoaiphong.composeui.ui.playlist.MenuState
 
 @Composable
 fun PlaylistItem(
@@ -110,15 +57,15 @@ fun PlaylistItem(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
-            .background(Color.DarkGray)
+            .background(Color.Companion.DarkGray)
             .clickable { onClick() }
             .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically) {
+        verticalAlignment = Alignment.Companion.CenterVertically) {
         // Thumbnail
         Box(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .size(80.dp)
-                .clip(RoundedCornerShape(10.dp))
+                .clip(androidx.compose.foundation.shape.RoundedCornerShape(10.dp))
         ) {
             Image(
                 painter = rememberAsyncImagePainter(
@@ -129,30 +76,30 @@ fun PlaylistItem(
                     } ?: R.drawable.song1
                 ),
                 contentDescription = null,
-                modifier = Modifier.matchParentSize(),
-                contentScale = ContentScale.Crop
+                modifier = Modifier.Companion.matchParentSize(),
+                contentScale = ContentScale.Companion.Crop
             )
         }
 
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.Companion.width(12.dp))
 
         // Playlist name and song count
         Column(
-            modifier = Modifier
+            modifier = Modifier.Companion
                 .weight(1f)
                 .padding(end = if (showMenu) 8.dp else 0.dp)
         ) {
             Text(
                 text = playlist.name ?: "Untitled",
-                fontWeight = FontWeight.Bold,
+                fontWeight = FontWeight.Companion.Bold,
                 fontSize = 18.sp,
-                color = Color.White,
+                color = Color.Companion.White,
                 maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Companion.Ellipsis
             )
             Text(
                 text = "${songs.size} songs",
-                color = Color.Gray,
+                color = Color.Companion.Gray,
                 fontSize = 14.sp
             )
         }
@@ -164,8 +111,8 @@ fun PlaylistItem(
                     Icon(
                         painter = painterResource(id = R.drawable.ic_about),
                         contentDescription = null,
-                        tint = Color.White,
-                        modifier = Modifier.size(16.dp)
+                        tint = Color.Companion.White,
+                        modifier = Modifier.Companion.size(16.dp)
                     )
                 }
 
@@ -195,37 +142,4 @@ fun PlaylistItem(
                 onRename(playlist.playlistId, newName)
             })
     }
-}
-
-@Composable
-fun RenamePlaylistDialog(
-    currentName: String,
-    onDismiss: () -> Unit,
-    onConfirm: (String) -> Unit
-) {
-    var text by remember { mutableStateOf(currentName) }
-
-    AlertDialog(
-        onDismissRequest = onDismiss, confirmButton = {
-            Text(
-                "OK",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .clickable { onConfirm(text) },
-                color = Color.White
-            )
-        }, dismissButton = {
-            Text(
-                "Cancel",
-                modifier = Modifier
-                    .padding(8.dp)
-                    .clickable { onDismiss() },
-                color = Color.Gray
-            )
-        }, title = { Text("Rename Playlist", color = Color.White) }, text = {
-            TextField(
-                value = text, onValueChange = { text = it }, singleLine = true
-            )
-        }, containerColor = Color.DarkGray
-    )
 }
