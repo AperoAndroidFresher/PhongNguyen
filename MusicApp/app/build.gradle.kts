@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-parcelize")
     kotlin("kapt")
 }
 
@@ -41,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation (libs.androidx.core)
+    implementation (libs.androidx.media)
     implementation(libs.lottie.compose)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
