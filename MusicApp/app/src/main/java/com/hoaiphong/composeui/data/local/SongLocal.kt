@@ -4,9 +4,11 @@ import android.content.ContentResolver
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.net.Uri
+import android.os.Parcelable
 import android.provider.MediaStore
 import android.util.Base64
 import com.hoaiphong.composeui.data.local.model.entity.Song
+
 
 data class SongLocal(
     val id: Long,
@@ -14,8 +16,9 @@ data class SongLocal(
     val author: String,
     val duration: String,
     val image: ByteArray?,
-    val data: String,
-)
+    val data: String
+) 
+
 
 fun ByteArray?.toBase64(): String? {
     return this?.let { Base64.encodeToString(it, Base64.DEFAULT) }

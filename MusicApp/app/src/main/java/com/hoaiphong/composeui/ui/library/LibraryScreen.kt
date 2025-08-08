@@ -1,5 +1,7 @@
 package com.hoaiphong.composeui.ui.library
 
+import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,10 +11,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.hoaiphong.composeui.data.local.toEntity
+import com.hoaiphong.composeui.service.MusicService
 import com.hoaiphong.composeui.ui.library.components.ChoosePlaylistDialog
 import com.hoaiphong.composeui.ui.library.components.LibraryButton
 import com.hoaiphong.composeui.ui.library.components.LottieAnimationLoading
@@ -26,12 +31,12 @@ fun LibraryScreen(
     onNavigateToPlaylistScreen: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.dispatch(LibraryIntent.LoadLocalSongs)
         viewModel.dispatch(LibraryIntent.LoadPlaylists)
     }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -76,13 +81,27 @@ fun LibraryScreen(
         } else {
             LazyColumn {
                 itemsIndexed(state.songs) { index, songState ->
-                    SongPlayListItem(song = songState, onAddClick = {
-                        viewModel.dispatch(LibraryIntent.ShowAddToPlaylistDialog(index))
-                    }, onDropdownToggle = {
-                        viewModel.dispatch(LibraryIntent.ToggleDropdown(index))
-                    }, onDismissDropdown = {
-                        viewModel.dispatch(LibraryIntent.DismissDropdown)
-                    })
+                    SongPlayListItem(
+                        song = songState,
+                        onItemClick = {
+                            val playlistEntities = state.songs.map { it.song.toEntity() }
+                            val intent = Intent(context, MusicService::class.java).apply {
+                                action = MusicService.ACTION_PLAY_PLAYLIST
+                                putParcelableArrayListExtra("playlist", ArrayList(playlistEntities))
+                                putExtra("startIndex", index)
+                            }
+                            context.startService(intent)
+                        },
+                        onAddClick = {
+                            viewModel.dispatch(LibraryIntent.ShowAddToPlaylistDialog(index))
+                        },
+                        onDropdownToggle = {
+                            viewModel.dispatch(LibraryIntent.ToggleDropdown(index))
+                        },
+                        onDismissDropdown = {
+                            viewModel.dispatch(LibraryIntent.DismissDropdown)
+                        }
+                    )
                 }
             }
         }
