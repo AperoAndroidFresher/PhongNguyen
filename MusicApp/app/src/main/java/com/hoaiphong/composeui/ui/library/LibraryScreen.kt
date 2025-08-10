@@ -37,6 +37,20 @@ fun LibraryScreen(
         viewModel.dispatch(LibraryIntent.LoadLocalSongs)
         viewModel.dispatch(LibraryIntent.LoadPlaylists)
     }
+    LaunchedEffect(viewModel) {
+        viewModel.effect.collect { effect ->
+            when (effect) {
+                is LibraryEffect.StartMusicService -> {
+                    val intent = Intent(context, MusicService::class.java).apply {
+                        action = MusicService.ACTION_PLAY_PLAYLIST
+                        putParcelableArrayListExtra("playlist", ArrayList(effect.playlist))
+                        putExtra("startIndex", effect.startIndex)
+                    }
+                    context.startService(intent)
+                }
+            }
+        }
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -84,13 +98,7 @@ fun LibraryScreen(
                     SongPlayListItem(
                         song = songState,
                         onItemClick = {
-                            val playlistEntities = state.songs.map { it.song.toEntity() }
-                            val intent = Intent(context, MusicService::class.java).apply {
-                                action = MusicService.ACTION_PLAY_PLAYLIST
-                                putParcelableArrayListExtra("playlist", ArrayList(playlistEntities))
-                                putExtra("startIndex", index)
-                            }
-                            context.startService(intent)
+                            viewModel.dispatch(LibraryIntent.PlaySong(index))
                         },
                         onAddClick = {
                             viewModel.dispatch(LibraryIntent.ShowAddToPlaylistDialog(index))

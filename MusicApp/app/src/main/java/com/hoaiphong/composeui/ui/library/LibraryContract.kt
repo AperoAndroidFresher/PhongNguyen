@@ -1,6 +1,7 @@
 package com.hoaiphong.composeui.ui.library
 
 import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.data.local.model.entity.Song
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 
 
@@ -14,6 +15,7 @@ sealed interface LibraryIntent {
     data object DismissAddToPlaylistDialog : LibraryIntent
 
     object LoadPlaylists : LibraryIntent
+    data class PlaySong(val index: Int) : LibraryIntent
 }
 
 data class LibraryState(
@@ -31,4 +33,9 @@ data class LibraryState(
     val hasNetworkError: Boolean = false
 )
 
-sealed interface LibraryEffect
+sealed interface LibraryEffect{
+    data class StartMusicService(
+        val playlist: List<Song>,
+        val startIndex: Int
+    ) : LibraryEffect
+}
