@@ -3,7 +3,7 @@ package com.hoaiphong.composeui.data.internalstorage
 import android.content.Context
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import com.hoaiphong.composeui.api.song.SongAPIResponse
+import com.hoaiphong.composeui.api.response.SongAPIResponse
 import java.io.File
 
 class SongJsonStorage(private val context: Context) {

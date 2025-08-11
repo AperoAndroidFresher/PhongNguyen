@@ -2,8 +2,8 @@ package com.hoaiphong.composeui.data.internalstorage.fetcher
 
 import android.content.Context
 import com.google.gson.Gson
-import com.hoaiphong.composeui.api.song.SongAPIResponse
-import com.hoaiphong.composeui.api.song.SongRetrofitClient
+import com.hoaiphong.composeui.api.response.SongAPIResponse
+import com.hoaiphong.composeui.api.client.SongRetrofitClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

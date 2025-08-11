@@ -1,6 +1,7 @@
-package com.hoaiphong.composeui.api.song
+package com.hoaiphong.composeui.api.client
 
 
+import com.hoaiphong.composeui.api.service.SongApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

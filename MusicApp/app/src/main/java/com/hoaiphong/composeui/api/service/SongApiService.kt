@@ -1,5 +1,6 @@
-package com.hoaiphong.composeui.api.song
+package com.hoaiphong.composeui.api.service
 
+import com.hoaiphong.composeui.api.response.SongAPIResponse
 import retrofit2.Call
 import retrofit2.http.GET
 
