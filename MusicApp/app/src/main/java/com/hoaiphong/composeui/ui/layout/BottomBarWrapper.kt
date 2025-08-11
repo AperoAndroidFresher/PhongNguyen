@@ -1,11 +1,11 @@
 package com.hoaiphong.composeui.ui.layout
 
 import android.content.Intent
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -14,7 +14,10 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.service.MusicService
@@ -70,7 +73,11 @@ fun SharedBottom(
                             selected = route == selectedRoute,
                             onClick = { onNavigate(route) },
                             icon = {
-                                Icon(imageVector = route.icon, contentDescription = null)
+                                Image(
+                                    painter = painterResource(id = route.iconRes),
+                                    contentDescription = null,
+                                    colorFilter = ColorFilter.tint(Color.White) 
+                                )
                             }
                         )
                     }
