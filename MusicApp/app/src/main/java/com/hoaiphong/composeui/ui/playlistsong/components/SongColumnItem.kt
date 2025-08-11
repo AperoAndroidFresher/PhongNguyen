@@ -2,6 +2,7 @@ package com.hoaiphong.composeui.ui.playlistsong.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,6 +40,7 @@ fun SongColumnItem(
     onRemoveClick: () -> Unit,
     onDropdownToggle: () -> Unit,
     onDismissDropdown: () -> Unit,
+    onPlayClick: () -> Unit,
 ) {
     Column(
         modifier = modifier.padding(16.dp),
@@ -58,7 +60,8 @@ fun SongColumnItem(
                     } ?: R.drawable.song1,
                 ),
                 contentDescription = null,
-                modifier = Modifier.Companion.matchParentSize(),
+                modifier = Modifier.Companion.matchParentSize()
+                    .clickable { onPlayClick() },
                 contentScale = ContentScale.Companion.Crop,
             )
 

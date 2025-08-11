@@ -12,6 +12,7 @@ fun ColumnSongList(
     onRemoveClick: (Int) -> Unit,
     onDropdownToggle: (Int) -> Unit,
     onDismissDropdown: (Int) -> Unit,
+    onPlayClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
@@ -21,6 +22,7 @@ fun ColumnSongList(
                 onRemoveClick = { onRemoveClick(index) },
                 onDropdownToggle = { onDropdownToggle(index) },
                 onDismissDropdown = { onDismissDropdown(index) },
+                onPlayClick = { onPlayClick(index) }
             )
         }
     }

@@ -104,7 +104,21 @@ fun TopLevelNavGraph(
                 )
             }
             entry<PlaylistSongs> { playlistSongs ->
-                PlaylistSongScreen(entry = playlistSongs)
+                SharedBottom(
+                    selectedRoute = Song,
+                    onNavigate = { target ->
+                        if (target != topLevelBackStack.topLevelKey) {
+                            topLevelBackStack.addTopLevel(target)
+                            topLevelBackStack.clear(target)
+                        }
+                    },
+                    topLevelBackStack = topLevelBackStack
+                ) { padding ->
+                    PlaylistSongScreen(
+                        entry = playlistSongs,
+                        modifier = Modifier.padding(padding)
+                    )
+                }
             }
             entry<PlayingSong> {
                 val playerViewModel: PlayerViewModel = viewModel()

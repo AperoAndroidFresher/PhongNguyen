@@ -286,6 +286,7 @@ class MusicService : Service() {
     fun toggleLoop() {
         isLoop = !isLoop
         mediaPlayer?.isLooping = isLoop
+        _playerState.value = _playerState.value.copy(isRepeat = isLoop)
     }
 
     fun toggleShuffle() {
@@ -306,6 +307,7 @@ class MusicService : Service() {
                 originalPlaylist.indexOfFirst { it.songId == current.songId }.takeIf { it != -1 } ?: 0
             } ?: 0
         }
+        _playerState.value = _playerState.value.copy(isShuffle = isShuffle)
     }
 
     fun isPlaying(): Boolean = mediaPlayer?.isPlaying == true

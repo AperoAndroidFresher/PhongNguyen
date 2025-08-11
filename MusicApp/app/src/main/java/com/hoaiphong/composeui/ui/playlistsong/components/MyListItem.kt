@@ -1,6 +1,7 @@
 package com.hoaiphong.composeui.ui.playlistsong.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,6 +39,7 @@ fun SongListItem(
     onRemoveClick: () -> Unit,
     onDropdownToggle: () -> Unit,
     onDismissDropdown: () -> Unit,
+    onPlayClick: () -> Unit,
 ) {
     Row(
         modifier = modifier
@@ -66,7 +68,8 @@ fun SongListItem(
         Column(
             modifier = Modifier.Companion
                 .weight(1f)
-                .padding(end = 4.dp),
+                .padding(end = 4.dp)
+                .clickable { onPlayClick() } ,
         ) {
             Text(
                 text = song.song.name,
