@@ -1,5 +1,6 @@
 package com.hoaiphong.composeui.ui.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.ui.navigation.MyInformationScreen
 
@@ -28,8 +30,8 @@ fun HomeScreen(
             horizontalArrangement = Arrangement.End
         ) {
             IconButton(onClick = { onNavigate(MyInformationScreen) }) {
-                Icon(
-                    imageVector = MyInformationScreen.icon,
+                Image(
+                    painter = painterResource(id = MyInformationScreen.iconRes),
                     contentDescription = "My Info"
                 )
             }

@@ -8,6 +8,7 @@ import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
 import com.hoaiphong.composeui.data.local.getAllMp3File
 import com.hoaiphong.composeui.data.local.toModel
 import com.hoaiphong.composeui.data.local.room.AppDatabase
+import com.hoaiphong.composeui.data.local.toEntity
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
@@ -117,6 +118,30 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                     it.copy(songs = intent.songs.map { song ->
                         SongItem(song = song)
                     })
+                }
+            }
+
+            is PlaylistIntent.PlaySong -> {
+                val songs = _uiState.value.songs
+                val index = intent.index
+                if (index !in songs.indices) return
+
+                val songItem = songs[index]
+                val song = songItem.song
+                val artist = song.author.ifEmpty { "Unknown Artist" }
+                val image = song.image
+
+                val playlistEntities = songs.map { it.song.toEntity() }
+
+                viewModelScope.launch {
+                    _effect.emit(
+                        PlaylistEffect.StartMusicService(
+                            playlist = playlistEntities,
+                            startIndex = index,
+                            artist = artist,
+                            image = image
+                        )
+                    )
                 }
             }
         }

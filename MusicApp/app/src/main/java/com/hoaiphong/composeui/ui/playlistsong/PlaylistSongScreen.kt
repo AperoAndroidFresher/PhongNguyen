@@ -1,5 +1,6 @@
 package com.hoaiphong.composeui.ui.playlistsong
 
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
+import com.hoaiphong.composeui.service.MusicService
 import com.hoaiphong.composeui.ui.navigation.PlaylistSongs
 import com.hoaiphong.composeui.ui.playlistsong.components.ColumnSongList
 import com.hoaiphong.composeui.ui.playlistsong.components.GridSongList
@@ -44,11 +46,22 @@ fun PlaylistSongScreen(
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 is PlaylistEffect.ShowToast -> {
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
+                }
+
+                is PlaylistEffect.StartMusicService -> {
+                    val intent = Intent(context, MusicService::class.java).apply {
+                        action = MusicService.ACTION_PLAY_PLAYLIST
+                        putParcelableArrayListExtra("playlist", ArrayList(effect.playlist))
+                        putExtra("startIndex", effect.startIndex)
+                        putExtra("artist", effect.artist)
+                        putExtra("image", effect.image)
+                    }
+                    context.startService(intent)
                 }
             }
         }
@@ -124,7 +137,8 @@ fun PlaylistSongScreen(
                                 index
                             )
                         )
-                    }
+                    },
+                    onPlayClick = { index -> viewModel.dispatch(PlaylistIntent.PlaySong(index)) }
                 )
             } else {
                 GridSongList(
@@ -143,7 +157,8 @@ fun PlaylistSongScreen(
                                 index
                             )
                         )
-                    }
+                    },
+                    onPlayClick = { index -> viewModel.dispatch(PlaylistIntent.PlaySong(index)) }
                 )
             }
         }

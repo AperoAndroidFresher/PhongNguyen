@@ -5,7 +5,7 @@ import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
-
+import com.hoaiphong.composeui.R
 
 sealed interface Route
 
@@ -14,23 +14,23 @@ data class Login(val defaultUsername: String = "", val defaultPassword: String =
 data object SignUp : Route
 
 sealed interface TopLevelRoute : Route {
-    val icon: ImageVector
+    val iconRes: Int
 }
 
 data object Home : TopLevelRoute {
-    override val icon = Icons.Default.Home
+    override val iconRes = R.drawable.ic_home
 }
 
 data object MyInformationScreen : TopLevelRoute {
-    override val icon = Icons.Default.Settings
+    override val iconRes = R.drawable.ic_settings
 }
 
 data object MySong : TopLevelRoute {
-    override val icon = Icons.AutoMirrored.Filled.List
+    override val iconRes = R.drawable.ic_library
 }
 
 data object Song : TopLevelRoute {
-    override val icon = Icons.AutoMirrored.Filled.List
+    override val iconRes: Int = R.drawable.ic_playlist
 }
 
 data class PlaylistSongs(val playlistId: Long) : Route
