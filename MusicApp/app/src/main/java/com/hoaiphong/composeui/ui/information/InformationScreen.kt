@@ -25,7 +25,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun InformationScreen(
-    viewModel: InfoViewModel = viewModel()
+    viewModel: InfoViewModel = viewModel(),
+    onNavigateToLogin: () -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -50,6 +51,9 @@ fun InformationScreen(
                     Toast.makeText(context, effect.message, Toast.LENGTH_SHORT).show()
                 }
 
+                is MyInfoEffect.NavigateToLoginScreen -> {
+                    onNavigateToLogin()  
+                }
                 is MyInfoEffect.ShowSuccessDialog -> {
                 }
             }

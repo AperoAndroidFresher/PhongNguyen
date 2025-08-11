@@ -69,7 +69,14 @@ fun AppNavGraph() {
                 }
 
                 is HomeRoute -> NavEntry(route) {
-                    TopLevelNavGraph(topLevelBackStack)
+                    TopLevelNavGraph(
+                        topLevelBackStack = topLevelBackStack,
+                        onLogout = {
+                            topLevelBackStack.clear()
+                            backStack.clear()
+                            backStack.add(Login())
+                        }
+                    )
                 }
 
                 else -> error("Unknown route: $route")

@@ -25,9 +25,11 @@ sealed interface MyInfoIntent {
     object ToggleTheme : MyInfoIntent
     data class ToggleEditing(val editing: Boolean) : MyInfoIntent
     data class AvatarChanged(val uri: Uri?) : MyInfoIntent
+    object Logout : MyInfoIntent
 }
 
 sealed interface MyInfoEffect {
     object ShowSuccessDialog : MyInfoEffect
     data class ShowToast(val message: String) : MyInfoEffect
+    object NavigateToLoginScreen : MyInfoEffect
 }
