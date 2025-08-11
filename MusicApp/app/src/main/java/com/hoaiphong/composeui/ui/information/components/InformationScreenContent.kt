@@ -259,7 +259,19 @@ fun InformationScreenContent(
                         onIntent(MyInfoIntent.Submit)
                     }
                 }
+            }else {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    LogoutButton(
+                        text = "Logout",
+                        iconResId = R.drawable.ic_logout,
+                        onClick = { onIntent(MyInfoIntent.Logout) }
+                    )
+                }
             }
+            
         }
     }
 }

@@ -25,6 +25,7 @@ import com.hoaiphong.composeui.service.MusicService
 @Composable
 fun TopLevelNavGraph(
     topLevelBackStack: TopLevelBackStack<Any>,
+    onLogout: () -> Unit,
 ) {
     val context = LocalContext.current
     NavDisplay(
@@ -95,7 +96,12 @@ fun TopLevelNavGraph(
                 }
             }
             entry<MyInformationScreen> {
-                InformationScreen()
+                InformationScreen(
+                    onNavigateToLogin = {
+                        topLevelBackStack.clear()
+                        onLogout()
+                    }
+                )
             }
             entry<PlaylistSongs> { playlistSongs ->
                 PlaylistSongScreen(entry = playlistSongs)

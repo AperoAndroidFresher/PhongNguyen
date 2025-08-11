@@ -13,6 +13,7 @@ import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import com.hoaiphong.composeui.comon.UserSession
 import com.hoaiphong.composeui.data.repository.impl.UserRepositoryImpl
+import com.hoaiphong.composeui.ui.information.MyInfoEffect.*
 
 class InfoViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -102,7 +103,7 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                             val savedUsername = userSession.getSavedUsername()
 
                             if (savedUsername.isNullOrBlank()) {
-                                _effect.emit(MyInfoEffect.ShowToast("Không tìm thấy tài khoản đã đăng nhập"))
+                                _effect.emit(ShowToast("Không tìm thấy tài khoản đã đăng nhập"))
                                 return@launch
                             }
 
@@ -117,9 +118,9 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                             )
 
                             _effect.emit(MyInfoEffect.ShowSuccessDialog)
-                            _effect.emit(MyInfoEffect.ShowToast("Cập nhật thông tin thành công"))
+                            _effect.emit(ShowToast("Cập nhật thông tin thành công"))
                         } catch (e: Exception) {
-                            _effect.emit(MyInfoEffect.ShowToast("Cập nhật thất bại: ${e.message}"))
+                            _effect.emit(ShowToast("Cập nhật thất bại: ${e.message}"))
                         }
                     }
 
@@ -134,6 +135,17 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
 
+            MyInfoIntent.Logout -> {
+                viewModelScope.launch {
+                    try {
+                        val userSession = UserSession(getApplication())
+                        userSession.clear() 
+                        _effect.emit(MyInfoEffect.NavigateToLoginScreen)  
+                    } catch (e: Exception) {
+                        _effect.emit(MyInfoEffect.ShowToast("Lỗi khi đăng xuất"))
+                    }
+                }
+            }
         }
     }
 
