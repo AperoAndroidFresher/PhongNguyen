@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.comon.SongItem
 import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
 import com.hoaiphong.composeui.data.local.SongLocal
 import com.hoaiphong.composeui.data.local.getAllMp3File
@@ -57,9 +57,21 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         }
     }
     private fun playSong(index: Int) {
+        val songItem = uiState.value.songs[index]
+        val song = songItem.song
+        val artist = song.author.ifEmpty { "Unknown Artist" }
+        val image = song.image
+
         val playlistEntities = uiState.value.songs.map { it.song.toEntity() }
         viewModelScope.launch {
-            _effect.emit(LibraryEffect.StartMusicService(playlistEntities, index))
+            _effect.emit(
+                LibraryEffect.StartMusicService(
+                    playlist = playlistEntities,
+                    startIndex = index,
+                    artist = artist,
+                    image = image
+                )
+            )
         }
     }
     fun addSongToPlaylist(playlistId: Long, song: SongLocal) {
@@ -74,7 +86,7 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             val songEntities = rawSongs.map { it.toEntity() }
             db.songDao().insertAllSong(*songEntities.toTypedArray())
 
-            val wrapped = rawSongs.map { SongItemState(it) }
+            val wrapped = rawSongs.map { SongItem(it) }
 
             _uiState.update {
                 it.copy(

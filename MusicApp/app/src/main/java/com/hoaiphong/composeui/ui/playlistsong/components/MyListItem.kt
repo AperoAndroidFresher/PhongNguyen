@@ -27,13 +27,13 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
-import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.comon.SongItem
 import com.hoaiphong.composeui.ui.components.SongDropdownMenu
 import com.hoaiphong.composeui.utils.toDurationFormatted
 
 @Composable
 fun SongListItem(
-    song: SongItemState,
+    song: SongItem,
     modifier: Modifier = Modifier,
     onRemoveClick: () -> Unit,
     onDropdownToggle: () -> Unit,
