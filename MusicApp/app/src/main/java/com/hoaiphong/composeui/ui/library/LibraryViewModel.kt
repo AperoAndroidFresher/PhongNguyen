@@ -29,6 +29,9 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     private val _uiState = MutableStateFlow(LibraryState())
     val uiState: StateFlow<LibraryState> = _uiState.asStateFlow()
 
+    private val _effect = MutableSharedFlow<LibraryEffect>()
+    val effect = _effect.asSharedFlow()
+
     init {
         observePlaylists()
     }
@@ -50,9 +53,15 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
             is LibraryIntent.ShowAddToPlaylistDialog -> showAddToPlaylistDialog(intent.index)
             is LibraryIntent.DismissAddToPlaylistDialog -> dismissAddToPlaylistDialog()
             is LibraryIntent.LoadPlaylists -> {}
+            is LibraryIntent.PlaySong -> playSong(intent.index)
         }
     }
-
+    private fun playSong(index: Int) {
+        val playlistEntities = uiState.value.songs.map { it.song.toEntity() }
+        viewModelScope.launch {
+            _effect.emit(LibraryEffect.StartMusicService(playlistEntities, index))
+        }
+    }
     fun addSongToPlaylist(playlistId: Long, song: SongLocal) {
         viewModelScope.launch {
             playlistManager.addSongToPlaylist(playlistId, song)
