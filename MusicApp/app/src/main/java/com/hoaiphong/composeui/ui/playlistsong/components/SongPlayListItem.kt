@@ -28,12 +28,12 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import com.hoaiphong.composeui.R
-import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.comon.SongItem
 import com.hoaiphong.composeui.utils.toDurationFormatted
 
 @Composable
 fun SongPlayListItem(
-    song: SongItemState,
+    song: SongItem,
     modifier: Modifier = Modifier,
     onItemClick: () -> Unit,
     onAddClick: () -> Unit,

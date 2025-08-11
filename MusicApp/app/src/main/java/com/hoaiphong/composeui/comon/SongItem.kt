@@ -2,7 +2,7 @@ package com.hoaiphong.composeui.comon
 
 import com.hoaiphong.composeui.data.local.SongLocal
 
-data class SongItemState(
+data class SongItem(
     val song: SongLocal,
     val isMenuExpanded: Boolean = false
 )
