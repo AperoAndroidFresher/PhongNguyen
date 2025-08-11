@@ -9,12 +9,13 @@ import com.hoaiphong.composeui.data.local.getAllMp3File
 import com.hoaiphong.composeui.data.local.toModel
 import com.hoaiphong.composeui.data.local.room.AppDatabase
 import com.hoaiphong.composeui.data.local.toEntity
+import com.hoaiphong.composeui.data.repository.impl.PlaylistRepositoryImpl
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class PlaylistViewModel(application: Application) : AndroidViewModel(application) {
     private val db = AppDatabase.getInstance(application)
-    private val playlistManager = PlaylistManager(
+    private val playlistManager = PlaylistRepositoryImpl(
         db.playListDao(),
         db.songDao(),
         db.playlistSongCrossRefDAO()

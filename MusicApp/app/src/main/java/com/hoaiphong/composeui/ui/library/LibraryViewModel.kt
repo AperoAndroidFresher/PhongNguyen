@@ -15,11 +15,12 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import com.hoaiphong.composeui.data.internalstorage.SongStorage
 import com.hoaiphong.composeui.data.internalstorage.Impl.SongStorageImpl
+import com.hoaiphong.composeui.data.repository.impl.PlaylistRepositoryImpl
 
 class LibraryViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = AppDatabase.getInstance(application)
-    private val playlistManager = PlaylistManager(
+    private val playlistManager = PlaylistRepositoryImpl(
         playListDAO = db.playListDao(),
         songDAO = db.songDao(),
         crossRefDAO = db.playlistSongCrossRefDAO()

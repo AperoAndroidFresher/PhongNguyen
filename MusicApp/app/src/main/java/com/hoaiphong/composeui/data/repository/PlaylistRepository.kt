@@ -1,15 +1,20 @@
 package com.hoaiphong.composeui.data.repository
 
+import com.hoaiphong.composeui.data.local.SongLocal
 import com.hoaiphong.composeui.data.local.model.entity.Playlist
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
+import kotlinx.coroutines.flow.Flow
 
 interface PlaylistRepository {
     suspend fun getAllPlaylists(): List<Playlist>
-    suspend fun addPlaylist(playlistName: String, user_name: String)
-    suspend fun removePlaylist(name: String)
-    suspend fun renamePlaylist(oldName: String, newName: String)
-    suspend fun getPlaylistWithSongs(name: String): PlaylistWithSongs?
-    suspend fun removeSongFromPlaylist(playlistName: String, songId: Long)
-    suspend fun getSongIdsInPlaylist(playlistName: String): List<Long>
-    suspend fun isSongInPlaylist(playlistName: String, songId: Long): Boolean
+    suspend fun getPlaylistWithSongs(playlistId: Long): PlaylistWithSongs?
+    suspend fun getPlaylistByName(name: String): Playlist?
+    suspend fun getPlaylistWithSongsById(id: Long): PlaylistWithSongs?
+    suspend fun addPlaylist(name: String, ownerUsername: String): Playlist?
+    suspend fun addSongToPlaylist(playlistId: Long, song: SongLocal)
+    suspend fun renamePlaylist(playlistId: Long, newName: String): Boolean
+    suspend fun removePlaylist(playlistId: Long)
+    suspend fun removeSongFromPlaylist(playlistId: Long, songId: Long)
+    fun getPlaylistsWithSongs(): Flow<List<PlaylistWithSongs>>
+    suspend fun getPlaylistWithSongsByName(name: String): PlaylistWithSongs?
 }

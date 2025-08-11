@@ -58,8 +58,11 @@ class PlaylistManager(
         )
     }
 
-    suspend fun renamePlaylist(playlistId: Long, newName: String) {
+    suspend fun renamePlaylist(playlistId: Long, newName: String): Boolean {
+        val existing = playListDAO.findByPlaylistName(newName)
+        if (existing != null) return false
         playListDAO.renamePlaylist(playlistId, newName)
+        return true
     }
 
     suspend fun removePlaylist(playlistId: Long) {

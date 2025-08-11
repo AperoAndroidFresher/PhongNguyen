@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
 import com.hoaiphong.composeui.data.local.room.AppDatabase
+import com.hoaiphong.composeui.data.repository.impl.PlaylistRepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,7 @@ import kotlinx.coroutines.launch
 class PlayListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = AppDatabase.getInstance(application)
-    private val playlistManager = PlaylistManager(
+    private val playlistManager = PlaylistRepositoryImpl(
         playListDAO = db.playListDao(),
         songDAO = db.songDao(),
         crossRefDAO = db.playlistSongCrossRefDAO()
