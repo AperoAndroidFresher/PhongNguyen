@@ -1,7 +1,7 @@
 package com.hoaiphong.composeui.data.internalstorage.downloader
 
 import android.content.Context
-import com.hoaiphong.composeui.api.song.SongAPIResponse
+import com.hoaiphong.composeui.api.response.SongAPIResponse
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.OkHttpClient

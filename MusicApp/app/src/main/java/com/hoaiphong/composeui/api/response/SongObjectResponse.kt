@@ -1,4 +1,4 @@
-package com.hoaiphong.composeui.api.song
+package com.hoaiphong.composeui.api.response
 
 import com.google.gson.annotations.SerializedName
 
