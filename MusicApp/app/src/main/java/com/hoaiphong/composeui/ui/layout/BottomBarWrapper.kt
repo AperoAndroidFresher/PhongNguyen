@@ -18,10 +18,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.service.MusicService
-import com.hoaiphong.composeui.ui.library.LibraryIntent
 import com.hoaiphong.composeui.ui.navigation.Home
 import com.hoaiphong.composeui.ui.navigation.MySong
+import com.hoaiphong.composeui.ui.navigation.PlayingSong    
 import com.hoaiphong.composeui.ui.navigation.Song
+import com.hoaiphong.composeui.ui.navigation.TopLevelBackStack  
 import com.hoaiphong.composeui.ui.navigation.TopLevelRoute
 import com.hoaiphong.composeui.ui.playsong.PlayerViewModel
 import com.hoaiphong.composeui.ui.playsong.components.MusicPlayer
@@ -30,6 +31,7 @@ import com.hoaiphong.composeui.ui.playsong.components.MusicPlayer
 fun SharedBottom(
     selectedRoute: TopLevelRoute,
     onNavigate: (TopLevelRoute) -> Unit,
+    topLevelBackStack: TopLevelBackStack<Any>,   
     playerViewModel: PlayerViewModel = viewModel(),
     content: @Composable (innerPadding: PaddingValues) -> Unit
 ) {
@@ -43,13 +45,9 @@ fun SharedBottom(
             Column {
                 if (playerState.songName.isNotEmpty() && playerState.duration > 0) {
                     MusicPlayer(
-                        currentTime = playerState.currentTime,
-                        duration = playerState.duration,
-                        songName = playerState.songName,
-                        isPlaying = playerState.isPlaying,
                         onDeleteClick = {
                             val stopIntent = Intent(context, MusicService::class.java).apply {
-                                action = MusicService.ACTION_STOP  
+                                action = MusicService.ACTION_STOP
                             }
                             context.startService(stopIntent)
                         },
@@ -58,6 +56,9 @@ fun SharedBottom(
                                 action = MusicService.ACTION_PLAY_PAUSE
                             }
                             context.startService(playPauseIntent)
+                        },
+                        onNavigateToPlayingScreen = {
+                            topLevelBackStack.addTopLevel(PlayingSong)
                         }
                     )
                 } else {
@@ -75,7 +76,7 @@ fun SharedBottom(
                     }
                 }
             }
-            
+
         }
     ) { innerPadding ->
         content(innerPadding)

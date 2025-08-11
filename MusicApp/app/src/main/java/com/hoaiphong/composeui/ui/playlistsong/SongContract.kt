@@ -1,6 +1,6 @@
 package com.hoaiphong.composeui.ui.playlistsong
 
-import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.comon.SongItem
 import com.hoaiphong.composeui.data.local.SongLocal
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 
@@ -18,7 +18,7 @@ sealed interface PlaylistEffect {
 }
 
 data class PlaylistState(
-    val songs: List<SongItemState> = emptyList(),
+    val songs: List<SongItem> = emptyList(),
     val isColumnView: Boolean = true,
     val isLoading: Boolean = false,
     val playlistWithSongs: PlaylistWithSongs? = null

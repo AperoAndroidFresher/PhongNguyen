@@ -4,11 +4,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.comon.SongItem
 
 @Composable
 fun ColumnSongList(
-    songs: List<SongItemState>,
+    songs: List<SongItem>,
     onRemoveClick: (Int) -> Unit,
     onDropdownToggle: (Int) -> Unit,
     onDismissDropdown: (Int) -> Unit,

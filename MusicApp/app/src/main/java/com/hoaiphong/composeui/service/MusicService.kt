@@ -13,7 +13,6 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.MainActivity
@@ -41,10 +40,7 @@ class MusicService : Service() {
     private lateinit var mediaSession: MediaSessionCompat
 
     private val _isPlaying = MutableLiveData(false)
-    val isPlayingLiveData: LiveData<Boolean> get() = _isPlaying
-
     private val _currentSong = MutableLiveData<Song?>()
-    val currentSong: LiveData<Song?> get() = _currentSong
 
     // Exposed StateFlow to UI
     private val _playerState = MutableStateFlow(PlayerState())
@@ -55,12 +51,13 @@ class MusicService : Service() {
         override fun run() {
             val pos = mediaPlayer?.currentPosition?.toLong() ?: 0L
             val dur = mediaPlayer?.duration?.toLong() ?: 0L
-            _playerState.value = _playerState.value.copy(
+            val current = _playerState.value
+            _playerState.value = current.copy(
                 currentTime = pos,
                 duration = dur,
                 isPlaying = mediaPlayer?.isPlaying == true
             )
-            handler.postDelayed(this, 500L) // update twice per second
+            handler.postDelayed(this, 500L)
         }
     }
 
@@ -96,29 +93,25 @@ class MusicService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Ensure we are foreground when started
         if (!isServiceStarted) {
             isServiceStarted = true
-            // show minimal notification until we have a song
-            startForeground(NOTIFICATION_ID, buildNotification("No song playing"))
+            startForeground(NOTIFICATION_ID, buildNotification(title = "No song playing"))
         }
 
         intent?.action?.let { action ->
             when (action) {
-                ACTION_PLAY_PAUSE -> {
-                    if (isPlaying()) pauseSong() else playCurrentSong()
-                }
+                ACTION_PLAY_PAUSE -> if (isPlaying()) pauseSong() else playCurrentSong()
                 ACTION_NEXT -> playNextSong()
                 ACTION_PREVIOUS -> playPreviousSong()
                 ACTION_PLAY_PLAYLIST -> {
-                    val playlist = intent.getParcelableArrayListExtra<Song>("playlist") ?: emptyList<Song>()
+                    val playlist = intent.getParcelableArrayListExtra<Song>("playlist") ?: emptyList()
                     val startIndex = intent.getIntExtra("startIndex", 0)
                     setPlaylist(playlist, startIndex)
-                    playCurrentSong(true)
+                    playCurrentSong(forcePlay = true)
                 }
                 ACTION_STOP -> {
                     stopSong()
-                    stopSelf() 
+                    stopSelf()
                 }
             }
         }
@@ -127,6 +120,7 @@ class MusicService : Service() {
     }
 
     // ------------- MediaPlayer helpers -------------
+
     private fun initMediaPlayerIfNeeded() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer()
@@ -168,31 +162,14 @@ class MusicService : Service() {
                     isPaused = false
                     _isPlaying.postValue(true)
                     _currentSong.postValue(song)
-                    // update metadata
-                    mediaSession.setMetadata(
-                        MediaMetadataCompat.Builder()
-                            .putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.name)
-                            .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, song.artist ?: "Unknown Artist")
-                            .build()
-                    )
-                    mediaSession.setPlaybackState(
-                        PlaybackStateCompat.Builder()
-                            .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1f)
-                            .setActions(
-                                PlaybackStateCompat.ACTION_PLAY_PAUSE or
-                                    PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-                                    PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-                            )
-                            .build()
-                    )
-                    // start updating position
-                    handler.removeCallbacks(positionUpdater)
-                    handler.post(positionUpdater)
-                    // show notification for this song
-                    startForeground(NOTIFICATION_ID, buildNotification(song))
+                    updateMediaSessionMetadata(song)
+                    startPositionUpdates()
+                    startForeground(NOTIFICATION_ID, buildNotification(song = song))
                     _playerState.value = PlayerState(
                         songName = song.name ?: "",
-                        currentTime = currentPosition.toLong(),
+                        artistName = song.artist ?: "Unknown Artist",
+                        image = song.image ?: "",
+                        currentTime = 0L, 
                         duration = duration.toLong(),
                         isPlaying = true
                     )
@@ -204,26 +181,46 @@ class MusicService : Service() {
         }
     }
 
+    private fun updateMediaSessionMetadata(song: Song) {
+        mediaSession.setMetadata(
+            MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, song.name)
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, song.artist ?: "Unknown Artist")
+                .build()
+        )
+        mediaSession.setPlaybackState(
+            PlaybackStateCompat.Builder()
+                .setState(PlaybackStateCompat.STATE_PLAYING, 0, 1f)
+                .setActions(
+                    PlaybackStateCompat.ACTION_PLAY_PAUSE or
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                )
+                .build()
+        )
+    }
+
+    private fun startPositionUpdates() {
+        handler.removeCallbacks(positionUpdater)
+        handler.post(positionUpdater)
+    }
+
     // ------------- Public control API -------------
+
     fun setPlaylist(playlist: List<Song>, startIndex: Int = 0) {
         originalPlaylist = playlist.toList()
         currentPlaylist = originalPlaylist.toList()
         currentSongIndex = startIndex.coerceIn(0, currentPlaylist.size - 1).takeIf { currentPlaylist.isNotEmpty() } ?: 0
     }
 
-    fun playSong(song: Song) {
-        prepareAndStart(song.data, song)
-    }
-
     fun playCurrentSong(forcePlay: Boolean = false) {
         if (currentPlaylist.isEmpty()) return
         val song = currentPlaylist.getOrNull(currentSongIndex) ?: return
-        // if mediaPlayer exists and paused -> resume
+
         if (!forcePlay && mediaPlayer != null && isPaused) {
             resumeSong()
             return
         }
-        // otherwise start fresh
         prepareAndStart(song.data, song)
     }
 
@@ -233,16 +230,7 @@ class MusicService : Service() {
                 it.pause()
                 isPaused = true
                 _isPlaying.postValue(false)
-                mediaSession.setPlaybackState(
-                    PlaybackStateCompat.Builder()
-                        .setState(PlaybackStateCompat.STATE_PAUSED, it.currentPosition.toLong(), 1f)
-                        .setActions(
-                            PlaybackStateCompat.ACTION_PLAY_PAUSE or
-                                PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-                                PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-                        )
-                        .build()
-                )
+                updateMediaSessionPlaybackState(PlaybackStateCompat.STATE_PAUSED, it.currentPosition.toLong())
                 _playerState.value = _playerState.value.copy(isPlaying = false)
                 updateNotificationForCurrentSong()
             }
@@ -254,19 +242,23 @@ class MusicService : Service() {
             it.start()
             isPaused = false
             _isPlaying.postValue(true)
-            mediaSession.setPlaybackState(
-                PlaybackStateCompat.Builder()
-                    .setState(PlaybackStateCompat.STATE_PLAYING, it.currentPosition.toLong(), 1f)
-                    .setActions(
-                        PlaybackStateCompat.ACTION_PLAY_PAUSE or
-                            PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
-                            PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
-                    )
-                    .build()
-            )
-            handler.post(positionUpdater)
+            updateMediaSessionPlaybackState(PlaybackStateCompat.STATE_PLAYING, it.currentPosition.toLong())
+            startPositionUpdates()
             updateNotificationForCurrentSong()
         }
+    }
+
+    private fun updateMediaSessionPlaybackState(state: Int, position: Long) {
+        mediaSession.setPlaybackState(
+            PlaybackStateCompat.Builder()
+                .setState(state, position, 1f)
+                .setActions(
+                    PlaybackStateCompat.ACTION_PLAY_PAUSE or
+                        PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
+                        PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
+                )
+                .build()
+        )
     }
 
     fun stopSong() {
@@ -291,14 +283,14 @@ class MusicService : Service() {
         playCurrentSong(true)
     }
 
-    fun setLooping(looping: Boolean) {
-        isLoop = looping
-        mediaPlayer?.isLooping = looping
+    fun toggleLoop() {
+        isLoop = !isLoop
+        mediaPlayer?.isLooping = isLoop
     }
 
-    fun setShuffle(shuffle: Boolean) {
-        isShuffle = shuffle
-        if (shuffle) {
+    fun toggleShuffle() {
+        isShuffle = !isShuffle
+        if (isShuffle) {
             val current = currentPlaylist.getOrNull(currentSongIndex)
             val shuffled = originalPlaylist.toMutableList().apply { shuffle() }
             current?.let {
@@ -318,14 +310,13 @@ class MusicService : Service() {
 
     fun isPlaying(): Boolean = mediaPlayer?.isPlaying == true
 
-    fun getCurrentPosition(): Int = mediaPlayer?.currentPosition ?: 0
-
-    fun seekTo(position: Int) {
-        mediaPlayer?.seekTo(position)
+    fun seekTo(position: Long) {
+        mediaPlayer?.seekTo(position.toInt())
     }
 
     // ------------- Notification helpers -------------
-    private fun buildNotification(song: Song): Notification {
+
+    private fun buildNotification(song: Song? = null, title: String? = null): Notification {
         val playPauseIntent = PendingIntent.getService(
             this, 0, Intent(this, MusicService::class.java).apply { action = ACTION_PLAY_PAUSE },
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
@@ -339,48 +330,42 @@ class MusicService : Service() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken))
-            .setSmallIcon(R.drawable.ic_pause)
-            .setContentTitle(song.name)
-            .setContentText(song.artist ?: "Unknown Artist")
-            .setOnlyAlertOnce(true)
-            .addAction(R.drawable.ic_back, "Prev", prevIntent)
-            .addAction(if (isPlaying()) R.drawable.ic_pause else R.drawable.ic_play, if (isPlaying()) "Pause" else "Play", playPauseIntent)
-            .addAction(R.drawable.ic_next, "Next", nextIntent)
-            .setOngoing(isPlaying())
-
-        // add content intent to open main activity
         val contentIntent = PendingIntent.getActivity(
             this,
             3,
             Intent(this, MainActivity::class.java),
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
-        builder.setContentIntent(contentIntent)
+
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(R.drawable.logo)
+            .setOnlyAlertOnce(true)
+            .setContentIntent(contentIntent)
+
+        if (song != null) {
+            builder
+                .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken))
+                .setContentTitle(song.name)
+                .setContentText(song.artist ?: "Unknown Artist")
+                .addAction(R.drawable.ic_back, "Prev", prevIntent)
+                .addAction(if (isPlaying()) R.drawable.ic_pause else R.drawable.ic_play,
+                           if (isPlaying()) "Pause" else "Play", playPauseIntent)
+                .addAction(R.drawable.ic_next, "Next", nextIntent)
+                .setOngoing(isPlaying())
+        } else {
+            builder
+                .setContentTitle(title ?: "No song playing")
+                .setContentText("Unknown Artist")
+                .setOngoing(false)
+        }
 
         return builder.build()
-    }
-
-    private fun buildNotification(title: String): Notification {
-        val contentIntent = PendingIntent.getActivity(
-            this,
-            3,
-            Intent(this, MainActivity::class.java),
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_pause)
-            .setContentTitle(title)
-            .setContentText("Unknown Artist")
-            .setContentIntent(contentIntent)
-            .build()
     }
 
     private fun updateNotificationForCurrentSong() {
         _currentSong.value?.let { song ->
             val manager = getSystemService(NotificationManager::class.java)
-            manager?.notify(NOTIFICATION_ID, buildNotification(song))
+            manager?.notify(NOTIFICATION_ID, buildNotification(song = song))
         }
     }
 

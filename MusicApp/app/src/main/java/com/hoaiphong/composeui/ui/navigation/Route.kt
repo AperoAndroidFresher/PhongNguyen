@@ -35,4 +35,5 @@ data object Song : TopLevelRoute {
 
 data class PlaylistSongs(val playlistId: Long) : Route
 
+data object PlayingSong : Route
 

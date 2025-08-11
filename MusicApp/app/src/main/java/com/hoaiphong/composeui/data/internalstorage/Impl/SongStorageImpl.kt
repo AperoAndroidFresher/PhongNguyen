@@ -1,7 +1,7 @@
 package com.hoaiphong.composeui.data.internalstorage.Impl
 
 import android.content.Context
-import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.comon.SongItem
 import com.hoaiphong.composeui.data.internalstorage.downloader.SongFileDownloader
 import com.hoaiphong.composeui.data.internalstorage.SongJsonStorage
 import com.hoaiphong.composeui.data.internalstorage.fetcher.SongListFetcher
@@ -19,7 +19,7 @@ class SongStorageImpl(
     private val songFileDownloader = SongFileDownloader(context)
     private val songJsonStorage = SongJsonStorage(context)
 
-    override fun loadRemoteSongsAndDownloadFiles(onDone: (List<SongItemState>?) -> Unit) {
+    override fun loadRemoteSongsAndDownloadFiles(onDone: (List<SongItem>?) -> Unit) {
         songListFetcher.fetchAndSaveSongList("songs.json") { songList ->
             val finalList = songList ?: songJsonStorage.loadSongListFromFile("songs.json")
 
@@ -35,7 +35,7 @@ class SongStorageImpl(
 
                         val albumArt = SongMetadataResolver.extractAlbumArt(finalPath)
 
-                        SongItemState(
+                        SongItem(
                             SongLocal(
                                 id = index.toLong(),
                                 name = song.title,

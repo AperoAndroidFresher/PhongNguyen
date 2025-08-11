@@ -3,7 +3,7 @@ package com.hoaiphong.composeui.ui.playlistsong
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.hoaiphong.composeui.comon.SongItemState
+import com.hoaiphong.composeui.comon.SongItem
 import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
 import com.hoaiphong.composeui.data.local.getAllMp3File
 import com.hoaiphong.composeui.data.local.toModel
@@ -36,7 +36,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 val modelSongs = playlistWithSongs.songs.map { it.toModel() }
                 _uiState.update { oldState ->
                     oldState.copy(
-                        songs = modelSongs.map { SongItemState(it) },
+                        songs = modelSongs.map { SongItem(it) },
                         playlistWithSongs = playlistWithSongs
                     )
                 }
@@ -67,7 +67,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                         val modelSongs = updatedPlaylist.songs.map { it.toModel() }
                         _uiState.update { old ->
                             old.copy(
-                                songs = modelSongs.map { SongItemState(it) },
+                                songs = modelSongs.map { SongItem(it) },
                                 playlistWithSongs = updatedPlaylist
                             )
                         }
@@ -83,7 +83,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             is PlaylistIntent.LoadSongs -> {
                 viewModelScope.launch {
                     _uiState.update { it.copy(isLoading = true) }
-                    val songs = getAllMp3File(getApplication()).map { SongItemState(song = it) }
+                    val songs = getAllMp3File(getApplication()).map { SongItem(song = it) }
                     _uiState.update {
                         it.copy(songs = songs, isLoading = false)
                     }
@@ -115,7 +115,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
             is PlaylistIntent.LoadSpecificSongs -> {
                 _uiState.update {
                     it.copy(songs = intent.songs.map { song ->
-                        SongItemState(song = song)
+                        SongItem(song = song)
                     })
                 }
             }
