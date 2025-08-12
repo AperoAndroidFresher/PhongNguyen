@@ -41,7 +41,7 @@ fun LibraryScreen(
                 is LibraryEffect.StartMusicService -> {
                     val intent = Intent(context, MusicService::class.java).apply {
                         action = MusicService.ACTION_PLAY_PLAYLIST
-                        putParcelableArrayListExtra("playlist", ArrayList(effect.playlist))
+                        putExtra("playlistIds", effect.playlistIds.toLongArray())
                         putExtra("startIndex", effect.startIndex)
                         putExtra("artist", effect.artist)
                         putExtra("image", effect.image)

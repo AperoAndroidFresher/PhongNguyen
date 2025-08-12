@@ -49,4 +49,12 @@ interface SongDAO {
         """
     )
     suspend fun getSongsInPlaylist(playlistId: Long): PlaylistWithSongs
+    @Query(
+        """
+        SELECT *
+        FROM song
+        WHERE songId IN (:songIds)
+        """
+    )
+    suspend fun getSongsByIds(songIds: List<Long>): List<Song>
 }

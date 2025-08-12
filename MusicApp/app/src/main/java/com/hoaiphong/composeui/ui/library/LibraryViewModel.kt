@@ -64,10 +64,11 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
         val image = song.image
 
         val playlistEntities = uiState.value.songs.map { it.song.toEntity() }
+        val playlistIds = playlistEntities.map { it.songId }
         viewModelScope.launch {
             _effect.emit(
                 LibraryEffect.StartMusicService(
-                    playlist = playlistEntities,
+                    playlistIds = playlistIds,  
                     startIndex = index,
                     artist = artist,
                     image = image

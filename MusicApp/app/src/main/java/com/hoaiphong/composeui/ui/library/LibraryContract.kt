@@ -35,7 +35,7 @@ data class LibraryState(
 
 sealed interface LibraryEffect {
     data class StartMusicService(
-        val playlist: List<Song>,
+        val playlistIds: List<Long>,
         val startIndex: Int,
         val artist: String? = null,
         val image: ByteArray? = null
