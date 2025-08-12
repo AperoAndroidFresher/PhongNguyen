@@ -37,3 +37,8 @@ data class PlaylistSongs(val playlistId: Long) : Route
 
 data object PlayingSong : Route
 
+data object TopAlbumsDetail : Route
+
+data object TopArtistsDetail : Route
+
+data object TopTracksDetail : Route

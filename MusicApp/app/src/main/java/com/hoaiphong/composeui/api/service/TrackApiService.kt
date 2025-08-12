@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface TrackApiService {
 
     @GET("?format=json&method=artist.getTopTracks")
-    fun getAllTopTracks(
+    fun getTopTracks(
         @Query("mbid") mbid: String = MBID,
         @Query("api_key") apiKey: String = API_KEY
     ): Call<TopTracksResponse>

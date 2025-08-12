@@ -21,6 +21,9 @@ import com.hoaiphong.composeui.ui.playsong.components.PlayingScreen
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import com.hoaiphong.composeui.service.MusicService
+import com.hoaiphong.composeui.ui.home.components.TopAlbumsDetail
+import com.hoaiphong.composeui.ui.home.components.TopArtistsDetail
+import com.hoaiphong.composeui.ui.home.components.TopTracksDetail
 
 @Composable
 fun TopLevelNavGraph(
@@ -37,15 +40,11 @@ fun TopLevelNavGraph(
                     selectedRoute = Home,
                     onNavigate = { target ->
                         when (target) {
-                            is TopLevelRoute -> {
+                            else -> {
                                 if (target != topLevelBackStack.topLevelKey) {
                                     topLevelBackStack.addTopLevel(target)
                                     topLevelBackStack.clear(target)
                                 }
-                            }
-
-                            is MyInformationScreen -> {
-                                topLevelBackStack.addTopLevel(target)
                             }
                         }
                     },
@@ -99,6 +98,7 @@ fun TopLevelNavGraph(
                 InformationScreen(
                     onNavigateToLogin = {
                         topLevelBackStack.clear()
+                        topLevelBackStack.addTopLevel(Home)
                         onLogout()
                     }
                 )
@@ -143,6 +143,27 @@ fun TopLevelNavGraph(
                     onRepeat = { playerViewModel.toggleRepeat() },
                 )
             }
+            entry<TopAlbumsDetail> {
+                TopAlbumsDetail(
+                    onBackClick = {
+                        topLevelBackStack.clear(Home)
+                    }
+                )
+            }
+            entry <TopArtistsDetail> {
+                TopArtistsDetail(
+                    onBackClick = {
+                        topLevelBackStack.clear(Home)
+                    }
+                )
+            }
+            entry <TopTracksDetail> {
+                TopTracksDetail(
+                    onBackClick = {
+                        topLevelBackStack.clear(Home)
+                    }
+                )
+            }
         },
     )
 }
@@ -157,8 +178,16 @@ private fun handleNavigation(
                 topLevelBackStack.addTopLevel(target)
             }
         }
-
         is MyInformationScreen -> {
+            topLevelBackStack.addTopLevel(target)
+        }
+        is TopAlbumsDetail -> {
+            topLevelBackStack.addTopLevel(target)
+        }
+        is TopArtistsDetail -> {
+            topLevelBackStack.addTopLevel(target)
+        }
+        is TopTracksDetail -> {
             topLevelBackStack.addTopLevel(target)
         }
     }
