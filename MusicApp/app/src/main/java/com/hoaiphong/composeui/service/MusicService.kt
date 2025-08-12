@@ -17,13 +17,25 @@ import androidx.lifecycle.MutableLiveData
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.MainActivity
 import com.hoaiphong.composeui.data.local.model.entity.Song
+import com.hoaiphong.composeui.data.local.room.AppDatabase
+import com.hoaiphong.composeui.data.repository.PlaylistRepository
+import com.hoaiphong.composeui.data.repository.impl.PlaylistRepositoryImpl
 import com.hoaiphong.composeui.ui.playsong.PlayerState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.lang.Exception
 
 class MusicService : Service() {
+
+    private lateinit var playlistRepository: PlaylistRepository
+
+    private val serviceJob = Job()
+    private val serviceScope = CoroutineScope(Dispatchers.IO + serviceJob)
 
     private val binder = LocalBinder()
     private var mediaPlayer: MediaPlayer? = null
@@ -67,7 +79,15 @@ class MusicService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        val db = AppDatabase.getInstance(applicationContext)
+        playlistRepository = PlaylistRepositoryImpl(
+            playListDAO = db.playListDao(),
+            songDAO = db.songDao(),
+            crossRefDAO = db.playlistSongCrossRefDAO()
+        )
+
         createNotificationChannel()
+
         mediaSession = MediaSessionCompat(this, "MusicService").apply {
             setCallback(object : MediaSessionCompat.Callback() {
                 override fun onPlay() = playCurrentSong()
@@ -81,6 +101,7 @@ class MusicService : Service() {
 
     override fun onDestroy() {
         releaseMediaPlayer()
+        serviceJob.cancel()
         mediaSession.release()
         handler.removeCallbacksAndMessages(null)
         super.onDestroy()
@@ -103,12 +124,27 @@ class MusicService : Service() {
                 ACTION_PLAY_PAUSE -> if (isPlaying()) pauseSong() else playCurrentSong()
                 ACTION_NEXT -> playNextSong()
                 ACTION_PREVIOUS -> playPreviousSong()
+
                 ACTION_PLAY_PLAYLIST -> {
-                    val playlist = intent.getParcelableArrayListExtra<Song>("playlist") ?: emptyList()
+                    val playlistIds = intent.getLongArrayExtra("playlistIds")?.toList() ?: emptyList()
                     val startIndex = intent.getIntExtra("startIndex", 0)
-                    setPlaylist(playlist, startIndex)
-                    playCurrentSong(forcePlay = true)
+
+                    if (playlistIds.isNotEmpty()) {
+                        serviceScope.launch {
+                            try {
+                                val playlist = playlistRepository.getSongsByIds(playlistIds)
+                                val songMap = playlist.associateBy { it.songId }
+                                val orderedPlaylist = playlistIds.mapNotNull { songMap[it] }
+
+                                setPlaylist(orderedPlaylist, startIndex)
+                                playCurrentSong(forcePlay = true)
+                            } catch (e: Exception) {
+                                Log.e(TAG, "Failed to load songs for playlist", e)
+                            }
+                        }
+                    }
                 }
+
                 ACTION_STOP -> {
                     stopSong()
                     stopSelf()
@@ -120,7 +156,6 @@ class MusicService : Service() {
     }
 
     // ------------- MediaPlayer helpers -------------
-
     private fun initMediaPlayerIfNeeded() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer()
@@ -169,7 +204,7 @@ class MusicService : Service() {
                         songName = song.name ?: "",
                         artistName = song.artist ?: "Unknown Artist",
                         image = song.image ?: "",
-                        currentTime = 0L, 
+                        currentTime = 0L,
                         duration = duration.toLong(),
                         isPlaying = true
                     )

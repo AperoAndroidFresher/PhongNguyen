@@ -3,6 +3,7 @@ package com.hoaiphong.composeui.data.repository.impl
 import com.hoaiphong.composeui.data.local.SongLocal
 import com.hoaiphong.composeui.data.local.model.entity.Playlist
 import com.hoaiphong.composeui.data.local.model.entity.PlaylistSongCrossRef
+import com.hoaiphong.composeui.data.local.model.entity.Song
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 import com.hoaiphong.composeui.data.local.room.dao.PlayListDAO
 import com.hoaiphong.composeui.data.local.room.dao.PlaylistSongCrossRefDAO
@@ -77,5 +78,8 @@ class PlaylistRepositoryImpl(
     override suspend fun getPlaylistWithSongsByName(name: String): PlaylistWithSongs? {
         val playlist = playListDAO.findByPlaylistName(name) ?: return null
         return getPlaylistWithSongs(playlist.playlistId)
+    }
+    override suspend fun getSongsByIds(songIds: List<Long>): List<Song> {
+        return songDAO.getSongsByIds(songIds)
     }
 }

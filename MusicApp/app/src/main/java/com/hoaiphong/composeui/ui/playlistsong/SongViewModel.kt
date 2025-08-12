@@ -133,11 +133,11 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                 val image = song.image
 
                 val playlistEntities = songs.map { it.song.toEntity() }
-
+                val playlistIds = playlistEntities.map { it.songId }
                 viewModelScope.launch {
                     _effect.emit(
                         PlaylistEffect.StartMusicService(
-                            playlist = playlistEntities,
+                            playlistIds = playlistIds,
                             startIndex = index,
                             artist = artist,
                             image = image
