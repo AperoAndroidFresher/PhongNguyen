@@ -13,10 +13,10 @@ interface AlbumApiService {
     ): Call<TopAlbumsResponse>
 
     @GET("?format=json&method=artist.getTopAlbums")
-    fun getTop5Albums(
+    fun getTop6Albums(
         @Query("mbid") mbid: String = MBID,
         @Query("api_key") apiKey: String = API_KEY,
-        @Query("limit") limit: Int = 5,
+        @Query("limit") limit: Int = 6,
     ): Call<TopAlbumsResponse>
 
     companion object {

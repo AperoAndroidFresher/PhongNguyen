@@ -3,10 +3,7 @@ package com.hoaiphong.composeui.ui.login
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
-import com.hoaiphong.composeui.api.test.AlbumApiTest
-import com.hoaiphong.composeui.api.test.ArtistApiTest
 import com.hoaiphong.composeui.comon.UserSession
-import com.hoaiphong.composeui.data.internalstorage.fetcher.TrackApiTest
 import com.hoaiphong.composeui.data.repository.impl.UserRepositoryImpl
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,9 +37,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 val user = userRepository.login(current.username, current.password)
                 if (user != null) {
                     UserSession(application).saveUser(user.userName)
-                    TrackApiTest.logTopTracks()
-                    ArtistApiTest.logTopArtists()
-                    AlbumApiTest.logTopAlbums()
+//                    TrackApiTest.logTopTracks()
+//                    ArtistApiTest.logTopArtists()
+//                    AlbumApiTest.logTopAlbums()
                     _effect.send(LoginEffect.NavigateToHome)
                 } else {
                     _effect.send(LoginEffect.ShowToast("Sai tài khoản hoặc mật khẩu"))
