@@ -139,7 +139,7 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                 viewModelScope.launch {
                     try {
                         val userSession = UserSession(getApplication())
-                        userSession.clear() 
+                        userSession.clear()
                         _effect.emit(MyInfoEffect.NavigateToLoginScreen)  
                     } catch (e: Exception) {
                         _effect.emit(MyInfoEffect.ShowToast("Lỗi khi đăng xuất"))

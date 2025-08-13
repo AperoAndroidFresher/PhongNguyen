@@ -31,13 +31,14 @@ fun ColumnSongList(
     onPlayClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     onMove: (Int, Int) -> Unit,
+    isDragEnabled: Boolean,
 ) {
     val scope = rememberCoroutineScope()
     var overScrollJob by remember { mutableStateOf<Job?>(null) }
     val dragDropListState = rememberDragDropListState(onMove = onMove)
-    
-    LazyColumn(
-        modifier = modifier
+    var lazyColumnModifier = modifier.fillMaxSize().padding(top = 10.dp, start = 10.dp, end = 10.dp)
+    if(isDragEnabled){
+        lazyColumnModifier = modifier
             .pointerInput(Unit) {
                 detectDragGesturesAfterLongPress(
                     onDrag = { change, offset ->
@@ -62,7 +63,10 @@ fun ColumnSongList(
                 )
             }
             .fillMaxSize()
-            .padding(top = 10.dp, start = 10.dp, end = 10.dp),
+            .padding(top = 10.dp, start = 10.dp, end = 10.dp)
+    }
+    LazyColumn(
+        modifier = lazyColumnModifier,
         state = dragDropListState.lazyListState
     ) {
         items(songs.size) { index ->
@@ -72,6 +76,7 @@ fun ColumnSongList(
                 onDropdownToggle = { onDropdownToggle(index) },
                 onDismissDropdown = { onDismissDropdown(index) },
                 onPlayClick = { onPlayClick(index) },
+                isDragEnabled = isDragEnabled,
                 modifier = Modifier.composed {
                     val offsetOrNull = dragDropListState.elementDisplacement.takeIf {
                         index == dragDropListState.currentIndexOfDraggedItem

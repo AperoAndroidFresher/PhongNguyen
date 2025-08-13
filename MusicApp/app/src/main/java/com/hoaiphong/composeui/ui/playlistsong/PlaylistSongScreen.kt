@@ -24,6 +24,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,6 +54,7 @@ fun PlaylistSongScreen(
     val playlistId = entry.playlistId
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsState()
+    var isDragEnabled by remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel) {
         viewModel.effect.collect { effect ->
@@ -123,7 +127,7 @@ fun PlaylistSongScreen(
                         modifier = Modifier
                             .size(25.dp)
                             .clickable {
-                                onNavigate(PlaylistSortScreen(playlistId = entry.playlistId))
+                                isDragEnabled = !isDragEnabled
                             },
                     )
                 }
@@ -152,7 +156,8 @@ fun PlaylistSongScreen(
                     onPlayClick = { index -> viewModel.dispatch(PlaylistIntent.PlaySong(index)) },
                     onMove = { fromIndex, toIndex ->
                         viewModel.dispatch(PlaylistIntent.MoveSong(fromIndex, toIndex))
-                    }
+                    },
+                    isDragEnabled = isDragEnabled
                 )
             } else {
                 GridSongList(
