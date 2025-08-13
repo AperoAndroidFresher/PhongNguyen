@@ -33,7 +33,8 @@ fun LoginScreenContent(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
-            .padding(16.dp)
+            .padding(WindowInsets.statusBars.asPaddingValues())
+            .padding(8.dp)
             .pointerInput(Unit) {
                 detectTapGestures { focusManager.clearFocus() }
             },

@@ -40,11 +40,13 @@ fun SongListItem(
     onDropdownToggle: () -> Unit,
     onDismissDropdown: () -> Unit,
     onPlayClick: () -> Unit,
+    isDragEnabled: Boolean,
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(4.dp),
+            .padding(4.dp)
+            .clickable { onPlayClick() } ,
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.Companion.CenterVertically,
     ) {
@@ -68,8 +70,7 @@ fun SongListItem(
         Column(
             modifier = Modifier.Companion
                 .weight(1f)
-                .padding(end = 4.dp)
-                .clickable { onPlayClick() } ,
+                .padding(end = 4.dp),
         ) {
             Text(
                 text = song.song.name,
@@ -105,12 +106,20 @@ fun SongListItem(
                 onClick = onDropdownToggle,
                 modifier = Modifier.Companion.size(24.dp),
             ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_about),
-                    contentDescription = "More Options",
-                    tint = Color.Companion.White,
-                    modifier = Modifier.Companion.size(18.dp),
-                )
+                if(isDragEnabled){
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_hamburger_menu),
+                        contentDescription = "More Options",
+                        tint = Color.Companion.White,
+                        modifier = Modifier.Companion.size(18.dp),
+                    )
+                }else
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_about),
+                        contentDescription = "More Options",
+                        tint = Color.Companion.White,
+                        modifier = Modifier.Companion.size(18.dp),
+                    )
             }
 
             SongDropdownMenu(

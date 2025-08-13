@@ -42,6 +42,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.reorderable)
+    implementation (libs.composereorderable.reorderable)
     implementation (libs.androidx.core)
     implementation (libs.androidx.media)
     implementation(libs.lottie.compose)
@@ -53,8 +55,8 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
     implementation(libs.coil.compose)
-    implementation("androidx.navigation:navigation-compose:2.7.5")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation(libs.androidx.navigation.compose)    
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.coil.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

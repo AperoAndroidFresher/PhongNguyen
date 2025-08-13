@@ -30,7 +30,7 @@ fun PlaylistDropdownMenu(
             modifier = modifier
                 .width(290.dp)
                 .background(Color.Companion.Black.copy(alpha = 0.8f)),
-            offset = DpOffset(x = 50.dp, y = 200.dp)
+            offset = DpOffset(x = 50.dp, y = 50.dp)
         ) {
             DropdownMenuItemRemove {
                 onDismissRequest()

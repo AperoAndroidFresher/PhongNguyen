@@ -103,7 +103,7 @@ fun TrackItem(
         modifier = Modifier
             .padding(end = 8.dp)
             .width(140.dp)
-            .height(160.dp)
+            .height(140.dp)
             .clip(RoundedCornerShape(8.dp)),
     ) {
         AsyncImage(
@@ -169,7 +169,6 @@ fun TrackItem(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
-                    Log.d("GGGGGGGGGGGG", "TrackItem: $artist")
                 }
             }
         }

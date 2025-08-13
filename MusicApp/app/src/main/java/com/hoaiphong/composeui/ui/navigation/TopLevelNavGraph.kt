@@ -24,6 +24,7 @@ import com.hoaiphong.composeui.service.MusicService
 import com.hoaiphong.composeui.ui.home.components.TopAlbumsDetail
 import com.hoaiphong.composeui.ui.home.components.TopArtistsDetail
 import com.hoaiphong.composeui.ui.home.components.TopTracksDetail
+import com.hoaiphong.composeui.ui.playlistsong.components.PlaylistSortScreen
 
 @Composable
 fun TopLevelNavGraph(
@@ -116,7 +117,12 @@ fun TopLevelNavGraph(
                 ) { padding ->
                     PlaylistSongScreen(
                         entry = playlistSongs,
-                        modifier = Modifier.padding(padding)
+                        modifier = Modifier.padding(padding),
+                        onNavigate = {
+                            topLevelBackStack.addTopLevel(
+                                PlaylistSortScreen(playlistId = playlistSongs.playlistId)
+                            )
+                        }
                     )
                 }
             }
@@ -161,6 +167,15 @@ fun TopLevelNavGraph(
                 TopTracksDetail(
                     onBackClick = {
                         topLevelBackStack.clear(Home)
+                    }
+                )
+            }
+            entry<PlaylistSortScreen> { sortScreen ->
+                PlaylistSortScreen(
+                    entry = PlaylistSongs(playlistId = sortScreen.playlistId),
+                    onClose = { topLevelBackStack.removeLast() },
+                    onConfirm = {
+                        topLevelBackStack.removeLast()
                     }
                 )
             }

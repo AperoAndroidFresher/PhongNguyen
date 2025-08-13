@@ -39,7 +39,8 @@ fun SignUpContent(
             .fillMaxSize()
             .background(Color.Black)
             .pointerInput(Unit) { detectTapGestures { focusManager.clearFocus() } }
-            .padding(16.dp),
+            .padding(WindowInsets.statusBars.asPaddingValues())
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(

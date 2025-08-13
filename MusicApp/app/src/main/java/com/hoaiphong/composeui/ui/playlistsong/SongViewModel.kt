@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.comon.SongItem
-import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
 import com.hoaiphong.composeui.data.local.getAllMp3File
 import com.hoaiphong.composeui.data.local.toModel
 import com.hoaiphong.composeui.data.local.room.AppDatabase
@@ -143,6 +142,19 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
                             image = image
                         )
                     )
+                }
+            }
+            is PlaylistIntent.MoveSong -> {
+                _uiState.update { state ->
+                    val updatedSongs = state.songs.toMutableList()
+                    val song = updatedSongs.removeAt(intent.fromIndex)
+                    updatedSongs.add(intent.toIndex, song)
+                    state.copy(songs = updatedSongs)
+                }
+            }
+            is PlaylistIntent.ConfirmSort -> {
+                viewModelScope.launch {
+                    _effect.emit(PlaylistEffect.ShowToast("Playlist sorted"))
                 }
             }
         }

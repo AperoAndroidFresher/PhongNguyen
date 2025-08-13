@@ -1,6 +1,7 @@
 package com.hoaiphong.composeui.ui.playlistsong
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -9,17 +10,23 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -33,6 +40,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.service.MusicService
 import com.hoaiphong.composeui.ui.navigation.PlaylistSongs
+import com.hoaiphong.composeui.ui.navigation.PlaylistSortScreen
 import com.hoaiphong.composeui.ui.playlistsong.components.ColumnSongList
 import com.hoaiphong.composeui.ui.playlistsong.components.GridSongList
 
@@ -40,11 +48,13 @@ import com.hoaiphong.composeui.ui.playlistsong.components.GridSongList
 fun PlaylistSongScreen(
     entry: PlaylistSongs,
     modifier: Modifier = Modifier,
+    onNavigate: (Any) -> Unit = {},
     viewModel: PlaylistViewModel = viewModel()
 ) {
     val playlistId = entry.playlistId
     val context = LocalContext.current
     val state by viewModel.uiState.collectAsState()
+    var isDragEnabled by remember { mutableStateOf(false) }
 
     LaunchedEffect(viewModel) {
         viewModel.effect.collect { effect ->
@@ -75,9 +85,10 @@ fun PlaylistSongScreen(
         modifier = modifier
             .background(Color(0xFF121212))
             .fillMaxSize()
+            .padding(WindowInsets.statusBars.asPaddingValues())
+            .padding(8.dp)
     ) {
         Column {
-            Spacer(modifier = Modifier.height(32.dp))
 
             Box(
                 modifier = Modifier
@@ -113,7 +124,11 @@ fun PlaylistSongScreen(
                         painter = painterResource(id = R.drawable.ic_sort_up),
                         contentDescription = "Sort Icon",
                         colorFilter = ColorFilter.tint(Color.White),
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clickable {
+                                isDragEnabled = !isDragEnabled
+                            },
                     )
                 }
             }
@@ -138,7 +153,11 @@ fun PlaylistSongScreen(
                             )
                         )
                     },
-                    onPlayClick = { index -> viewModel.dispatch(PlaylistIntent.PlaySong(index)) }
+                    onPlayClick = { index -> viewModel.dispatch(PlaylistIntent.PlaySong(index)) },
+                    onMove = { fromIndex, toIndex ->
+                        viewModel.dispatch(PlaylistIntent.MoveSong(fromIndex, toIndex))
+                    },
+                    isDragEnabled = isDragEnabled
                 )
             } else {
                 GridSongList(
