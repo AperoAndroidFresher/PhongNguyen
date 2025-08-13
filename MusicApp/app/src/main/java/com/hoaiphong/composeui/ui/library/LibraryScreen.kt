@@ -55,14 +55,14 @@ fun LibraryScreen(
         modifier = modifier
             .fillMaxSize()
             .background(Color(0xFF121212))
-            .padding(top = 32.dp),
+            .padding(WindowInsets.statusBars.asPaddingValues())
+            .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
             text = "Library", fontSize = 25.sp, color = Color.White, textAlign = TextAlign.Center
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
+        )   
+        
 
         Row {
             LibraryButton(

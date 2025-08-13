@@ -65,7 +65,7 @@ fun TopAlbums(
             contentPadding = PaddingValues(8.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.height(200.dp),
+            modifier = Modifier.height(220.dp),
         ) {
             items(albums) { album ->
                 Column(

@@ -25,7 +25,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadTop6Albums() {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        HomeRetrofitClient.build().getTop6Albums()
+        HomeRetrofitClient.buildAlbum().getTop6Albums()
             .enqueue(
                 object : Callback<TopAlbumsResponse> {
                     override fun onResponse(call: Call<TopAlbumsResponse>, response: Response<TopAlbumsResponse>) {
@@ -51,7 +51,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadTopAlbums() {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        HomeRetrofitClient.build().getTopAlbums()
+        HomeRetrofitClient.buildAlbum().getTopAlbums()
             .enqueue(
                 object : Callback<TopAlbumsResponse> {
                     override fun onResponse(call: Call<TopAlbumsResponse>, response: Response<TopAlbumsResponse>) {
@@ -77,7 +77,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadTop5Artists() {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        HomeRetrofitClient.build1().getTop5Artists()
+        HomeRetrofitClient.buildArtist().getTop5Artists()
             .enqueue(
                 object : Callback<TopArtistsResponse> {
                     override fun onResponse(call: Call<TopArtistsResponse>, response: Response<TopArtistsResponse>) {
@@ -103,7 +103,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadTopArtists() {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        HomeRetrofitClient.build1().getTopArtists()
+        HomeRetrofitClient.buildArtist().getTopArtists()
             .enqueue(
                 object : Callback<TopArtistsResponse> {
                     override fun onResponse(call: Call<TopArtistsResponse>, response: Response<TopArtistsResponse>) {
@@ -129,7 +129,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadTop5Tracks() {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        HomeRetrofitClient.build2().getTop5Tracks()
+        HomeRetrofitClient.buildTrack().getTop5Tracks()
             .enqueue(
                 object : Callback<TopTracksResponse> {
                     override fun onResponse(call: Call<TopTracksResponse>, response: Response<TopTracksResponse>) {
@@ -155,7 +155,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadTopTracks() {
         _uiState.value = _uiState.value.copy(isLoading = true)
-        HomeRetrofitClient.build2().getTopTracks()
+        HomeRetrofitClient.buildTrack().getTopTracks()
             .enqueue(
                 object : Callback<TopTracksResponse> {
                     override fun onResponse(call: Call<TopTracksResponse>, response: Response<TopTracksResponse>) {

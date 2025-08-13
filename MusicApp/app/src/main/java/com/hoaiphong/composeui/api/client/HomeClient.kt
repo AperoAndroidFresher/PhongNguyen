@@ -15,13 +15,13 @@ object HomeRetrofitClient {
 
     private val retrofit by lazy { buildRetrofit() }
 
-    fun build(): AlbumApiService {
+    fun buildAlbum(): AlbumApiService {
         return HomeRetrofitClient.retrofit.create(AlbumApiService::class.java)
     }
-    fun build1(): ArtistApiService {
+    fun buildArtist(): ArtistApiService {
         return HomeRetrofitClient.retrofit.create(ArtistApiService::class.java)
     }
-    fun build2(): TrackApiService {
+    fun buildTrack(): TrackApiService {
         return HomeRetrofitClient.retrofit.create(TrackApiService::class.java)
     }
 

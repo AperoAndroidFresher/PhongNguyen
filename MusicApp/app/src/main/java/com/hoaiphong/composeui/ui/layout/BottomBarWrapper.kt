@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -76,8 +77,11 @@ fun SharedBottom(
                                 Image(
                                     painter = painterResource(id = route.iconRes),
                                     contentDescription = null,
-                                    colorFilter = ColorFilter.tint(Color.White) 
+                                    colorFilter = ColorFilter.tint(Color.White)
                                 )
+                            },
+                            label = {
+                                Text(text = route.label, color = Color.White)
                             }
                         )
                     }
