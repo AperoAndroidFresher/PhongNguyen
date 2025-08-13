@@ -1,6 +1,7 @@
 package com.hoaiphong.composeui.ui.playlistsong
 
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -33,6 +34,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.service.MusicService
 import com.hoaiphong.composeui.ui.navigation.PlaylistSongs
+import com.hoaiphong.composeui.ui.navigation.PlaylistSortScreen
 import com.hoaiphong.composeui.ui.playlistsong.components.ColumnSongList
 import com.hoaiphong.composeui.ui.playlistsong.components.GridSongList
 
@@ -40,6 +42,7 @@ import com.hoaiphong.composeui.ui.playlistsong.components.GridSongList
 fun PlaylistSongScreen(
     entry: PlaylistSongs,
     modifier: Modifier = Modifier,
+    onNavigate: (Any) -> Unit = {},
     viewModel: PlaylistViewModel = viewModel()
 ) {
     val playlistId = entry.playlistId
@@ -113,7 +116,11 @@ fun PlaylistSongScreen(
                         painter = painterResource(id = R.drawable.ic_sort_up),
                         contentDescription = "Sort Icon",
                         colorFilter = ColorFilter.tint(Color.White),
-                        modifier = Modifier.size(25.dp)
+                        modifier = Modifier
+                            .size(25.dp)
+                            .clickable {
+                                onNavigate(PlaylistSortScreen(playlistId = entry.playlistId))
+                            },
                     )
                 }
             }
@@ -138,7 +145,10 @@ fun PlaylistSongScreen(
                             )
                         )
                     },
-                    onPlayClick = { index -> viewModel.dispatch(PlaylistIntent.PlaySong(index)) }
+                    onPlayClick = { index -> viewModel.dispatch(PlaylistIntent.PlaySong(index)) },
+                    onMove = { fromIndex, toIndex ->
+                        viewModel.dispatch(PlaylistIntent.MoveSong(fromIndex, toIndex))
+                    }
                 )
             } else {
                 GridSongList(
