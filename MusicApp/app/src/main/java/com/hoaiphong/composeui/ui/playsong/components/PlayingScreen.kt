@@ -2,7 +2,6 @@ package com.hoaiphong.composeui.ui.playsong.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -116,7 +116,7 @@ fun PlayingScreen(
                 tint = Color.White,
                 modifier = Modifier.clickable { onBack() }
             )
-            Text("Now Playing", color = Color.White, fontWeight = FontWeight.Bold)
+            Text(stringResource(R.string.now_playing), color = Color.White, fontWeight = FontWeight.Bold)
             Icon(
                 imageVector = Icons.Default.Close,
                 contentDescription = "Close",

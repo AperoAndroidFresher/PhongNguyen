@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
 
@@ -19,12 +20,12 @@ fun DropdownMenuItemShare() {
     val context = LocalContext.current
 
     DropdownMenuItem(
-        text = { Text("Share", color = Color.Companion.White) },
+        text = { Text(stringResource(R.string.share), color = Color.Companion.White) },
         onClick = {
             val intent = Intent(Intent.ACTION_SEND).apply {
                 type = "audio/*"
             }
-            context.startActivity(Intent.createChooser(intent, "Share with"))
+            context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_with)))
         },
         leadingIcon = {
             Image(

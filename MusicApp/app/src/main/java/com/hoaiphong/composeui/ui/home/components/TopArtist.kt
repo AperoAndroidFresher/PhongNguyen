@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import coil.compose.AsyncImage
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,12 +46,12 @@ fun TopArtist(
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Text(
-                text = "Top Artists",
+                text = stringResource(R.string.top_artists),
                 style = MaterialTheme.typography.titleMedium,
                 color = Color.White,
             )
             Text(
-                text = "See all",
+                text = stringResource(R.string.see_all),
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color(0xFF00C2CB),  
                 modifier = Modifier.clickable { onSeeAllArtistClick() },

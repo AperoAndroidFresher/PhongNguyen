@@ -25,6 +25,7 @@ import com.hoaiphong.composeui.ui.home.components.TopAlbumsDetail
 import com.hoaiphong.composeui.ui.home.components.TopArtistsDetail
 import com.hoaiphong.composeui.ui.home.components.TopTracksDetail
 import com.hoaiphong.composeui.ui.playlistsong.components.PlaylistSortScreen
+import com.hoaiphong.composeui.ui.settinglanguage.LanguageSettingsScreen
 
 @Composable
 fun TopLevelNavGraph(
@@ -180,6 +181,13 @@ fun TopLevelNavGraph(
                     }
                 )
             }
+            entry <LanguageSetting> {
+                LanguageSettingsScreen(
+                    onBack = {
+                        topLevelBackStack.clear(Home)
+                    }
+                )
+            }
         },
     )
 }
@@ -194,9 +202,6 @@ private fun handleNavigation(
                 topLevelBackStack.addTopLevel(target)
             }
         }
-        is MyInformationScreen -> {
-            topLevelBackStack.addTopLevel(target)
-        }
         is TopAlbumsDetail -> {
             topLevelBackStack.addTopLevel(target)
         }
@@ -204,6 +209,9 @@ private fun handleNavigation(
             topLevelBackStack.addTopLevel(target)
         }
         is TopTracksDetail -> {
+            topLevelBackStack.addTopLevel(target)
+        }
+        is LanguageSetting -> {
             topLevelBackStack.addTopLevel(target)
         }
     }

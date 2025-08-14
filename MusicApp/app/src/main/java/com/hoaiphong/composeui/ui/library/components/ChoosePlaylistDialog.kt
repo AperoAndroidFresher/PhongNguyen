@@ -24,9 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.data.local.model.entity.relations.PlaylistWithSongs
 
 @Composable
@@ -38,19 +40,21 @@ fun ChoosePlaylistDialog(
     modifier: Modifier = Modifier,
 ) {
     AlertDialog(
-        onDismissRequest = onDismiss, containerColor = Color(0xFF1E1E1E), title = {
+        onDismissRequest = onDismiss, containerColor = Color(0xFF1E1E1E),
+        title = {
             Box(
                 modifier = Modifier.Companion.fillMaxWidth(),
                 contentAlignment = Alignment.Companion.Center
             ) {
                 Text(
-                    text = "Choose playlist",
+                    text = stringResource(R.string.choose_playlist),
                     fontWeight = FontWeight.Companion.Bold,
                     color = Color.Companion.White,
-                    textAlign = TextAlign.Companion.Center
+                    textAlign = TextAlign.Companion.Center,
                 )
             }
-        }, text = {
+        },
+        text = {
             if (playlists.isEmpty()) {
                 Box(
                     modifier = Modifier.Companion
@@ -62,7 +66,7 @@ fun ChoosePlaylistDialog(
                         horizontalAlignment = Alignment.Companion.CenterHorizontally
                     ) {
                         Text(
-                            text = "You don't have any \nplaylists. Click the \n“+” button to add",
+                            text = stringResource(R.string.you_don_t_have_any_playlists_click_the_button_to_add),
                             color = Color.Companion.White,
                             textAlign = TextAlign.Companion.Center
                         )
@@ -83,8 +87,8 @@ fun ChoosePlaylistDialog(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Add,
-                                contentDescription = "Add playlist",
-                                tint = Color.Companion.White
+                                contentDescription = stringResource(R.string.add_playlist),
+                                tint = Color.Companion.White,
                             )
                         }
                     }
@@ -101,10 +105,12 @@ fun ChoosePlaylistDialog(
                                 .fillMaxWidth()
                                 .clickable {
                                     onPlaylistSelected(playlistWithSongs.playlist.playlistId)
-                                })
+                                }
+                        )
                     }
                 }
             }
-        }, confirmButton = {}, modifier = modifier
+        },
+        confirmButton = {}, modifier = modifier,
     )
 }

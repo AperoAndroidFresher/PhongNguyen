@@ -9,8 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hoaiphong.composeui.R
 
 @Composable
 fun InformationButton(
@@ -34,5 +36,5 @@ fun InformationButton(
 @Preview(showBackground = true, name = "My Button")
 @Composable
 fun PreviewMyButton() {
-    InformationButton(text = "Submit") {}
+    InformationButton(text = stringResource(R.string.submit)) {}
 }

@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -73,7 +74,7 @@ fun ChoosePlaylistItem(
                 )
             }
             Text(
-                "${songs.size} songs", color = Color.Companion.Gray, fontSize = 14.sp
+                stringResource(R.string.songs, songs.size), color = Color.Companion.Gray, fontSize = 14.sp,
             )
         }
     }

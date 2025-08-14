@@ -14,16 +14,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import com.hoaiphong.composeui.R
 
 @Composable
 fun TextInput(
     value: String = "",
     onValueChange: (String) -> Unit = {},
     leadingIcon: ImageVector = Icons.Default.Person,
-    placeholderText: String = "Username",
-    visualTransformation: VisualTransformation = VisualTransformation.Companion.None
+    placeholderText: String = stringResource(R.string.username),
+    visualTransformation: VisualTransformation = VisualTransformation.Companion.None,
 ) {
     OutlinedTextField(
         value = value,

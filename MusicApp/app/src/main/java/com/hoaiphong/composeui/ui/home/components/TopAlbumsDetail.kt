@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -80,7 +81,7 @@ fun TopAlbumsDetail(
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                text = "Top Albums",
+                text = stringResource(R.string.top_albums),
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
             )

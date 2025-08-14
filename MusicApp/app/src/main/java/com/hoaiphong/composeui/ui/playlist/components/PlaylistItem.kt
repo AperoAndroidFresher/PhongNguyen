@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -90,12 +91,12 @@ fun PlaylistItem(
                 .padding(end = if (showMenu) 8.dp else 0.dp)
         ) {
             Text(
-                text = playlist.name ?: "Untitled",
+                text = playlist.name ?: stringResource(R.string.untitled),
                 fontWeight = FontWeight.Companion.Bold,
                 fontSize = 18.sp,
                 color = Color.Companion.White,
                 maxLines = 1,
-                overflow = TextOverflow.Companion.Ellipsis
+                overflow = TextOverflow.Companion.Ellipsis,
             )
             Text(
                 text = "${songs.size} songs",
