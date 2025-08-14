@@ -37,9 +37,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 val user = userRepository.login(current.username, current.password)
                 if (user != null) {
                     UserSession(application).saveUser(user.userName)
-//                    TrackApiTest.logTopTracks()
-//                    ArtistApiTest.logTopArtists()
-//                    AlbumApiTest.logTopAlbums()
                     _effect.send(LoginEffect.NavigateToHome)
                 } else {
                     _effect.send(LoginEffect.ShowToast("Sai tài khoản hoặc mật khẩu"))

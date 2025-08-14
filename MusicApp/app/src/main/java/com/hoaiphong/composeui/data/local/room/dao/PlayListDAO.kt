@@ -61,8 +61,8 @@ interface PlayListDAO {
     suspend fun findByPlaylistName(playlistName: String): Playlist?
 
     @Transaction
-    @Query("SELECT * FROM playlist")
-    fun getAllPlaylistsWithSongs(): Flow<List<PlaylistWithSongs>>
+    @Query("SELECT * FROM playlist WHERE owner_username = :username")
+    fun getPlaylistsWithSongsByUsername(username: String): Flow<List<PlaylistWithSongs>>
 
     @Transaction
     @Query("SELECT * FROM Playlist WHERE playlistId  = :id")

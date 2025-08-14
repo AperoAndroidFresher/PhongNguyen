@@ -71,8 +71,8 @@ class PlaylistRepositoryImpl(
         crossRefDAO.deleteByPlaylistSongCrossRefIds(playlistId, songId)
     }
 
-    override fun getPlaylistsWithSongs(): Flow<List<PlaylistWithSongs>> {
-        return playListDAO.getAllPlaylistsWithSongs()
+    override suspend fun getPlaylistsWithSongs(username: String): Flow<List<PlaylistWithSongs>> {
+        return playListDAO.getPlaylistsWithSongsByUsername(username)
     }
 
     override suspend fun getPlaylistWithSongsByName(name: String): PlaylistWithSongs? {

@@ -3,9 +3,10 @@ package com.hoaiphong.composeui.ui.library
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.hoaiphong.composeui.comon.SongItem
-import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
+import com.hoaiphong.composeui.comon.UserSession
 import com.hoaiphong.composeui.data.local.SongLocal
 import com.hoaiphong.composeui.data.local.getAllMp3File
 import com.hoaiphong.composeui.data.local.toEntity
@@ -38,8 +39,10 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private fun observePlaylists() {
+        val userSession = UserSession(application)
+        val username = userSession.getSavedUsername() ?: return
         viewModelScope.launch(Dispatchers.IO) {
-            playlistManager.getPlaylistsWithSongs().collectLatest { playlists ->
+            playlistManager.getPlaylistsWithSongs(username).collectLatest { playlists ->
                 _uiState.update { it.copy(playlists = playlists) }
             }
         }
