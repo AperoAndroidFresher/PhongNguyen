@@ -16,7 +16,7 @@ interface PlaylistRepository {
     suspend fun renamePlaylist(playlistId: Long, newName: String): Boolean
     suspend fun removePlaylist(playlistId: Long)
     suspend fun removeSongFromPlaylist(playlistId: Long, songId: Long)
-    fun getPlaylistsWithSongs(): Flow<List<PlaylistWithSongs>>
+    suspend fun getPlaylistsWithSongs(username: String): Flow<List<PlaylistWithSongs>>
     suspend fun getPlaylistWithSongsByName(name: String): PlaylistWithSongs?
     suspend fun getSongsByIds(songIds: List<Long>): List<Song>
 }

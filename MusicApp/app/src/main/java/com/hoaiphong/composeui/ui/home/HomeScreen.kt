@@ -31,6 +31,7 @@ import com.hoaiphong.composeui.ui.library.components.NoInternetConnectionContent
 import com.hoaiphong.composeui.ui.navigation.TopAlbumsDetail
 import com.hoaiphong.composeui.ui.navigation.TopArtistsDetail
 import com.hoaiphong.composeui.ui.navigation.TopTracksDetail
+import com.hoaiphong.composeui.ui.playlist.PlayListViewModel
 
 @Preview(showBackground = true, backgroundColor = 0xFF000000)
 @Composable
@@ -39,6 +40,7 @@ fun HomeScreen(
     onNavigate: (Any) -> Unit = {},
     homeViewModel: HomeViewModel = viewModel(),
     infoViewModel: InfoViewModel = viewModel(),
+    playlistViewModel: PlayListViewModel = viewModel()
 ) {
     val uiState by homeViewModel.uiState
     val state by infoViewModel.state.collectAsState()
@@ -47,6 +49,7 @@ fun HomeScreen(
         homeViewModel.loadTop6Albums()
         homeViewModel.loadTop5Artists()
         homeViewModel.loadTop5Tracks()
+        playlistViewModel.observePlaylists()
     }
 
     LazyColumn(

@@ -57,9 +57,9 @@ fun TopLevelNavGraph(
                     )
                 }
             }
-            entry<MySong> {
+            entry<Library> {
                 SharedBottom(
-                    selectedRoute = MySong,
+                    selectedRoute = Library,
                     onNavigate = { target ->
                         if (target != topLevelBackStack.topLevelKey) {
                             topLevelBackStack.addTopLevel(target)
@@ -71,14 +71,15 @@ fun TopLevelNavGraph(
                     LibraryScreen(
                         modifier = Modifier.padding(padding),
                         onNavigateToPlaylistScreen = {
-                            topLevelBackStack.addTopLevel(Song)
+                            
+                            topLevelBackStack.addTopLevel(Playlist)
                         }
                     )
                 }
             }
-            entry<Song> {
+            entry<Playlist> {
                 SharedBottom(
-                    selectedRoute = Song,
+                    selectedRoute = Playlist,
                     onNavigate = { target ->
                         if (target != topLevelBackStack.topLevelKey) {
                             topLevelBackStack.addTopLevel(target)
@@ -106,7 +107,7 @@ fun TopLevelNavGraph(
             }
             entry<PlaylistSongs> { playlistSongs ->
                 SharedBottom(
-                    selectedRoute = Song,
+                    selectedRoute = Playlist,
                     onNavigate = { target ->
                         if (target != topLevelBackStack.topLevelKey) {
                             topLevelBackStack.addTopLevel(target)

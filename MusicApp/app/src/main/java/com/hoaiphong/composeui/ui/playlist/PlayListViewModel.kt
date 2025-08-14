@@ -1,9 +1,11 @@
 package com.hoaiphong.composeui.ui.playlist
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
-import com.hoaiphong.composeui.data.repository.impl.PlaylistManager
+import com.hoaiphong.composeui.comon.UserSession
 import com.hoaiphong.composeui.data.local.room.AppDatabase
 import com.hoaiphong.composeui.data.repository.impl.PlaylistRepositoryImpl
 import kotlinx.coroutines.Dispatchers
@@ -30,9 +32,11 @@ class PlayListViewModel(application: Application) : AndroidViewModel(application
         observePlaylists()
     }
 
-    private fun observePlaylists() {
+    fun observePlaylists() {
+        val userSession = UserSession(application)
+        val username = userSession.getSavedUsername() ?: return
         viewModelScope.launch(Dispatchers.IO) {
-            playlistManager.getPlaylistsWithSongs().collectLatest { playlists ->
+            playlistManager.getPlaylistsWithSongs(username).collectLatest { playlists ->
                 _state.update { it.copy(playlists = playlists) }
             }
         }
