@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.service.MusicService
 import com.hoaiphong.composeui.ui.navigation.Home
-import com.hoaiphong.composeui.ui.navigation.MySong
+import com.hoaiphong.composeui.ui.navigation.Library
 import com.hoaiphong.composeui.ui.navigation.PlayingSong    
-import com.hoaiphong.composeui.ui.navigation.Song
+import com.hoaiphong.composeui.ui.navigation.Playlist
 import com.hoaiphong.composeui.ui.navigation.TopLevelBackStack  
 import com.hoaiphong.composeui.ui.navigation.TopLevelRoute
 import com.hoaiphong.composeui.ui.playsong.PlayerViewModel
@@ -69,7 +69,7 @@ fun SharedBottom(
                     Spacer(modifier = Modifier.height(0.dp))
                 }
                 NavigationBar {
-                    listOf(Home, MySong, Song).forEach { route ->
+                    listOf(Home, Library, Playlist).forEach { route ->
                         NavigationBarItem(
                             selected = route == selectedRoute,
                             onClick = { onNavigate(route) },

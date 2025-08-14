@@ -1,6 +1,9 @@
 package com.hoaiphong.composeui.ui.library
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -14,6 +17,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.service.MusicService
 import com.hoaiphong.composeui.ui.library.components.ChoosePlaylistDialog
@@ -21,6 +25,7 @@ import com.hoaiphong.composeui.ui.library.components.LibraryButton
 import com.hoaiphong.composeui.ui.library.components.LottieAnimationLoading
 import com.hoaiphong.composeui.ui.library.components.NoInternetConnectionContent
 import com.hoaiphong.composeui.ui.playlistsong.components.SongPlayListItem
+import android.Manifest
 
 @Composable
 fun LibraryScreen(
@@ -30,9 +35,25 @@ fun LibraryScreen(
 ) {
     val state by viewModel.uiState.collectAsState()
     val context = LocalContext.current
+    
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        if (granted) {
+            viewModel.dispatch(LibraryIntent.LoadLocalSongs)
+        }
+    }
 
     LaunchedEffect(Unit) {
-        viewModel.dispatch(LibraryIntent.LoadLocalSongs)
+        if (ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.READ_MEDIA_AUDIO
+            ) == PackageManager.PERMISSION_GRANTED
+        ) {
+            viewModel.dispatch(LibraryIntent.LoadLocalSongs)
+        } else {
+            permissionLauncher.launch(Manifest.permission.READ_MEDIA_AUDIO)
+        }
         viewModel.dispatch(LibraryIntent.LoadPlaylists)
     }
     LaunchedEffect(viewModel) {
@@ -67,14 +88,16 @@ fun LibraryScreen(
         Row {
             LibraryButton(
                 text = "Local",
-                modifier = Modifier.width(100.dp),
+                isSelected = state.isLocalSelected,
+                modifier = Modifier.width(150.dp),
                 onClick = { viewModel.dispatch(LibraryIntent.LoadLocalSongs) })
 
             Spacer(modifier = Modifier.width(20.dp))
 
             LibraryButton(
                 text = "Remote",
-                modifier = Modifier.width(100.dp),
+                isSelected = !state.isLocalSelected,
+                modifier = Modifier.width(150.dp),
                 onClick = { viewModel.dispatch(LibraryIntent.LoadRemoteSongs) })
         }
 

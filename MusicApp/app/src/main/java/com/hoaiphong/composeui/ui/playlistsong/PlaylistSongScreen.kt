@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -95,41 +97,83 @@ fun PlaylistSongScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 14.dp)
             ) {
-                Text(
-                    text = state.playlistWithSongs?.playlist?.name ?: "Playlist",
-                    fontSize = 25.sp,
-                    color = Color.White,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                if (isDragEnabled) {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_delete),
+                            contentDescription = "Close",
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clickable {
+                                    isDragEnabled = false
+                                    viewModel.loadPlaylistById(playlistId)
+                                },
+                        )
 
-                Row(
-                    modifier = Modifier.align(Alignment.CenterEnd),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Image(
-                        painter = painterResource(id = if (state.isColumnView) R.drawable.ic_column else R.drawable.ic_row),
-                        contentDescription = "Toggle View",
-                        colorFilter = ColorFilter.tint(Color.White),
-                        modifier = Modifier
-                            .size(25.dp)
-                            .clickable {
-                                viewModel.dispatch(
-                                    PlaylistIntent.ToggleView(!state.isColumnView)
-                                )
-                            }
+                        Text(
+                            text = "Sorting",
+                            fontSize = 18.sp,
+                            color = Color.White,
+                            textAlign = TextAlign.Center,
+                        )
+
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_tick),
+                            contentDescription = "Confirm",
+                            tint = Color.White,
+                            modifier = Modifier
+                                .size(20.dp)
+                                .clickable {
+                                    isDragEnabled = false
+                                },
+                        )
+                    }
+                } else {
+                    Text(
+                        text = state.playlistWithSongs?.playlist?.name ?: "Playlist",
+                        fontSize = 25.sp,
+                        color = Color.White,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.align(Alignment.Center)
                     )
-                    Spacer(Modifier.width(8.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_sort_up),
-                        contentDescription = "Sort Icon",
-                        colorFilter = ColorFilter.tint(Color.White),
-                        modifier = Modifier
-                            .size(25.dp)
-                            .clickable {
-                                isDragEnabled = !isDragEnabled
-                            },
-                    )
+
+                    Row(
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Image(
+                            painter = painterResource(
+                                id = if (state.isColumnView) R.drawable.ic_column else R.drawable.ic_row
+                            ),
+                            contentDescription = "Toggle View",
+                            colorFilter = ColorFilter.tint(Color.White),
+                            modifier = Modifier
+                                .size(25.dp)
+                                .clickable {
+                                    viewModel.dispatch(
+                                        PlaylistIntent.ToggleView(!state.isColumnView)
+                                    )
+                                }
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_sort_up),
+                            contentDescription = "Sort Icon",
+                            colorFilter = ColorFilter.tint(Color.White),
+                            modifier = Modifier
+                                .size(25.dp)
+                                .clickable {
+                                    isDragEnabled = !isDragEnabled
+                                },
+                        )
+                    }
                 }
             }
 

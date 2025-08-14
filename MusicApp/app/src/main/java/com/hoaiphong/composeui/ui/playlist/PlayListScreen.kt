@@ -55,7 +55,7 @@ import com.hoaiphong.composeui.ui.playlist.components.PlaylistItem
 fun PlaylistScreen(
     modifier: Modifier = Modifier,
     viewModel: PlayListViewModel = viewModel(),
-    onNavigateToPlaylistSongs: (Long) -> Unit
+    onNavigateToPlaylistSongs: (Long) -> Unit,
 ) {
     val context = LocalContext.current
     val state by viewModel.state.collectAsState()

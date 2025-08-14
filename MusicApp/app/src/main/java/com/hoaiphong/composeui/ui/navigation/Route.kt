@@ -1,10 +1,5 @@
 package com.hoaiphong.composeui.ui.navigation
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.List
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.ui.graphics.vector.ImageVector
 import com.hoaiphong.composeui.R
 
 sealed interface Route
@@ -28,12 +23,12 @@ data object MyInformationScreen : TopLevelRoute {
     override val label = ""
 }
 
-data object MySong : TopLevelRoute {
+data object Library : TopLevelRoute {
     override val iconRes = R.drawable.ic_library
     override val label = "Library"
 }
 
-data object Song : TopLevelRoute {
+data object Playlist : TopLevelRoute {
     override val iconRes: Int = R.drawable.ic_playlist
     override val label = "Playlist"
 }
