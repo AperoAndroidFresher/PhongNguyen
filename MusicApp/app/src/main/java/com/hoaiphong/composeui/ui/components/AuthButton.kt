@@ -9,13 +9,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.hoaiphong.composeui.R
 
 @Composable
 fun AuthButton(
     modifier: Modifier = Modifier,
-    text: String = "Log in",  
-    onClick: () -> Unit = {}
+    text: String = stringResource(R.string.log_in),
+    onClick: () -> Unit = {},
 ) {
     Button(
         onClick = onClick,

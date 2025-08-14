@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
@@ -40,16 +41,16 @@ fun NoInternetConnectionContent(
         )
         Spacer(modifier = Modifier.Companion.height(16.dp))
         Text(
-            "No internet connection,\nplease check your \nconnection again",
+            stringResource(R.string.no_internet_connection_please_check_your_connection_again),
             textAlign = TextAlign.Companion.Center,
-            color = Color.Companion.White
+            color = Color.Companion.White,
         )
         Spacer(modifier = Modifier.Companion.height(16.dp))
         Button(
             onClick = onRetry,
             colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00C2CB))
         ) {
-            Text("Try again")
+            Text(stringResource(R.string.try_again))
         }
     }
 }

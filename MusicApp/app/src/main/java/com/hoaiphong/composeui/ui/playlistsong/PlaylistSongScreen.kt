@@ -1,7 +1,6 @@
 package com.hoaiphong.composeui.ui.playlistsong
 
 import android.content.Intent
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,7 +42,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.service.MusicService
 import com.hoaiphong.composeui.ui.navigation.PlaylistSongs
-import com.hoaiphong.composeui.ui.navigation.PlaylistSortScreen
 import com.hoaiphong.composeui.ui.playlistsong.components.ColumnSongList
 import com.hoaiphong.composeui.ui.playlistsong.components.GridSongList
 
@@ -118,7 +117,7 @@ fun PlaylistSongScreen(
                         )
 
                         Text(
-                            text = "Sorting",
+                            text = stringResource(R.string.sorting),
                             fontSize = 18.sp,
                             color = Color.White,
                             textAlign = TextAlign.Center,
@@ -137,11 +136,11 @@ fun PlaylistSongScreen(
                     }
                 } else {
                     Text(
-                        text = state.playlistWithSongs?.playlist?.name ?: "Playlist",
+                        text = state.playlistWithSongs?.playlist?.name ?: stringResource(R.string.playlist),
                         fontSize = 25.sp,
                         color = Color.White,
                         textAlign = TextAlign.Center,
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center),
                     )
 
                     Row(

@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
@@ -65,7 +66,7 @@ fun SignUpContent(
         Spacer(modifier = Modifier.height(8.dp))
 
         Text(
-            text = "Sign up",
+            text = stringResource(R.string.sign_up),
             style = MaterialTheme.typography.titleLarge,
             color = Color.White,
         )
@@ -79,7 +80,7 @@ fun SignUpContent(
             placeholderText = "Username",
             visualTransformation = VisualTransformation.None,
         )
-        if (state.usernameError) ErrText("Invalid format")
+        if (state.usernameError) ErrText(stringResource(R.string.invalid_format))
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -89,7 +90,7 @@ fun SignUpContent(
             passwordVisible = state.passwordVisible,
             onPasswordVisibilityChange = { onIntent(SignUpIntent.TogglePasswordVisibility) },
         )
-        if (state.passwordError) ErrText("Invalid format")
+        if (state.passwordError) ErrText(stringResource(R.string.invalid_format))
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -100,7 +101,7 @@ fun SignUpContent(
             passwordVisible = state.passwordVisible,
             onPasswordVisibilityChange = { onIntent(SignUpIntent.TogglePasswordVisibility) },
         )
-        if (state.confirmPasswordError) ErrText("Confirmation password is not match")
+        if (state.confirmPasswordError) ErrText(stringResource(R.string.confirmation_password_is_not_match))
 
         Spacer(modifier = Modifier.height(12.dp))
 
@@ -111,12 +112,12 @@ fun SignUpContent(
             placeholderText = "Email",
             visualTransformation = VisualTransformation.None,
         )
-        if (state.emailError) ErrText("Email không hợp lệ hoặc không phải @apero.vn")
+        if (state.emailError) ErrText(stringResource(R.string.email_is_not_match))
 
         Spacer(modifier = Modifier.height(24.dp))
 
         AuthButton(
-            text = "Sign Up",
+            text = stringResource(R.string.sign_up),
             onClick = { onIntent(SignUpIntent.SubmitSignUp) },
         )
     }

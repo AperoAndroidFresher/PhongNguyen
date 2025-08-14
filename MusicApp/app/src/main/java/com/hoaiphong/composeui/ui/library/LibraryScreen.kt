@@ -26,6 +26,8 @@ import com.hoaiphong.composeui.ui.library.components.LottieAnimationLoading
 import com.hoaiphong.composeui.ui.library.components.NoInternetConnectionContent
 import com.hoaiphong.composeui.ui.playlistsong.components.SongPlayListItem
 import android.Manifest
+import androidx.compose.ui.res.stringResource
+import com.hoaiphong.composeui.R
 
 @Composable
 fun LibraryScreen(
@@ -81,24 +83,29 @@ fun LibraryScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Library", fontSize = 25.sp, color = Color.White, textAlign = TextAlign.Center
+            text = stringResource(R.string.library),
+            fontSize = 25.sp,
+            color = Color.White,
+            textAlign = TextAlign.Center,
         )   
         
 
         Row {
             LibraryButton(
-                text = "Local",
+                text = stringResource(R.string.local),
                 isSelected = state.isLocalSelected,
                 modifier = Modifier.width(150.dp),
-                onClick = { viewModel.dispatch(LibraryIntent.LoadLocalSongs) })
+                onClick = { viewModel.dispatch(LibraryIntent.LoadLocalSongs) },
+            )
 
             Spacer(modifier = Modifier.width(20.dp))
 
             LibraryButton(
-                text = "Remote",
+                text = stringResource(R.string.remote),
                 isSelected = !state.isLocalSelected,
                 modifier = Modifier.width(150.dp),
-                onClick = { viewModel.dispatch(LibraryIntent.LoadRemoteSongs) })
+                onClick = { viewModel.dispatch(LibraryIntent.LoadRemoteSongs) },
+            )
         }
 
         Spacer(modifier = Modifier.height(16.dp))

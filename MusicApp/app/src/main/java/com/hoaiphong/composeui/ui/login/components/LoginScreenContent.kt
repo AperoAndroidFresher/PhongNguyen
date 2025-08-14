@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.ui.components.AuthButton
@@ -48,9 +49,9 @@ fun LoginScreenContent(
         )
 
         Text(
-            text = "Login to your account",
+            text = stringResource(R.string.login_to_your_account),
             style = MaterialTheme.typography.titleLarge,
-            color = Color.White
+            color = Color.White,
         )
         Spacer(Modifier.height(16.dp))
 
@@ -78,7 +79,7 @@ fun LoginScreenContent(
         Spacer(Modifier.height(16.dp))
 
         AuthButton(
-            text = "Log in",
+            text = stringResource(R.string.log_in),
             onClick = { onIntent(LoginIntent.SubmitLogin) }
         )
 
@@ -90,14 +91,14 @@ fun LoginScreenContent(
                 .padding(bottom = 16.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Text("Don't have an account?", color = Color.White)
+            Text(stringResource(R.string.don_t_have_an_account), color = Color.White)
             Spacer(modifier = Modifier.width(4.dp))
             Text(
-                "Sign Up",
+                stringResource(R.string.sign_up),
                 color = Color(0xFF00BCD4),
                 modifier = Modifier.clickable {
                     onIntent(LoginIntent.NavigateToSignUp)
-                }
+                },
             )
         }
     }

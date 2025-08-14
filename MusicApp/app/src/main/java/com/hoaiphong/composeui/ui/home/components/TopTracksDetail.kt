@@ -35,6 +35,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -84,7 +85,7 @@ fun TopTracksDetail(
             Spacer(modifier = Modifier.width(8.dp))
 
             Text(
-                text = "Top Tracks",
+                text = stringResource(R.string.top_tracks),
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.White,
             )

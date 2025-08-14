@@ -43,4 +43,6 @@ data object TopArtistsDetail : Route
 
 data object TopTracksDetail : Route
 
+data object LanguageSetting : Route
+
 data class PlaylistSortScreen(val playlistId: Long) : Route

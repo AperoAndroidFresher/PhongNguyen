@@ -12,7 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.hoaiphong.composeui.R
 
 @Composable
 fun RenamePlaylistDialog(
@@ -23,26 +25,31 @@ fun RenamePlaylistDialog(
     var text by remember { mutableStateOf(currentName) }
 
     AlertDialog(
-        onDismissRequest = onDismiss, confirmButton = {
+        onDismissRequest = onDismiss,
+        confirmButton = {
             Text(
-                "OK",
+                stringResource(R.string.ok),
                 modifier = Modifier.Companion
                     .padding(8.dp)
                     .clickable { onConfirm(text) },
-                color = Color.Companion.White
+                color = Color.Companion.White,
             )
-        }, dismissButton = {
+        },
+        dismissButton = {
             Text(
-                "Cancel",
+                stringResource(R.string.cancel),
                 modifier = Modifier.Companion
                     .padding(8.dp)
                     .clickable { onDismiss() },
-                color = Color.Companion.Gray
+                color = Color.Companion.Gray,
             )
-        }, title = { Text("Rename Playlist", color = Color.Companion.White) }, text = {
+        },
+        title = { Text(stringResource(R.string.rename_playlist), color = Color.Companion.White) },
+        text = {
             TextField(
                 value = text, onValueChange = { text = it }, singleLine = true
             )
-        }, containerColor = Color.Companion.DarkGray
+        },
+        containerColor = Color.Companion.DarkGray,
     )
 }

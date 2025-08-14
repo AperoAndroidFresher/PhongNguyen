@@ -17,11 +17,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hoaiphong.composeui.R
 
 @Composable
 fun SuccessPopupContent(modifier: Modifier = Modifier) {
@@ -43,7 +45,7 @@ fun SuccessPopupContent(modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.Companion.height(16.dp))
             Text(
-                text = "Success!",
+                text = stringResource(R.string.success),
                 modifier = Modifier.Companion.fillMaxWidth(),
                 textAlign = TextAlign.Companion.Center,
                 style = TextStyle(
@@ -52,11 +54,11 @@ fun SuccessPopupContent(modifier: Modifier = Modifier) {
                     lineHeight = 36.sp,
                     letterSpacing = (36.sp * 0.055f),
                     color = Color(0xFF25AE88)
-                )
+                ),
             )
             Spacer(modifier = Modifier.Companion.height(16.dp))
             Text(
-                text = "Your information has\nbeen updated!",
+                text = stringResource(R.string.your_information_has_been_updated),
                 textAlign = TextAlign.Companion.Center,
                 style = TextStyle(
                     fontWeight = FontWeight.Companion.Normal,
@@ -64,7 +66,7 @@ fun SuccessPopupContent(modifier: Modifier = Modifier) {
                     lineHeight = 20.sp,
                     letterSpacing = (20.sp * 0.055f),
                     color = Color.Companion.Black
-                )
+                ),
             )
         }
     }

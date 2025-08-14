@@ -5,13 +5,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hoaiphong.composeui.R
 
 @Composable
 fun ErrText(
-    message: String = "Invalid format"
+    message: String = stringResource(R.string.invalid_format),
 ) {
     Text(
         text = message,
@@ -24,5 +26,5 @@ fun ErrText(
 @Preview(showBackground = true, name = "Error Text")
 @Composable
 fun PreviewErrText() {
-    ErrText(message = "Invalid format")
+    ErrText(message = stringResource(R.string.invalid_format))
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -142,11 +143,11 @@ fun InformationScreenContent(
                     },
                 )
                 Text(
-                    "MY INFORMATION",
+                    stringResource(R.string.my_information),
                     fontSize = 25.sp,
                     modifier = Modifier.weight(1f),
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 if (!state.isEditing) {
                     Image(
@@ -259,7 +260,7 @@ fun InformationScreenContent(
                 Box(
                     modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center
                 ) {
-                    InformationButton(text = "Submit") {
+                    InformationButton(text = stringResource(R.string.submit)) {
                         onIntent(MyInfoIntent.Submit)
                     }
                 }
@@ -269,9 +270,9 @@ fun InformationScreenContent(
                     contentAlignment = Alignment.Center
                 ) {
                     LogoutButton(
-                        text = "Logout",
+                        text = stringResource(R.string.logout),
                         iconResId = R.drawable.ic_logout,
-                        onClick = { onIntent(MyInfoIntent.Logout) }
+                        onClick = { onIntent(MyInfoIntent.Logout) },
                     )
                 }
             }

@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -78,11 +79,11 @@ fun PlaylistScreen(
                     .padding(horizontal = 14.dp)
             ) {
                 Text(
-                    text = "My Playlist",
+                    text = stringResource(R.string.my_playlist),
                     fontSize = 25.sp,
                     color = Color.White,
                     textAlign = TextAlign.Center,
-                    modifier = Modifier.align(Alignment.Center)
+                    modifier = Modifier.align(Alignment.Center),
                 )
 
                 Row(
@@ -110,7 +111,7 @@ fun PlaylistScreen(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Text(
-                            text = "Choose playlist",
+                            text = stringResource(R.string.choose_playlist),
                             fontSize = 20.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
@@ -120,7 +121,7 @@ fun PlaylistScreen(
                         Spacer(modifier = Modifier.height(32.dp))
 
                         Text(
-                            text = "You don't have any \nplaylists. Click the \n“+” button to add",
+                            text = stringResource(R.string.you_don_t_have_any_playlists_click_the_button_to_add),
                             fontSize = 16.sp,
                             color = Color.White,
                             textAlign = TextAlign.Center
@@ -177,40 +178,48 @@ fun PlaylistScreen(
 
         // Dialog thêm playlist
         if (state.showAddDialog) {
-            AlertDialog(onDismissRequest = {
-                viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
-                newPlaylistName = ""
-            }, title = { Text(text = "New Playlist") }, text = {
-                OutlinedTextField(
-                    value = newPlaylistName,
-                    onValueChange = { newPlaylistName = it },
-                    label = { Text("Enter name") })
-            }, confirmButton = {
-                Button(
-                    onClick = {
-                        val username = userSession.getSavedUsername()
-                        if (username.isNullOrBlank()) return@Button
+            AlertDialog(
+                onDismissRequest = {
+                    viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
+                    newPlaylistName = ""
+                },
+                title = { Text(text = stringResource(R.string.new_playlist)) },
+                text = {
+                    OutlinedTextField(
+                        value = newPlaylistName,
+                        onValueChange = { newPlaylistName = it },
+                        label = { Text(stringResource(R.string.enter_name)) },
+                    )
+                },
+                confirmButton = {
+                    Button(
+                        onClick = {
+                            val username = userSession.getSavedUsername()
+                            if (username.isNullOrBlank()) return@Button
 
-                        viewModel.dispatch(
-                            PlaylistIntent.AddPlaylist(
-                                name = newPlaylistName,
-                                ownerUsername = username
+                            viewModel.dispatch(
+                                PlaylistIntent.AddPlaylist(
+                                    name = newPlaylistName,
+                                    ownerUsername = username
+                                )
                             )
-                        )
-                        newPlaylistName = ""
+                            newPlaylistName = ""
+                        }
+                    ) {
+                        Text(stringResource(R.string.add))
                     }
-                ) {
-                    Text("Add")
-                }
-            }, dismissButton = {
-                Button(
-                    onClick = {
-                        viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
-                        newPlaylistName = ""
-                    }) {
-                    Text("Cancel")
-                }
-            })
+                },
+                dismissButton = {
+                    Button(
+                        onClick = {
+                            viewModel.dispatch(PlaylistIntent.DismissAddPlaylistDialog)
+                            newPlaylistName = ""
+                        }
+                    ) {
+                        Text(stringResource(R.string.cancel))
+                    }
+                },
+            )
         }
     }
 }

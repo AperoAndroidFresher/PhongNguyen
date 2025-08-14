@@ -28,14 +28,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.comon.UserSession
+import com.hoaiphong.composeui.ui.navigation.LanguageSetting
 import com.hoaiphong.composeui.ui.navigation.MyInformationScreen
-
 @Preview(showBackground = true, backgroundColor = 0xF000000)
 @Composable
 fun Avatar(
@@ -91,7 +92,7 @@ fun Avatar(
 
             Column {
                 Text(
-                    "Welcome back !",
+                    stringResource(R.string.welcome_back),
                     color = Color.Companion.White,
                     fontSize = 20.sp,
                 )
@@ -104,7 +105,7 @@ fun Avatar(
 
             Spacer(modifier = Modifier.Companion.weight(1f))
 
-            IconButton(onClick = { onNavigate(MyInformationScreen) }) {
+            IconButton(onClick = { onNavigate(LanguageSetting) }) {
                 Image(
                     painter = painterResource(id = MyInformationScreen.iconRes),
                     contentDescription = "My Info",
@@ -128,7 +129,7 @@ fun Avatar(
             Spacer(modifier = Modifier.Companion.width(8.dp))
 
             Text(
-                "Rankings",
+                stringResource(R.string.rankings),
                 color = Color(0xFF00C2CB),
                 fontSize = 28.sp,
             )
