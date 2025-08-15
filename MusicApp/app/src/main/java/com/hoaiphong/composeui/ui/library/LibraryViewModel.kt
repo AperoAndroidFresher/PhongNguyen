@@ -68,6 +68,9 @@ class LibraryViewModel(application: Application) : AndroidViewModel(application)
 
         val playlistEntities = uiState.value.songs.map { it.song.toEntity() }
         val playlistIds = playlistEntities.map { it.songId }
+        _uiState.update {
+            it.copy(currentPlayingIndex = index) 
+        }
         viewModelScope.launch {
             _effect.emit(
                 LibraryEffect.StartMusicService(

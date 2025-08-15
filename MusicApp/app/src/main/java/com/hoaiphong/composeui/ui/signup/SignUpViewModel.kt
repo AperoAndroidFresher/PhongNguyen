@@ -99,8 +99,7 @@ class SignUpViewModel(application: Application) : AndroidViewModel(application) 
 
                 _effect.send(SignUpEffect.NavigateBack(user.userName, user.password ?: ""))
             } catch (e: Exception) {
-                Log.e("SignUpViewModel", "Sign up failed", e)
-                _effect.send(SignUpEffect.ShowToast("Đăng ký thất bại: ${e.message}"))
+                _effect.send(SignUpEffect.ShowToast("Sign up failed: ${e.message}"))
             }
         }
     }

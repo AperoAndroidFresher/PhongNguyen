@@ -57,8 +57,6 @@ fun LibraryScreen(
             permissionLauncher.launch(Manifest.permission.READ_MEDIA_AUDIO)
         }
         viewModel.dispatch(LibraryIntent.LoadPlaylists)
-    }
-    LaunchedEffect(viewModel) {
         viewModel.effect.collect { effect ->
             when (effect) {
                 is LibraryEffect.StartMusicService -> {
@@ -127,6 +125,7 @@ fun LibraryScreen(
                 itemsIndexed(state.songs) { index, songState ->
                     SongPlayListItem(
                         song = songState,
+                        isPlaying = index == state.currentPlayingIndex,
                         onItemClick = {
                             viewModel.dispatch(LibraryIntent.PlaySong(index))
                         },

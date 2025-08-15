@@ -1,6 +1,7 @@
 package com.hoaiphong.composeui.ui.playlistsong.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,15 +36,20 @@ import com.hoaiphong.composeui.utils.toDurationFormatted
 fun SongPlayListItem(
     song: SongItem,
     modifier: Modifier = Modifier,
+    isPlaying: Boolean = false,
     onItemClick: () -> Unit,
     onAddClick: () -> Unit,
     onDropdownToggle: () -> Unit,
     onDismissDropdown: () -> Unit,
 ) {
+    val borderColor = if (isPlaying) Color(0xFF1DB954) else Color.Transparent
     val context = LocalContext.current
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .then(
+                if (isPlaying) Modifier.background(Color(0x221DB954)) else Modifier
+            )
             .clickable { onItemClick() }
             .padding(4.dp),
         horizontalArrangement = Arrangement.Start,
