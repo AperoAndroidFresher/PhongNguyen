@@ -3,6 +3,7 @@ package com.hoaiphong.composeui.ui.login
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.application
+import com.hoaiphong.composeui.R
 import com.hoaiphong.composeui.comon.UserSession
 import com.hoaiphong.composeui.data.repository.impl.UserRepositoryImpl
 import kotlinx.coroutines.CoroutineScope
@@ -39,10 +40,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                     UserSession(application).saveUser(user.userName)
                     _effect.send(LoginEffect.NavigateToHome)
                 } else {
-                    _effect.send(LoginEffect.ShowToast("Sai tài khoản hoặc mật khẩu"))
+                    _effect.send(LoginEffect.ShowToast("Incorrect username or password"))
                 }
             } catch (e: Exception) {
-                _effect.send(LoginEffect.ShowToast("Đăng nhập thất bại: ${e.message}"))
+                _effect.send(LoginEffect.ShowToast("Login falue: ${e.message}"))
             }
         }
     }

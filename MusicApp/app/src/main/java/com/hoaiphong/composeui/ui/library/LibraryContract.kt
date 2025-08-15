@@ -30,7 +30,8 @@ data class LibraryState(
 
     val playlists: List<PlaylistWithSongs> = emptyList(),
     val isLoading: Boolean = false,
-    val hasNetworkError: Boolean = false
+    val hasNetworkError: Boolean = false,
+    val currentPlayingIndex: Int? = null
 )
 
 sealed interface LibraryEffect {

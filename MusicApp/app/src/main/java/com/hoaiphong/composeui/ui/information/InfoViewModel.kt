@@ -42,10 +42,10 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                         )
                     }
                 } catch (e: Exception) {
-                    _effect.emit(MyInfoEffect.ShowToast("Không thể tải dữ liệu người dùng"))
+                    _effect.emit(MyInfoEffect.ShowToast("Cannot load user data"))
                 }
             } else {
-                _effect.emit(MyInfoEffect.ShowToast("Không tìm thấy tài khoản đã đăng nhập"))
+                _effect.emit(MyInfoEffect.ShowToast("Cannot find the logged-in account"))
             }
         }
     }
@@ -103,7 +103,7 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                             val savedUsername = userSession.getSavedUsername()
 
                             if (savedUsername.isNullOrBlank()) {
-                                _effect.emit(ShowToast("Không tìm thấy tài khoản đã đăng nhập"))
+                                _effect.emit(ShowToast("Cannot find the logged-in account"))
                                 return@launch
                             }
 
@@ -118,9 +118,8 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                             )
 
                             _effect.emit(MyInfoEffect.ShowSuccessDialog)
-                            _effect.emit(ShowToast("Cập nhật thông tin thành công"))
                         } catch (e: Exception) {
-                            _effect.emit(ShowToast("Cập nhật thất bại: ${e.message}"))
+                            _effect.emit(ShowToast("Update err: ${e.message}"))
                         }
                     }
 
@@ -142,7 +141,7 @@ class InfoViewModel(application: Application) : AndroidViewModel(application) {
                         userSession.clear()
                         _effect.emit(MyInfoEffect.NavigateToLoginScreen)  
                     } catch (e: Exception) {
-                        _effect.emit(MyInfoEffect.ShowToast("Lỗi khi đăng xuất"))
+                        _effect.emit(MyInfoEffect.ShowToast("logout err ${e.message}"))
                     }
                 }
             }
